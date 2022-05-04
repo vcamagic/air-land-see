@@ -7,7 +7,7 @@ export class Card {
   name!: string;
   power!: number;
   type!: LaneType;
-  private faceUp!: boolean;
+  protected faceUp!: boolean;
   highlight!: boolean;
 
   constructor(id: number, name: string, power: number, type: LaneType) {
@@ -23,7 +23,7 @@ export class Card {
     return this.faceUp;
   }
 
-  flip(): void {
+  flip(board: Board): void {
     this.faceUp = !this.faceUp;
   }
 

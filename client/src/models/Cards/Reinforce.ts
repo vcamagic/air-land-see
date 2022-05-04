@@ -8,16 +8,30 @@ export class Reinforce extends Card {
         super(1, 'Reinforce', 1, LaneType.LAND);
     }
 
+    flip(board: Board): void {
+        this.faceUp = !this.faceUp;
+        if(this.isFaceUp()) {
+            let temp = board.getCardById(this.id);
+            if(temp!==null){
+                this.selectTargets(board, temp.lane);
+            }
+        }
+    }
+
     deploy(board: Board, selectedLane: LaneType): void {
-        board.getAdjacentLanes(selectedLane).forEach((lane: Lane) => {
-            lane.highlight = true;
-        });
         board.getLane(selectedLane).addPlayerCard(this);
+        this.selectTargets(board, selectedLane)
     }
 
     executeEffect(board: Board, targetId?: number, selectedLane?: LaneType): void {
         board.getLane(selectedLane as LaneType).addPlayerCard(board.deck[board.deck.length - 1]);
         board.deck.splice(board.deck.length - 1, 1);
         board.clearHighlights();
+    }
+
+    selectTargets(board: Board, selectedLane: LaneType) {
+        board.getAdjacentLanes(selectedLane).forEach((lane: Lane) => {
+            lane.highlight = true;
+        });
     }
 }
