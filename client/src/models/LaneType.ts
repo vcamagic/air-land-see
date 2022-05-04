@@ -1,5 +1,5 @@
 export enum LaneType {
-    'AIR',
+    'AIR' = 1,
     'LAND',
     'SEA'
 }
