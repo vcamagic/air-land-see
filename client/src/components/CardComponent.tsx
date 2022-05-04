@@ -1,10 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
+import BoardContext from '../contexts/BoardContext';
 import { Card } from '../models/Cards/Card';
 
-export const CardComponent = (card: Card) => {
-  useEffect(() => {}, [card.faceUp]);
+interface CardComponentProps {
+  card: Card;
+}
+
+export const CardComponent = (props: CardComponentProps) => {
+  const board = useContext(BoardContext);
+  useEffect(() => {}, [props.card.faceUp]);
+
+  useEffect(() => {
+    console.log(board.boardState);
+  }, [board]);
 
   const FaceUpCard = () => <div>FaceUpCard</div>;
   const FaceDownCard = () => <div>FaceDownCard</div>;
-  return <>{card.faceUp ? <FaceUpCard /> : <FaceDownCard />}</>;
+  return <>{props.card.faceUp ? <FaceUpCard /> : <FaceDownCard />}</>;
 };
