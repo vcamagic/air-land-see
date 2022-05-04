@@ -20,7 +20,7 @@ function App() {
     boardDispatch,
   };
 
-  const cardToSend = new Card('Bismarck', 6, LaneType.SEA);
+  const cardToSend = new Card(1,'Bismarck', 6, LaneType.SEA);
   return (
     <BoardContextProvider value={boardContextValues}>
       <div className='flex justify-center'>

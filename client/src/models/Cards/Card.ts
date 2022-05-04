@@ -1,57 +1,62 @@
-import { Board } from "../Board";
-import { Lane } from "../Lane";
-import { LaneType } from "../LaneType";
-
+import { Board } from '../Board';
+import { Lane } from '../Lane';
+import { LaneType } from '../LaneType';
 
 export class Card {
-    id!: number;
-    name!: string;
-    power!: number;
-    type!: LaneType;
-    private faceUp!: boolean;
-    highlight!: boolean;
+  id!: number;
+  name!: string;
+  power!: number;
+  type!: LaneType;
+  private faceUp!: boolean;
+  highlight!: boolean;
 
-    constructor(id: number, name: string, power: number, type: LaneType) {
-        this.id = id;
-        this.name = name;
-        this.power = power;
-        this.type = type;
-        this.faceUp = false;
-        this.highlight = false;
-    }
+  constructor(id: number, name: string, power: number, type: LaneType) {
+    this.id = id;
+    this.name = name;
+    this.power = power;
+    this.type = type;
+    this.faceUp = false;
+    this.highlight = false;
+  }
 
-    flip(): void {
-        this.faceUp = !this.faceUp;
-    }
+  isFaceUp(): boolean {
+    return this.faceUp;
+  }
 
-    highlightAvailableLanes(board:Board): void {
-        board.lanes.forEach((lane: Lane) => {
-            if(lane.type === this.type || board.player.airdrop || (board.player.aerodrome && this.power <= 3)){
-                lane.highlight = true;
-            }
-        });
-    }
+  flip(): void {
+    this.faceUp = !this.faceUp;
+  }
 
-    deploy(board:Board, selectedLane:LaneType): void {
-        board.getLane(selectedLane).addPlayerCard(this);
-    }
+  highlightAvailableLanes(board: Board): void {
+    board.lanes.forEach((lane: Lane) => {
+      if (
+        lane.type === this.type ||
+        board.player.airdrop ||
+        (board.player.aerodrome && this.power <= 3)
+      ) {
+        lane.highlight = true;
+      }
+    });
+  }
 
-    improvise(board: Board, selectedLane: LaneType): void {
-        this.faceUp = false;
-        board.getLane(selectedLane).addPlayerCard(this);
-    }
+  deploy(board: Board, selectedLane: LaneType): void {
+    board.getLane(selectedLane).addPlayerCard(this);
+  }
 
-    executeEffect(board:Board, targetId?: number, selectedLane?: LaneType): void {
+  improvise(board: Board, selectedLane: LaneType): void {
+    this.faceUp = false;
+    board.getLane(selectedLane).addPlayerCard(this);
+  }
 
-    }
+  executeEffect(
+    board: Board,
+    targetId?: number,
+    selectedLane?: LaneType
+  ): void {}
 
-    onDestroy(): void {
+  onDestroy(): void {}
 
-    }
-
-    onTarget(): number {
-        return this.id;
-    }
-
+  onTarget(): number {
+    return this.id;
+  }
 }
-

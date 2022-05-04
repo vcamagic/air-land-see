@@ -8,7 +8,8 @@ interface CardComponentProps {
 
 export const CardComponent = (props: CardComponentProps) => {
   const board = useContext(BoardContext);
-  useEffect(() => {}, [props.card.faceUp]);
+
+  useEffect(() => {}, [props.card]);
 
   useEffect(() => {
     console.log(board.boardState);
@@ -16,5 +17,5 @@ export const CardComponent = (props: CardComponentProps) => {
 
   const FaceUpCard = () => <div>FaceUpCard</div>;
   const FaceDownCard = () => <div>FaceDownCard</div>;
-  return <>{props.card.faceUp ? <FaceUpCard /> : <FaceDownCard />}</>;
+  return <>{props.card.isFaceUp() ? <FaceUpCard /> : <FaceDownCard />}</>;
 };
