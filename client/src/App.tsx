@@ -4,9 +4,11 @@ import { CardComponent } from './components/CardComponent';
 import {
   BoardContextProvider,
   boardReducer,
-  initialBoardState
+  initialBoardState,
 } from './contexts/BoardContext';
 import { Card } from './models/Cards/Card';
+import { Maneuver } from './models/Cards/Maneuver';
+import { Reinforce } from './models/Cards/Reinforce';
 import { LaneType } from './models/LaneType';
 
 function App() {
@@ -20,11 +22,13 @@ function App() {
     boardDispatch,
   };
 
-  const cardToSend = new Card(1,'Bismarck', 6, LaneType.SEA);
+  const cardToSend = new Maneuver(LaneType.AIR);
+  const cardToSend1 = new Reinforce();
   return (
     <BoardContextProvider value={boardContextValues}>
       <div className='flex justify-center'>
         <CardComponent card={cardToSend} />
+        <CardComponent card={cardToSend1} />
       </div>
     </BoardContextProvider>
   );

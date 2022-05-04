@@ -9,14 +9,25 @@ export class Card {
   type!: LaneType;
   protected faceUp!: boolean;
   highlight!: boolean;
+  description!: string;
+  img!: string;
 
-  constructor(id: number, name: string, power: number, type: LaneType) {
+  constructor(
+    id: number,
+    name: string,
+    power: number,
+    type: LaneType,
+    description: string,
+    img: string
+  ) {
     this.id = id;
     this.name = name;
     this.power = power;
     this.type = type;
-    this.faceUp = false;
+    this.faceUp = true;
     this.highlight = false;
+    this.description = description;
+    this.img = img;
   }
 
   isFaceUp(): boolean {

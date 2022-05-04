@@ -1,11 +1,11 @@
-import { Board } from "../Board";
-import { Lane } from "../Lane";
-import { LaneType } from "../LaneType";
-import { Card } from "./Card";
+import { Board } from '../Board';
+import { Lane } from '../Lane';
+import { LaneType } from '../LaneType';
+import { Card } from './Card';
 
 export class Maneuver extends Card {
     constructor(type: LaneType) {
-        super(type * 6 + 3,'Maneuver', 3, type);
+        super(type * 6 + 3,'Maneuver', 3, type, 'Flip a card in an adjacent theater.', '../assets/manuever.jpg');
     }
 
     deploy(board: Board, selectedLane: LaneType): void {
