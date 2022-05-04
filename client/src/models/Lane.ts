@@ -6,12 +6,16 @@ export class Lane {
     playerCards!: Card[];
     opponentCards!:Card[];
     highlight!: boolean;
+    playerScore!: number;
+    opponentScore!: number;
 
     constructor(type: LaneType) {
         this.type = type;
         this.playerCards = [];
         this.opponentCards = [];
         this.highlight = false;
+        this.playerScore = 0;
+        this.opponentScore = 0;
     }
 
     getLastPlayerCard(): Card | null {

@@ -6,7 +6,7 @@ import { Card } from './Card';
 export class Reinforce extends Card {
   constructor() {
     super(
-      1,
+      7,
       'Reinforce',
       1,
       LaneType.LAND,

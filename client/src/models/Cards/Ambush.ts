@@ -5,7 +5,7 @@ import { Card } from "./Card";
 
 export class Ambush extends Card {
     constructor() {
-        super(2, 'Ambush', 2, LaneType.LAND);
+        super(8, 'Ambush', 2, LaneType.LAND);
     }
 
     flip(board: Board): void {

@@ -10,6 +10,7 @@ export class Board {
     playerTurn!: boolean;
     deck!: Card[];
 
+
     constructor(playerTurn: boolean) {
         const firstLane = Math.floor(Math.random() * 3);
         this.lanes = [new Lane(firstLane), new Lane((firstLane + 1) % 3), new Lane((firstLane + 2) % 3)];
@@ -42,15 +43,15 @@ export class Board {
         return this.lanes.find(x=>x.type === type) as Lane;
     }
 
-    getCardById(targetId: number): {card: Card, lane: LaneType} | null {
+    getCardById(targetId: number): {card: Card, lane: LaneType, playerOwned: boolean} | null {
         this.lanes.forEach((lane: Lane) => {
             let temp = lane.playerCards.find(x=>x.id === targetId);
             if(temp !== null){
-                return {card: temp, lane: lane.type };
+                return {card: temp, lane: lane.type, playerOwned: true };
             }
             temp = lane.opponentCards.find(x => x.id === targetId);
             if(temp !== null) {
-                return {card: temp, lane: lane.type };
+                return {card: temp, lane: lane.type, playerOwned: false };
             }
         });
         return null;
@@ -66,5 +67,31 @@ export class Board {
                 card.highlight = false;
             });
         })
+    }
+
+    calculateScores(): void {
+        const escalation = this.getCardById(14);
+        this.lanes.forEach((lane: Lane) => {
+            let total: number = 0;
+            let coveringFire: boolean = false;
+            for(let i = lane.playerCards.length - 1; i>=0; i--){
+                if(coveringFire) {
+                    total+=4;
+                } else {
+                    if(lane.playerCards[i].isFaceUp()){
+                        total+=lane.playerCards[i].power;
+                        if(lane.playerCards[i].name === 'Covering Fire') {
+                            coveringFire = true;
+                        }
+                    } else {
+                        if(escalation!==null && escalation.playerOwned && escalation.card.isFaceUp()){
+                            total+=4;
+                        } else {
+                            total+=2;
+                        }
+                    }
+                }
+            }
+        });
     }
 }
