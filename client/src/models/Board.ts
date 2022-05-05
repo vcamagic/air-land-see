@@ -115,5 +115,15 @@ export class Board {
             }
             lane.opponentScore = total;
         });
+        const support = this.getCardById(1);
+        if(support !== null && support.card.isFaceUp) {
+            this.getAdjacentLanes(support.lane).forEach((lane: Lane) => {
+                if(support.playerOwned) {
+                    lane.playerScore+=3;
+                } else {
+                    lane.opponentScore+=3;
+                }
+            });
+        }
     }
 }
