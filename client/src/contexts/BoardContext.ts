@@ -5,6 +5,10 @@ interface Action {
   type: string;
   payload: any;
 }
+interface BoardContextProps {
+  boardState: Board;
+  boardDispatch: React.Dispatch<Action>;
+}
 
 export const initialBoardState = new Board(true);
 
@@ -19,10 +23,6 @@ export const boardReducer = (state: Board, action: Action) => {
   }
 };
 
-interface BoardContextProps {
-  boardState: Board;
-  boardDispatch: React.Dispatch<Action>;
-}
 const BoardContext = createContext<BoardContextProps>({
   boardState: initialBoardState,
   boardDispatch: () => {},

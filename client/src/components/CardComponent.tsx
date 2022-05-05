@@ -1,9 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Card } from '../models/Cards/Card';
-import img from '../assets/manuever.jpg';
+import { CardEffect } from '../models/Cards/CardEffect';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfinity, faBolt } from '@fortawesome/free-solid-svg-icons';
 interface CardComponentProps {
   card: Card;
 }
+
+const getCardIcon = (cardEffect: CardEffect) => {
+  switch (cardEffect) {
+    case CardEffect.INSTANT:
+      return <FontAwesomeIcon className='h-4 w-4' icon={faBolt} />;
+    case CardEffect.PERMANENT:
+      return <FontAwesomeIcon className='h-5 w-5' icon={faInfinity} />;
+    case CardEffect.NO_EFFECT:
+      return '';
+    default:
+      return '';
+  }
+};
 
 export const CardComponent = (props: CardComponentProps) => {
   const FaceUpCard = () => (
@@ -14,14 +29,17 @@ export const CardComponent = (props: CardComponentProps) => {
         </h1>
         <div>
           <div className='flex justify-end'>
-            <h1 className='text-2xl font-bold'>{props.card.name}</h1>
+            <h1 className='text-2xl font-bold'>
+              <span className='p-2'>{getCardIcon(props.card.effect)}</span>
+              {props.card.name}
+            </h1>
           </div>
           <p className='font-bold text-xs text-right'>
             {props.card.description}
           </p>
         </div>
       </div>
-      <img src={img} alt='card' className='h-237 w-237' />
+      <img src={props.card.img} alt='card' className='h-237 w-237' />
     </div>
   );
   const FaceDownCard = () => <div>FaceDownCard</div>;

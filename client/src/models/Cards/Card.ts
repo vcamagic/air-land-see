@@ -1,6 +1,7 @@
 import { Board } from '../Board';
 import { Lane } from '../Lane';
 import { LaneType } from '../LaneType';
+import { CardEffect } from './CardEffect';
 
 export class Card {
   id!: number;
@@ -11,6 +12,7 @@ export class Card {
   highlight!: boolean;
   description!: string;
   img!: string;
+  effect!: CardEffect;
 
   constructor(
     id: number,
@@ -18,7 +20,8 @@ export class Card {
     power: number,
     type: LaneType,
     description: string,
-    img: string
+    img: string,
+    effect: CardEffect
   ) {
     this.id = id;
     this.name = name;
@@ -28,6 +31,7 @@ export class Card {
     this.highlight = false;
     this.description = description;
     this.img = img;
+    this.effect = effect
   }
 
   isFaceUp(): boolean {
