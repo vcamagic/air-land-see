@@ -9,7 +9,7 @@ export class Maneuver extends Card {
     }
 
     deploy(board: Board, selectedLane: LaneType): void {
-        board.getLane(selectedLane).addPlayerCard(this);
+        super.deploy(board, selectedLane);
         this.selectTargets(board, selectedLane);
     }
 

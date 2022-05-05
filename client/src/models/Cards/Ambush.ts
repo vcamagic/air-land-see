@@ -5,7 +5,7 @@ import { Card } from "./Card";
 
 export class Ambush extends Card {
     constructor() {
-        super(8, 'Ambush', 2, LaneType.LAND);
+        super(8, 'Ambush', 2, LaneType.LAND, 'FLIP a card in any theater', '../assets/ambush.jpg');
     }
 
     flip(board: Board): void {
@@ -16,7 +16,7 @@ export class Ambush extends Card {
     }
 
     deploy(board: Board, selectedLane: LaneType): void {
-        board.getLane(selectedLane).addPlayerCard(this);
+        super.deploy(board,selectedLane);
         this.selectTargets(board);
     }
 

@@ -9,6 +9,6 @@ export class Heavy extends Card {
             case 2: name = 'Heavy Tanks'; break;
             case 3: name = 'Bismark'; break;
         }
-        super(type * 6 + 6, name, 6, type);
+        super(type * 6 + 6, name, 6, type, '','../assets/heavy.jpg');
     }
 }
