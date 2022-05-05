@@ -60,7 +60,7 @@ export class Card {
 
   improvise(board: Board, selectedLane: LaneType): void {
     this.faceUp = false;
-    const containment = board.getCardById(11);
+    const containment = board.getCardById(5);
     if(containment === null) {
         board.getLane(selectedLane).addPlayerCard(this);
     }

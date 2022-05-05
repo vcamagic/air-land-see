@@ -3,6 +3,7 @@ import { Card } from './Cards/Card';
 import { CoverFire } from './Cards/CoverFire';
 import { Heavy } from './Cards/Heavy';
 import { Maneuver } from './Cards/Maneuver';
+import { Redeploy } from './Cards/Redeploy';
 import { Reinforce } from './Cards/Reinforce';
 import { Lane } from './Lane';
 import { LaneType } from './LaneType';
@@ -31,6 +32,7 @@ export class Board {
       new Ambush(),
       new CoverFire(),
       new Heavy(LaneType.LAND),
+      new Redeploy(),
     ];
   }
 
@@ -153,6 +155,23 @@ export class Board {
           lane.opponentScore += 3;
         }
       });
+    }
+  }
+
+  removeCardFromLane(cardId?: number): void {
+    if (cardId !== undefined) {
+      this.lanes.forEach((lane) => {
+        lane.playerCards.filter((card) => card.id === cardId);
+      });
+    }
+  }
+
+  addCardToPlayerHand(cardId?: number): void {
+    if (cardId !== undefined) {
+      let card = this.getCardById(cardId);
+      if (card !== null) {
+        this.player.hand = [...this.player.hand, card.card];
+      }
     }
   }
 }

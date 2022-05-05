@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import { faBolt, faInfinity } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
 import { Card } from '../models/Cards/Card';
 import { CardEffect } from '../models/Cards/CardEffect';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfinity, faBolt } from '@fortawesome/free-solid-svg-icons';
+import { LaneType } from '../models/LaneType';
 interface CardComponentProps {
   card: Card;
 }
@@ -18,10 +19,25 @@ const getCardIcon = (cardEffect: CardEffect) => {
   }
 };
 
+const getBannerColor = (laneType: LaneType): string => {
+  switch (laneType) {
+    case LaneType.AIR:
+      return 'bg-cyan-300';
+    case LaneType.LAND:
+      return 'bg-orange-500';
+    case LaneType.SEA:
+      return 'bg-emerald-300';
+  }
+};
+
 export const CardComponent = (props: CardComponentProps) => {
   const FaceUpCard = () => (
     <div className='m-3'>
-      <div className='flex justify-evenly bg-orange-500 p-2 max-w-237 min-h-120'>
+      <div
+        className={`flex justify-evenly ${getBannerColor(
+          props.card.type
+        )} p-2 max-w-237 min-h-120`}
+      >
         <h1 className='text-7xl font-bold text-white mr-3'>
           {props.card.power}
         </h1>
