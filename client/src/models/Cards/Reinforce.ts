@@ -27,10 +27,10 @@ export class Reinforce extends Card {
     }
   }
 
-  deploy(board: Board, selectedLane: LaneType): void {
-    board.getLane(selectedLane).addPlayerCard(this);
-    this.selectTargets(board, selectedLane);
-  }
+    deploy(board: Board, selectedLane: LaneType): void {
+        super.deploy(board, selectedLane);
+        this.selectTargets(board, selectedLane)
+    }
 
   executeEffect(
     board: Board,

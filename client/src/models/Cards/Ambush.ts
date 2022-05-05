@@ -16,10 +16,10 @@ export class Ambush extends Card {
     }
   }
 
-  deploy(board: Board, selectedLane: LaneType): void {
-    board.getLane(selectedLane).addPlayerCard(this);
-    this.selectTargets(board);
-  }
+    deploy(board: Board, selectedLane: LaneType): void {
+        super.deploy(board,selectedLane);
+        this.selectTargets(board);
+    }
 
   selectTargets(board: Board) {
     board.lanes.forEach((lane: Lane) => {
