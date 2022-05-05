@@ -8,6 +8,14 @@ import { Reinforce } from './Cards/Land/Reinforce';
 import { Lane } from './Lane';
 import { LaneType } from './LaneType';
 import { Player } from './Player';
+import { Disrupt } from './Cards/Land/Disrupt';
+import { Blockade } from './Cards/Sea/Blockade';
+import { Transport } from './Cards/Sea/Transport';
+import { Escalation } from './Cards/Sea/Escalation';
+import { Support } from './Cards/Air/Support';
+import { AirDrop } from './Cards/Air/AirDrop';
+import { Aerodrome } from './Cards/Air/Aerodrome';
+import { Containment } from './Cards/Air/Containment';
 
 export class Board {
   lanes!: Lane[];
@@ -24,21 +32,29 @@ export class Board {
       new Lane(((firstLane + 1) % 3) + 1),
       new Lane(((firstLane + 2) % 3) + 1),
     ];
-    
+
     this.player = new Player('Player');
     this.opponent = new Player('Opponent');
     this.playerTurn = playerTurn;
     this.deck = [
-      new Heavy(LaneType.AIR),
+      new Support(),
+      new AirDrop(),
       new Maneuver(LaneType.AIR),
-      new Maneuver(LaneType.LAND),
+      new Aerodrome(),
+      new Containment(),
+      new Heavy(LaneType.AIR),
       new Reinforce(),
       new Ambush(),
+      new Maneuver(LaneType.LAND),
       new CoverFire(),
+      new Disrupt(),
       new Heavy(LaneType.LAND),
-      new Redeploy(),
-      new Heavy(LaneType.SEA),
+      new Transport(),
+      new Escalation(),
       new Maneuver(LaneType.SEA),
+      new Redeploy(),
+      new Blockade(),
+      new Heavy(LaneType.SEA),
     ];
   }
 

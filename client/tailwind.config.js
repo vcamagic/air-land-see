@@ -2,14 +2,14 @@ module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     maxWidth: {
-      237: '237px',
+      247: '247px',
     },
     minHeight: {
-      120: '120px',
+      145: '145px',
     },
     extend: {
       spacing: {
-        237: '237px',
+        247: '247px',
       },
     },
   },

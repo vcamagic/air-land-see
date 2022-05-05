@@ -9,9 +9,11 @@ export const BoardComponent = () => {
   console.log(boardState);
   return (
     <div>
-      {boardState.deck.map((card) => (
-        <CardComponent key={card.id} card={card} />
-      ))}
+      <div className='flex justify-center flex-wrap'>
+        {boardState.deck.map((card) => (
+          <CardComponent key={card.id} card={card} />
+        ))}
+      </div>
       <LaneComponent />
     </div>
   );

@@ -11,7 +11,7 @@ export class Ambush extends Card {
       'Ambush',
       2,
       LaneType.LAND,
-      'Flip a card in any theater.',
+      'FLIP a card in any theater.',
       '/images/ambush.jpg',
       CardEffect.INSTANT
     );

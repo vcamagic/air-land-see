@@ -6,22 +6,34 @@ import { CardEffect } from './CardEffect';
 
 export class Maneuver extends Card {
   constructor(type: LaneType) {
+    let id: number = 0;
+    switch (type) {
+      case LaneType.AIR:
+        id = 3;
+        break;
+      case LaneType.LAND:
+        id = 9;
+        break;
+      case LaneType.SEA:
+        id = 15;
+        break;
+    }
     super(
-      type * 6 + 3,
+      id,
       'Maneuver',
       3,
       type,
-      'Flip a card in an adjacent theater.',
+      'FLIP a card in an adjacent theater.',
       '/images/manuever.jpg',
       CardEffect.INSTANT
     );
   }
 
-    deploy(board: Board, selectedLane: LaneType): Board {
-        super.deploy(board, selectedLane);
-        this.selectTargets(board, selectedLane);
-        return board;
-    }
+  deploy(board: Board, selectedLane: LaneType): Board {
+    super.deploy(board, selectedLane);
+    this.selectTargets(board, selectedLane);
+    return board;
+  }
 
   flip(board: Board): void {
     this.faceUp = !this.faceUp;

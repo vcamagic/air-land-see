@@ -24,6 +24,6 @@ export class Heavy extends Card {
         description = 'It was made to rule the waves across the 7 seas.';
         break;
     }
-    super(type * 6 + 6, name, 6, type, description, img, CardEffect.NO_EFFECT);
+    super(type * 6, name, 6, type, description, img, CardEffect.NO_EFFECT);
   }
 }

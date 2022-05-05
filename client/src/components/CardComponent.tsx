@@ -46,7 +46,7 @@ export const CardComponent = (props: CardComponentProps) => {
       <div
         className={`flex justify-evenly ${getBannerColor(
           props.card.type
-        )} p-2 max-w-237 min-h-120`}
+        )} p-2 max-w-247 min-h-145`}
       >
         <h1 className='text-7xl font-bold text-white mr-3'>
           {props.card.power}
@@ -55,7 +55,13 @@ export const CardComponent = (props: CardComponentProps) => {
           <div className='flex justify-end'>
             <h1 className='text-2xl font-bold'>
               <span className='p-2'>{getCardIcon(props.card.effect)}</span>
-              {props.card.name}
+              <span
+                className={`${
+                  props.card.name === 'Containment' ? 'text-xl' : ''
+                }`}
+              >
+                {props.card.name}
+              </span>
             </h1>
           </div>
           <p className='font-bold text-xs text-right'>
@@ -63,7 +69,7 @@ export const CardComponent = (props: CardComponentProps) => {
           </p>
         </div>
       </div>
-      <img src={props.card.img} alt='card' className='h-237 w-237' />
+      <img src={props.card.img} alt='card' className='h-247 w-247' />
     </div>
   );
 
