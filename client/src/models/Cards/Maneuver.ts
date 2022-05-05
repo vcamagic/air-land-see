@@ -17,9 +17,10 @@ export class Maneuver extends Card {
     );
   }
 
-    deploy(board: Board, selectedLane: LaneType): void {
+    deploy(board: Board, selectedLane: LaneType): Board {
         super.deploy(board, selectedLane);
         this.selectTargets(board, selectedLane);
+        return board;
     }
 
   flip(board: Board): void {

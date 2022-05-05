@@ -1,7 +1,8 @@
+import _ from 'lodash';
 import React, { createContext } from 'react';
 import { Board } from '../models/Board';
-
-interface Action {
+import { Card } from '../models/Cards/Card';
+export interface Action {
   type: string;
   payload: any;
 }
@@ -13,9 +14,14 @@ interface BoardContextProps {
 export const initialBoardState = new Board(true);
 
 export const boardReducer = (state: Board, action: Action) => {
+  let copyState = _.cloneDeep(state);
   switch (action.type) {
-    case 'AddedToLane':
-      return state;
+    case 'CardDeployed':
+      let card = action.payload.card as Card;
+      let newState = _.cloneDeep(
+        action.payload.card.deploy(copyState, card.type)
+      );
+      return newState;
     case 'PlayerHandChange':
       return state;
     default:

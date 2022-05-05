@@ -22,7 +22,7 @@ export class Lane {
         if(this.playerCards.length === 0) {
             return null;
         }
-        return this.playerCards[this.playerCards.length];
+        return this.playerCards[this.playerCards.length - 1];
     }
 
     getLastOpponentCard(): Card | null {

@@ -1,10 +1,10 @@
-import { Ambush } from './Cards/Ambush';
+import { Ambush } from './Cards/Land/Ambush';
 import { Card } from './Cards/Card';
-import { CoverFire } from './Cards/CoverFire';
+import { CoverFire } from './Cards/Land/CoverFire';
 import { Heavy } from './Cards/Heavy';
 import { Maneuver } from './Cards/Maneuver';
-import { Redeploy } from './Cards/Redeploy';
-import { Reinforce } from './Cards/Reinforce';
+import { Redeploy } from './Cards/Sea/Redeploy';
+import { Reinforce } from './Cards/Land/Reinforce';
 import { Lane } from './Lane';
 import { LaneType } from './LaneType';
 import { Player } from './Player';
@@ -18,21 +18,27 @@ export class Board {
 
   constructor(playerTurn: boolean) {
     const firstLane = Math.floor(Math.random() * 3);
+
     this.lanes = [
-      new Lane(firstLane),
-      new Lane((firstLane + 1) % 3),
-      new Lane((firstLane + 2) % 3),
+      new Lane(firstLane + 1),
+      new Lane(((firstLane + 1) % 3) + 1),
+      new Lane(((firstLane + 2) % 3) + 1),
     ];
+    
     this.player = new Player('Player');
     this.opponent = new Player('Opponent');
     this.playerTurn = playerTurn;
     this.deck = [
+      new Heavy(LaneType.AIR),
       new Maneuver(LaneType.AIR),
+      new Maneuver(LaneType.LAND),
       new Reinforce(),
       new Ambush(),
       new CoverFire(),
       new Heavy(LaneType.LAND),
       new Redeploy(),
+      new Heavy(LaneType.SEA),
+      new Maneuver(LaneType.SEA),
     ];
   }
 

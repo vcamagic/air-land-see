@@ -1,7 +1,7 @@
-import { Board } from '../Board';
-import { LaneType } from '../LaneType';
-import { Card } from './Card';
-import { CardEffect } from './CardEffect';
+import { Board } from '../../Board';
+import { LaneType } from '../../LaneType';
+import { Card } from '../Card';
+import { CardEffect } from '../CardEffect';
 
 export class Redeploy extends Card {
   constructor() {
@@ -16,9 +16,10 @@ export class Redeploy extends Card {
     );
   }
 
-  deploy(board: Board, selectedLane: LaneType): void {
-    super.deploy(board, selectedLane);
+  deploy(board: Board, selectedLane: LaneType): Board {
     this.selectTargets(board);
+    super.deploy(board, selectedLane);
+    return board;
   }
 
   executeEffect(
@@ -28,8 +29,8 @@ export class Redeploy extends Card {
   ): void {
     let temp = board.getCardById(targetId as number);
     if (temp !== null && temp.playerOwned && temp.card.isFaceUp()!) {
-        board.removeCardFromLane(targetId);
-        board.addCardToPlayerHand(targetId);
+      board.removeCardFromLane(targetId);
+      board.addCardToPlayerHand(targetId);
     }
     board.clearHighlights();
   }

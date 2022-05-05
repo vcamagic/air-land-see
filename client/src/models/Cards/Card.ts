@@ -31,7 +31,7 @@ export class Card {
     this.highlight = false;
     this.description = description;
     this.img = img;
-    this.effect = effect
+    this.effect = effect;
   }
 
   isFaceUp(): boolean {
@@ -54,15 +54,17 @@ export class Card {
     });
   }
 
-  deploy(board: Board, selectedLane: LaneType): void {
+  deploy(board: Board, selectedLane: LaneType): Board {
+    console.log(selectedLane);
     board.getLane(selectedLane).addPlayerCard(this);
+    return board;
   }
 
   improvise(board: Board, selectedLane: LaneType): void {
     this.faceUp = false;
     const containment = board.getCardById(5);
-    if(containment === null) {
-        board.getLane(selectedLane).addPlayerCard(this);
+    if (containment === null) {
+      board.getLane(selectedLane).addPlayerCard(this);
     }
   }
 

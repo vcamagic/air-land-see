@@ -1,6 +1,7 @@
 import { faBolt, faInfinity } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { useContext } from 'react';
+import BoardContext from '../contexts/BoardContext';
 import { Card } from '../models/Cards/Card';
 import { CardEffect } from '../models/Cards/CardEffect';
 import { LaneType } from '../models/LaneType';
@@ -31,8 +32,17 @@ const getBannerColor = (laneType: LaneType): string => {
 };
 
 export const CardComponent = (props: CardComponentProps) => {
+  const { boardDispatch } = useContext(BoardContext);
+
+  const handleOnClick = () => {
+    boardDispatch({ type: 'CardDeployed', payload: { card: props.card } });
+  };
+
   const FaceUpCard = () => (
-    <div className='m-3'>
+    <div
+      className={`m-3 ${props.card.highlight ? 'border-2 border-red-400' : ''}`}
+      onClick={handleOnClick}
+    >
       <div
         className={`flex justify-evenly ${getBannerColor(
           props.card.type
@@ -56,6 +66,8 @@ export const CardComponent = (props: CardComponentProps) => {
       <img src={props.card.img} alt='card' className='h-237 w-237' />
     </div>
   );
+
   const FaceDownCard = () => <div>FaceDownCard</div>;
+
   return <>{props.card.isFaceUp() ? <FaceUpCard /> : <FaceDownCard />}</>;
 };

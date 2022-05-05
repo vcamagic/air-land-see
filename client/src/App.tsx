@@ -7,7 +7,7 @@ import {
   initialBoardState,
 } from './contexts/BoardContext';
 import { Maneuver } from './models/Cards/Maneuver';
-import { Reinforce } from './models/Cards/Reinforce';
+import { Reinforce } from './models/Cards/Land/Reinforce';
 import { LaneType } from './models/LaneType';
 
 function App() {
@@ -20,6 +20,7 @@ function App() {
     boardState,
     boardDispatch,
   };
+
   return (
     <BoardContextProvider value={boardContextValues}>
       <div className='flex justify-center'>
