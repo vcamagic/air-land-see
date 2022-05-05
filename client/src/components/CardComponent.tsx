@@ -15,8 +15,6 @@ const getCardIcon = (cardEffect: CardEffect) => {
       return <FontAwesomeIcon className='h-5 w-5' icon={faInfinity} />;
     case CardEffect.NO_EFFECT:
       return '';
-    default:
-      return '';
   }
 };
 
