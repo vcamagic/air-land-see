@@ -90,7 +90,6 @@ export class Board {
       });
     });
   }
-
   calculateScores(): void {
     const escalation = this.getCardById(14);
     this.lanes.forEach((lane: Lane) => {
@@ -117,94 +116,43 @@ export class Board {
             }
           }
         }
-        return adjacent;
-    }
-
-    getLane(type: LaneType): Lane {
-        return this.lanes.find(x=>x.type === type) as Lane;
-    }
-
-    getCardById(targetId: number): {card: Card, lane: LaneType, playerOwned: boolean} | null {
-        this.lanes.forEach((lane: Lane) => {
-            let temp = lane.playerCards.find(x=>x.id === targetId);
-            if(temp !== null){
-                return {card: temp, lane: lane.type, playerOwned: true };
+      }
+      lane.playerScore = total;
+      total = 0;
+      coveringFire = false;
+      for (let i = lane.opponentCards.length - 1; i >= 0; i--) {
+        if (coveringFire) {
+          total += 4;
+        } else {
+          if (lane.opponentCards[i].isFaceUp()) {
+            total += lane.opponentCards[i].power;
+            if (lane.opponentCards[i].name === 'Covering Fire') {
+              coveringFire = true;
             }
-            temp = lane.opponentCards.find(x => x.id === targetId);
-            if(temp !== null) {
-                return {card: temp, lane: lane.type, playerOwned: false };
+          } else {
+            if (
+              escalation !== null &&
+              !escalation.playerOwned &&
+              escalation.card.isFaceUp()
+            ) {
+              total += 4;
+            } else {
+              total += 2;
             }
-        });
-        return null;
-    }
-
-    clearHighlights(): void {
-        this.lanes.forEach((lane: Lane) => {
-            lane.highlight = false;
-            lane.playerCards.forEach((card: Card) => {
-                card.highlight = false;
-            });
-            lane.opponentCards.forEach((card: Card) => {
-                card.highlight = false;
-            });
-        })
-    }
-
-    calculateScores(): void {
-        const escalation = this.getCardById(14);
-        this.lanes.forEach((lane: Lane) => {
-            let total: number = 0;
-            let coveringFire: boolean = false;
-            for(let i = lane.playerCards.length - 1; i>=0; i--){
-                if(coveringFire) {
-                    total+=4;
-                } else {
-                    if(lane.playerCards[i].isFaceUp()){
-                        total+=lane.playerCards[i].power;
-                        if(lane.playerCards[i].name === 'Covering Fire') {
-                            coveringFire = true;
-                        }
-                    } else {
-                        if(escalation!==null && escalation.playerOwned && escalation.card.isFaceUp()){
-                            total+=4;
-                        } else {
-                            total+=2;
-                        }
-                    }
-                }
-            }
-            lane.playerScore = total;
-            total = 0;
-            coveringFire = false;
-            for(let i = lane.opponentCards.length - 1; i>=0; i--){
-                if(coveringFire) {
-                    total+=4;
-                } else {
-                    if(lane.opponentCards[i].isFaceUp()){
-                        total+=lane.opponentCards[i].power;
-                        if(lane.opponentCards[i].name === 'Covering Fire') {
-                            coveringFire = true;
-                        }
-                    } else {
-                        if(escalation!==null && !escalation.playerOwned && escalation.card.isFaceUp()){
-                            total+=4;
-                        } else {
-                            total+=2;
-                        }
-                    }
-                }
-            }
-            lane.opponentScore = total;
-        });
-        const support = this.getCardById(1);
-        if(support !== null && support.card.isFaceUp) {
-            this.getAdjacentLanes(support.lane).forEach((lane: Lane) => {
-                if(support.playerOwned) {
-                    lane.playerScore+=3;
-                } else {
-                    lane.opponentScore+=3;
-                }
-            });
+          }
         }
+      }
+      lane.opponentScore = total;
+    });
+    const support = this.getCardById(1);
+    if (support !== null && support.card.isFaceUp) {
+      this.getAdjacentLanes(support.lane).forEach((lane: Lane) => {
+        if (support.playerOwned) {
+          lane.playerScore += 3;
+        } else {
+          lane.opponentScore += 3;
+        }
+      });
     }
+  }
 }
