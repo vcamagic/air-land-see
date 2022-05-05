@@ -92,6 +92,28 @@ export class Board {
                     }
                 }
             }
+            lane.playerScore = total;
+            total = 0;
+            coveringFire = false;
+            for(let i = lane.opponentCards.length - 1; i>=0; i--){
+                if(coveringFire) {
+                    total+=4;
+                } else {
+                    if(lane.opponentCards[i].isFaceUp()){
+                        total+=lane.opponentCards[i].power;
+                        if(lane.opponentCards[i].name === 'Covering Fire') {
+                            coveringFire = true;
+                        }
+                    } else {
+                        if(escalation!==null && !escalation.playerOwned && escalation.card.isFaceUp()){
+                            total+=4;
+                        } else {
+                            total+=2;
+                        }
+                    }
+                }
+            }
+            lane.opponentScore = total;
         });
     }
 }
