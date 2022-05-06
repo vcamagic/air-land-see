@@ -22,7 +22,7 @@ export class Board {
   player!: Player;
   opponent!: Player;
   playerTurn!: boolean;
-  deck!: Card[];
+  deck!: Card[]; 
 
   constructor(playerTurn: boolean) {
     const firstLane = Math.floor(Math.random() * 3);

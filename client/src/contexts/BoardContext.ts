@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React, { createContext } from 'react';
 import { Board } from '../models/Board';
 import { Card } from '../models/Cards/Card';
+import { updateBoard } from '../services/boardService';
 export interface Action {
   type: string;
   payload: any;
@@ -21,6 +22,7 @@ export const boardReducer = (state: Board, action: Action) => {
       let newState = _.cloneDeep(
         action.payload.card.deploy(copyState, card.type)
       );
+      updateBoard(newState);
       return newState;
     case 'PlayerHandChange':
       return state;

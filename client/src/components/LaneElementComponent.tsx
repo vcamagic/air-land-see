@@ -43,7 +43,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
             props.lane.type
           )} relative w-247`}
         >
-          <h1>{getLaneName(props.lane.type)}</h1>
+          <h1>{`- ${getLaneName(props.lane.type)} -`}</h1>
         </div>
       </div>
       <div className='z-50 relative w-247'>

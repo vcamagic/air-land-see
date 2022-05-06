@@ -4,8 +4,9 @@ import { BoardComponent } from './components/BoardComponent';
 import {
   BoardContextProvider,
   boardReducer,
-  initialBoardState
+  initialBoardState,
 } from './contexts/BoardContext';
+import { WebSocketProvider } from './contexts/WebSocketProvider';
 
 function App() {
   const [boardState, boardDispatch] = useReducer(
@@ -19,11 +20,13 @@ function App() {
   };
 
   return (
-    <BoardContextProvider value={boardContextValues}>
-      <div className='flex justify-center'>
-        <BoardComponent />
-      </div>
-    </BoardContextProvider>
+    <WebSocketProvider>
+      <BoardContextProvider value={boardContextValues}>
+        <div className='flex justify-center'>
+          <BoardComponent />
+        </div>
+      </BoardContextProvider>
+    </WebSocketProvider>
   );
 }
 
