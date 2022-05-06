@@ -9,7 +9,7 @@ export class Aerodrome extends Card {
       'Aerodrome',
       4,
       LaneType.AIR,
-      'On your next turn, you may play a card to a non-matching theater.',
+      'You may play cards of strength 3 or less to non-matching theaters.',
       '/images/aerodrome.jpg',
       CardEffect.PERMANENT
     );

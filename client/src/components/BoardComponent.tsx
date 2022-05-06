@@ -4,7 +4,7 @@ import { CardComponent } from './CardComponent';
 import { LaneComponent } from './LaneComponent';
 
 export const BoardComponent = () => {
-  const { boardState, boardDispatch } = useContext(BoardContext);
+  const { boardState } = useContext(BoardContext);
 
   console.log(boardState);
   return (

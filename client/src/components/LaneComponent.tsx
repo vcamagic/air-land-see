@@ -3,7 +3,7 @@ import BoardContext from '../contexts/BoardContext';
 import { CardComponent } from './CardComponent';
 
 export const LaneComponent = () => {
-  const { boardState, boardDispatch } = useContext(BoardContext);
+  const { boardState } = useContext(BoardContext);
   return (
     <>
       <h1>LANE</h1>

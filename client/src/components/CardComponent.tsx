@@ -73,7 +73,11 @@ export const CardComponent = (props: CardComponentProps) => {
     </div>
   );
 
-  const FaceDownCard = () => <div>FaceDownCard</div>;
+  const FaceDownCard = () => (
+    <div className='w-247 h-392'>
+      <img src='/images/face-down.png' alt='face-down' />
+    </div>
+  );
 
   return <>{props.card.isFaceUp() ? <FaceUpCard /> : <FaceDownCard />}</>;
 };

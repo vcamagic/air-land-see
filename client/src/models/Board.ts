@@ -56,6 +56,8 @@ export class Board {
       new Blockade(),
       new Heavy(LaneType.SEA),
     ];
+    this.shuffleDeck();
+    this.dealCards();
   }
 
   nextRound(): void {
@@ -196,4 +198,17 @@ export class Board {
       }
     }
   }
+
+  private shuffleDeck = () => {
+    for (let i = this.deck.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.deck[i], this.deck[j]] = [this.deck[j], this.deck[i]];
+    }
+  };
+
+  private dealCards = () => {
+    this.player.hand = [...this.deck.slice(0, 3), ...this.deck.slice(6, 9)];
+    this.opponent.hand = [...this.deck.slice(3, 6), ...this.deck.slice(9, 12)];
+    this.deck = this.deck.slice(12);
+  };
 }

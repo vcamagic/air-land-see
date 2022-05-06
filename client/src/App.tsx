@@ -4,11 +4,8 @@ import { BoardComponent } from './components/BoardComponent';
 import {
   BoardContextProvider,
   boardReducer,
-  initialBoardState,
+  initialBoardState
 } from './contexts/BoardContext';
-import { Maneuver } from './models/Cards/Maneuver';
-import { Reinforce } from './models/Cards/Land/Reinforce';
-import { LaneType } from './models/LaneType';
 
 function App() {
   const [boardState, boardDispatch] = useReducer(
