@@ -1,17 +1,17 @@
 import React, { useContext } from 'react';
 import BoardContext from '../contexts/BoardContext';
+import { LaneType } from '../models/LaneType';
 import { CardComponent } from './CardComponent';
+import { LaneElementComponent } from './LaneElementComponent';
 
 export const LaneComponent = () => {
   const { boardState } = useContext(BoardContext);
+
   return (
     <>
-      <h1>LANE</h1>
-      {boardState.lanes.map((lane) =>
-        lane.playerCards.map((card) => (
-          <CardComponent key={card.id} card={card} />
-        ))
-      )}
+      {boardState.lanes.map((lane) => (
+        <LaneElementComponent key={lane.type} lane={lane} />
+      ))}
     </>
   );
 };

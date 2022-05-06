@@ -199,6 +199,10 @@ export class Board {
     }
   }
 
+  removeCardFromPlayerHand(cardId: number): void {
+    this.player.hand = this.player.hand.filter((card) => card.id !== cardId);
+  }
+
   private shuffleDeck = () => {
     for (let i = this.deck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));

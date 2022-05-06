@@ -55,8 +55,8 @@ export class Card {
   }
 
   deploy(board: Board, selectedLane: LaneType): Board {
-    console.log(selectedLane);
     board.getLane(selectedLane).addPlayerCard(this);
+    board.removeCardFromPlayerHand(this.id);
     return board;
   }
 

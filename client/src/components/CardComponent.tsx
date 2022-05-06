@@ -5,9 +5,6 @@ import BoardContext from '../contexts/BoardContext';
 import { Card } from '../models/Cards/Card';
 import { CardEffect } from '../models/Cards/CardEffect';
 import { LaneType } from '../models/LaneType';
-interface CardComponentProps {
-  card: Card;
-}
 
 const getCardIcon = (cardEffect: CardEffect) => {
   switch (cardEffect) {
@@ -31,6 +28,11 @@ const getBannerColor = (laneType: LaneType): string => {
   }
 };
 
+interface CardComponentProps {
+  card: Card;
+  inHand: boolean;
+}
+
 export const CardComponent = (props: CardComponentProps) => {
   const { boardDispatch } = useContext(BoardContext);
 
@@ -41,7 +43,7 @@ export const CardComponent = (props: CardComponentProps) => {
   const FaceUpCard = () => (
     <div
       className={`m-3 ${props.card.highlight ? 'border-2 border-red-400' : ''}`}
-      onClick={handleOnClick}
+      onClick={props.inHand ? handleOnClick : () => {}}
     >
       <div
         className={`flex justify-evenly ${getBannerColor(

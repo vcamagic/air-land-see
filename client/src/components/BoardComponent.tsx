@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import BoardContext from '../contexts/BoardContext';
-import { CardComponent } from './CardComponent';
+import { HandComponent } from './HandComponent';
 import { LaneComponent } from './LaneComponent';
 
 export const BoardComponent = () => {
@@ -10,11 +10,19 @@ export const BoardComponent = () => {
   return (
     <div>
       <div className='flex justify-center flex-wrap'>
-        {boardState.deck.map((card) => (
-          <CardComponent key={card.id} card={card} />
-        ))}
+        <div className='w-247 h-392'>
+          <img src='/images/face-down.png' alt='face-down' />
+        </div>
       </div>
-      <LaneComponent />
+      <div className='flex justify-center'>
+        <LaneComponent />
+        <div className='w-247 h-392'>
+          <img className='ml-auto' src='/images/face-down.png' alt='face-down' />
+        </div>
+      </div>
+      <div>
+        <HandComponent />
+      </div>
     </div>
   );
 };
