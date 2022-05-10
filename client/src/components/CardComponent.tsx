@@ -31,12 +31,14 @@ const getBannerColor = (laneType: LaneType): string => {
 interface CardComponentProps {
   card: Card;
   inHand: boolean;
+  updateClickedCard: (card: Card) => void;
 }
 
 export const CardComponent = (props: CardComponentProps) => {
-  const { updateBoard } = useContext(WebSocketContext);
+  const { updateBoardState, board } = useContext(WebSocketContext);
   const handleOnClick = () => {
-    // boardDispatch({ type: 'CardDeployed', payload: { card: props.card } });
+    updateBoardState(props.card.highlightAvailableLanes(board));
+    props.updateClickedCard(props.card);
   };
 
   const FaceUpCard = () => (

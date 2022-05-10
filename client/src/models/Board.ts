@@ -16,12 +16,13 @@ import { Support } from './Cards/Air/Support';
 import { AirDrop } from './Cards/Air/AirDrop';
 import { Aerodrome } from './Cards/Air/Aerodrome';
 import { Containment } from './Cards/Air/Containment';
+import { LaneDeployment } from './LaneDeployment';
 
 export class Board {
   lanes!: Lane[];
   player!: Player;
   opponent!: Player;
-  deck!: Card[]; 
+  deck!: Card[];
 
   constructor() {
     const firstLane = Math.floor(Math.random() * 3);
@@ -106,6 +107,7 @@ export class Board {
   clearHighlights(): void {
     this.lanes.forEach((lane: Lane) => {
       lane.highlight = false;
+      lane.laneDeploymentStatus = LaneDeployment.DEFAULT;
       lane.playerCards.forEach((card: Card) => {
         card.highlight = false;
       });
@@ -219,8 +221,17 @@ export class Board {
     temp.deck = this.deck;
     [temp.player, temp.opponent] = [this.opponent, this.player];
     this.lanes.forEach((lane: Lane, index: number) => {
-      [temp.lanes[index].playerCards, temp.lanes[index].opponentCards, temp.lanes[index].playerScore, temp.lanes[index].opponentScore] = 
-      [lane.opponentCards, lane.playerCards, lane.opponentScore, lane.playerScore];
+      [
+        temp.lanes[index].playerCards,
+        temp.lanes[index].opponentCards,
+        temp.lanes[index].playerScore,
+        temp.lanes[index].opponentScore,
+      ] = [
+        lane.opponentCards,
+        lane.playerCards,
+        lane.opponentScore,
+        lane.playerScore,
+      ];
     });
     return temp;
   }

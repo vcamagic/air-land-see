@@ -28,13 +28,19 @@ const getBannerColor = (laneType: LaneType): string => {
 
 interface LaneElementComponentInterface {
   lane: Lane;
+  updateClickedLane: (lane: Lane) => void;
 }
 
 export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   const CardStack = () => (
     <div className='z-50 relative w-247'>
       {props.lane.playerCards.map((card) => (
-        <CardComponent key={card.id} inHand={false} card={card} />
+        <CardComponent
+          key={card.id}
+          inHand={false}
+          card={card}
+          updateClickedCard={() => {}}
+        />
       ))}
     </div>
   );
@@ -59,13 +65,18 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
     </div>
   );
 
+  const handleDeployClick = () => {
+    props.updateClickedLane(props.lane);
+  };
+  const handleImproviseClick = () => {};
+
   const CanDeploy = () => (
     <div className='p-3'>
       <div className='flex-row h-200 w-247'>
-        <div className='flex 1'>
+        <div className='flex 1' onClick={handleDeployClick}>
           <h1>DEPLOY</h1>
         </div>
-        <div className='flex-1'>
+        <div className='flex-1' onClick={handleImproviseClick}>
           <h1>IMPROVISE</h1>
         </div>
       </div>

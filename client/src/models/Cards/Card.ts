@@ -1,5 +1,6 @@
 import { Board } from '../Board';
 import { Lane } from '../Lane';
+import { LaneDeployment } from '../LaneDeployment';
 import { LaneType } from '../LaneType';
 import { CardEffect } from './CardEffect';
 
@@ -42,16 +43,20 @@ export class Card {
     this.faceUp = !this.faceUp;
   }
 
-  highlightAvailableLanes(board: Board): void {
+  highlightAvailableLanes(board: Board): Board {
     board.lanes.forEach((lane: Lane) => {
       if (
         lane.type === this.type ||
         board.player.airdrop ||
         (board.player.aerodrome && this.power <= 3)
       ) {
-        lane.highlight = true;
+        lane.laneDeploymentStatus = LaneDeployment.CAN_DEPLOY;
+      } else {
+        lane.laneDeploymentStatus = LaneDeployment.ONLY_IMPROVISE;
       }
     });
+
+    return board;
   }
 
   deploy(board: Board, selectedLane: LaneType): Board {
