@@ -213,4 +213,15 @@ export class Board {
     this.opponent.hand = [...this.deck.slice(3, 6), ...this.deck.slice(9, 12)];
     this.deck = this.deck.slice(12);
   };
+
+  invertBoardState(): Board {
+    let temp: Board = new Board();
+    temp.deck = this.deck;
+    [temp.player, temp.opponent] = [this.opponent, this.player];
+    this.lanes.forEach((lane: Lane, index: number) => {
+      [temp.lanes[index].playerCards, temp.lanes[index].opponentCards, temp.lanes[index].playerScore, temp.lanes[index].opponentScore] = 
+      [lane.opponentCards, lane.playerCards, lane.opponentScore, lane.playerScore];
+    });
+    return temp;
+  }
 }

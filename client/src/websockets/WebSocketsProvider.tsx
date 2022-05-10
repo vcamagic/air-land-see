@@ -30,11 +30,6 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       .build();
 
     try {
-      connection.current.on('BoardUpdated', (board: Board) => {
-        setBoard(board);
-        setPlayerTurn(true);
-      });
-
       connection.current.on('GameFound', async (id: string) => {
         gameId.current = id;
         await connection.current.invoke('SubmitName', [id, playerName]);
@@ -58,7 +53,12 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       );
 
       connection.current.on('ReceivePreparedGame', (board: Board) => {
-        setBoard(board);
+        setBoard(board.invertBoardState());
+      });
+
+      connection.current.on('OpponentTurn', (board: Board) => {
+        setBoard(board.invertBoardState());
+        setPlayerTurn(true);
       });
 
       await connection.current.start();
