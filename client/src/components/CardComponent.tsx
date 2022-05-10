@@ -1,7 +1,6 @@
 import { faBolt, faInfinity } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useContext } from 'react';
-import BoardContext from '../contexts/BoardContext';
+import React from 'react';
 import { Card } from '../models/Cards/Card';
 import { CardEffect } from '../models/Cards/CardEffect';
 import { LaneType } from '../models/LaneType';
@@ -34,10 +33,10 @@ interface CardComponentProps {
 }
 
 export const CardComponent = (props: CardComponentProps) => {
-  const { boardDispatch } = useContext(BoardContext);
+  //const { boardDispatch } = useContext(BoardContext);
 
   const handleOnClick = () => {
-    boardDispatch({ type: 'CardDeployed', payload: { card: props.card } });
+    // boardDispatch({ type: 'CardDeployed', payload: { card: props.card } });
   };
 
   const FaceUpCard = () => (

@@ -1,13 +1,15 @@
-import React, { useContext } from 'react';
-import BoardContext from '../contexts/BoardContext';
+import React from 'react';
+import { Lane } from '../models/Lane';
 import { LaneElementComponent } from './LaneElementComponent';
 
-export const LaneComponent = () => {
-  const { boardState } = useContext(BoardContext);
+interface LaneComponentProps {
+  lanes: Lane[];
+}
 
+export const LaneComponent = (props: LaneComponentProps) => {
   return (
     <>
-      {boardState.lanes.map((lane) => (
+      {props.lanes.map((lane) => (
         <LaneElementComponent key={lane.type} lane={lane} />
       ))}
     </>

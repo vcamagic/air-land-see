@@ -1,12 +1,15 @@
-import React, { useContext } from 'react';
-import BoardContext from '../contexts/BoardContext';
+import React from 'react';
+import { Card } from '../models/Cards/Card';
 import { CardComponent } from './CardComponent';
 
-export const HandComponent = () => {
-  const { boardState } = useContext(BoardContext);
+interface HandComponentProps {
+  cards: Card[];
+}
+
+export const HandComponent = (props: HandComponentProps) => {
   return (
     <div className='flex justify-center flex-wrap'>
-      {boardState.player.hand.map((card) => (
+      {props.cards.map((card) => (
         <CardComponent key={card.id} inHand={true} card={card} />
       ))}
     </div>

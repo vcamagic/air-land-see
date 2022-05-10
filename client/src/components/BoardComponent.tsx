@@ -1,15 +1,11 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
+import { Board } from '../models/Board';
 import WebSocketContext from '../websockets/WebSocketContext';
 import { HandComponent } from './HandComponent';
 import { LaneComponent } from './LaneComponent';
 
 export const BoardComponent = () => {
-  const { joinGame } = useContext(WebSocketContext);
-
-  useEffect(() => {
-    console.log('eff');
-    joinGame('username');
-  }, []);
+  const { board } = useContext(WebSocketContext);
 
   return (
     <div>
@@ -19,7 +15,7 @@ export const BoardComponent = () => {
         </div>
       </div>
       <div className='flex justify-center'>
-        <LaneComponent />
+        <LaneComponent lanes={board.lanes} />
         <div className='w-247 h-392'>
           <img
             className='ml-auto'
@@ -29,7 +25,7 @@ export const BoardComponent = () => {
         </div>
       </div>
       <div>
-        <HandComponent />
+        <HandComponent cards={board.player.hand} />
       </div>
     </div>
   );

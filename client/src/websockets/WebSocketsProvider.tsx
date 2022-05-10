@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   HubConnectionBuilder,
   LogLevel,
@@ -12,34 +12,43 @@ interface WebSocketProviderProps {
 }
 
 export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
-  const [connection, setConnection] = useState({});
+  const connection = useRef(
+    new HubConnectionBuilder()
+      .withUrl('https://localhost:7095/game')
+      .configureLogging(LogLevel.Information)
+      .build()
+  );
   const [board, setBoard] = useState(new Board());
   const [playerTurn, setPlayerTurn] = useState(true);
+  const gameId = useRef('');
+  const renderOnce = useRef(0);
 
-  let gameId = '';
-  const joinGame = async (playerName: string) => {
+  const joinGame = useCallback(async (playerName: string) => {
+    connection.current = new HubConnectionBuilder()
+      .withUrl('https://localhost:7095/game')
+      .configureLogging(LogLevel.Information)
+      .build();
+
     try {
-      const connection = new HubConnectionBuilder()
-        .withUrl('https://localhost:7095/game')
-        .configureLogging(LogLevel.Information)
-        .build();
-
-      connection.on('BoardUpdated', (board: Board) => {
+      connection.current.on('BoardUpdated', (board: Board) => {
         setBoard(board);
         setPlayerTurn(true);
       });
 
-      connection.on('GameFound', async (id: string) => {
-        gameId = id;
-        await connection.invoke('SubmitName', [id, playerName]);
+      connection.current.on('GameFound', async (id: string) => {
+        gameId.current = id;
+        await connection.current.invoke('SubmitName', [id, playerName]);
       });
 
-      connection.on(
+      connection.current.on(
         'GameSetup',
         async (isHost: boolean, opponentName: string) => {
           if (isHost) {
             const board = new Board();
-            await connection.invoke('PrepareGame', [board, gameId]);
+            await connection.current.invoke('PrepareGame', [
+              board,
+              gameId.current,
+            ]);
             setBoard(board);
             setPlayerTurn(true);
           } else {
@@ -48,20 +57,26 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         }
       );
 
-      connection.on('ReceivePreparedGame', (board: Board) => {
+      connection.current.on('ReceivePreparedGame', (board: Board) => {
         setBoard(board);
       });
 
-      await connection.start();
-      setConnection(connection);
+      await connection.current.start();
     } catch (e) {
       console.log(e);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (renderOnce.current === 0) {
+      renderOnce.current++;
+      joinGame('player');
+    }
+  }, [joinGame]);
 
   const updateBoard = async (board: Board, gameId: string) => {
     try {
-      await (connection as HubConnection).invoke('UpdateBoard', board);
+      await connection.current.invoke('UpdateBoard', board);
     } catch (e) {
       console.error(e);
     }
@@ -69,7 +84,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
 
   const closeConnection = async () => {
     try {
-      await (connection as HubConnection).stop();
+      await connection.current.stop();
     } catch (e) {
       console.error(e);
     }
