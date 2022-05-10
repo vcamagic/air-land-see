@@ -20,7 +20,6 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
     wsRef.current = new WebSocket(BaseConfig.wsUrl);
 
     wsRef.current.onopen = () => {
-      console.log('socket open');
       setWsState(BaseConfig.webSocketState.OPEN);
     };
 
@@ -30,19 +29,21 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
     };
 
     wsRef.current.onclose = () => {
-      console.log('socket closed by server');
       setWsState(BaseConfig.webSocketState.CLOSED);
     };
   };
 
   const closeWs = () => {
     wsRef.current.close();
-    console.log('socket closed by client');
     setWsState(BaseConfig.webSocketState.CLOSED);
   };
 
+  const send = (board: Board) => {
+    wsRef.current.send(JSON.stringify(board));
+  };
+
   return (
-    <WebSocketProv value={{ closeWs, connectWs, wsState, board }}>
+    <WebSocketProv value={{ closeWs, connectWs, send, wsState, board }}>
       {children}
     </WebSocketProv>
   );

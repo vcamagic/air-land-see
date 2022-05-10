@@ -5,17 +5,19 @@ import { HandComponent } from './HandComponent';
 import { LaneComponent } from './LaneComponent';
 
 export const BoardComponent = () => {
-  const { boardState } = useContext(BoardContext);
-  const { connectWs, board } = useContext(WebSocketContext);
+  //const { boardState } = useContext(BoardContext);
+  const { connectWs, board, wsState } = useContext(WebSocketContext);
 
   useEffect(() => {
     connectWs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   useEffect(() => {
     console.log('WEB SOCKET BOARD.', board);
+    console.log('WEB SOCKET STATE', wsState);
   }, [board]);
-  console.log(boardState);
+
   return (
     <div>
       <div className='flex justify-center flex-wrap'>

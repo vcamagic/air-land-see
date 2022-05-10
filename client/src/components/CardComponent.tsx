@@ -53,7 +53,11 @@ export const CardComponent = (props: CardComponentProps) => {
         <h1 className='text-7xl font-bold text-white mr-3'>
           {props.card.power}
         </h1>
-        <div>
+        <div
+          className={`${
+            props.card.effect === CardEffect.PERMANENT ? 'text-white' : ''
+          }`}
+        >
           <div className='flex justify-end'>
             <h1 className='text-2xl font-bold'>
               <span className='p-2'>{getCardIcon(props.card.effect)}</span>

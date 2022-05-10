@@ -20,11 +20,11 @@ public class BoardService : IBoardService
         {
             BoardData.Board = board;
 
-            _ = _webSocketHub.SendAll(JsonSerializer.Serialize(BoardData.Board));
+            _webSocketHub.SendAll(JsonSerializer.Serialize(BoardData.Board));
         }
         catch (Exception ex)
         {
-            throw ex;
+            System.Console.WriteLine(ex);
         }
     }
 }
