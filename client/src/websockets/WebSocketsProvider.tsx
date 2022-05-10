@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  HubConnectionBuilder,
-  LogLevel,
-  HubConnection,
+    HubConnectionBuilder,
+    LogLevel
 } from '@microsoft/signalr';
-import { WebSocketProv } from './WebSocketContext';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Board } from '../models/Board';
+import { WebSocketProv } from './WebSocketContext';
 
 interface WebSocketProviderProps {
   children: JSX.Element;

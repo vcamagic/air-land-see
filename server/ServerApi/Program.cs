@@ -1,8 +1,7 @@
 using ALS.Services.Hub;
 using ALS.Services.Interfaces;
 using ALS.Services.Repository;
-using ALS.Services.Services;
-using ServerApi.Extensions;
+
 
 var AllowSpecificOrigins = "AllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -21,8 +20,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//builder.Services.AddSingleton(typeof(WebSocketHub), new WebSocketHub());
-//builder.Services.AddScoped<IBoardService, BoardService>();
 builder.Services.AddSignalR();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 
@@ -35,15 +32,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-// app.UseWebSockets(new WebSocketOptions
-// {
-//     KeepAliveInterval = TimeSpan.FromSeconds(120)
-// });
-
-// WebSocketHub _webSocketHub = app.Services.GetRequiredService<WebSocketHub>();
-
-// app.ConfigureWebSockets(_webSocketHub);
 
 app.MapHub<GameHub>("/game");
 
