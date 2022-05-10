@@ -11,7 +11,7 @@ export const WebSocketProvider = ({ children }: WebSocketProviderProps) => {
   const [wsState, setWsState] = useState(
     BaseConfig.webSocketState.NOTCONNECTED
   );
-  const [board, setBoard] = useState(new Board(true));
+  const [board, setBoard] = useState(new Board());
   const wsRef = useRef(new WebSocket(BaseConfig.wsUrl));
 
   const connectWs = () => {

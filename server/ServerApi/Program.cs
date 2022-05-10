@@ -11,7 +11,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: AllowSpecificOrigins, builder =>
     {
-        builder.AllowAnyHeader().AllowAnyHeader().WithOrigins("http://localhost:3000");
+        builder.AllowAnyHeader().AllowCredentials().AllowAnyHeader().WithOrigins("http://localhost:3000");
     });
 });
 // Add services to the container.

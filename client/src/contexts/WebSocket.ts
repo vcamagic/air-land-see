@@ -13,7 +13,7 @@ const WebSocketContext = React.createContext<WebSocketContextProps>({
   closeWs: () => {},
   send: (board: Board) => {},
   wsState: 0,
-  board: new Board(true),
+  board: new Board(),
 });
 export const WebSocketConsumer = WebSocketContext.Consumer;
 export const WebSocketProv = WebSocketContext.Provider;

@@ -12,7 +12,7 @@ interface BoardContextProps {
   boardDispatch: React.Dispatch<Action>;
 }
 
-export const initialBoardState = new Board(true);
+export const initialBoardState = new Board();
 
 export const boardReducer = (state: Board, action: Action) => {
   let copyState = _.cloneDeep(state);

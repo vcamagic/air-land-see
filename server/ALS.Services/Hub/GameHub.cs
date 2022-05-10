@@ -13,6 +13,15 @@ namespace ALS.Services.Hub
             Repo = repo;
         }
 
+
+        public async void PrepareGame(Board board, Guid gameId)
+        {
+            var game = Repo.Games.FirstOrDefault(game => game.Id == gameId);
+            if (game != null)
+            {
+                await Clients.Client(game.PlayerTwo.ConnectionId).ReceivePreparedGame(board);
+            }
+        }
         // public async void Turn(Guid id, AffectedField[] fields)
         // {
         //     Game g = Repo.Games.FirstOrDefault(x => x.Id == id);
@@ -52,7 +61,7 @@ namespace ALS.Services.Hub
             Game g = Repo.Games.FirstOrDefault(x => x.Id == id);
             if (g != null)
             {
-                if(g.PlayerOne.ConnectionId == Context.ConnectionId)
+                if (g.PlayerOne.ConnectionId == Context.ConnectionId)
                 {
                     g.PlayerOne.Name = name;
                 }
@@ -60,10 +69,10 @@ namespace ALS.Services.Hub
                 {
                     g.PlayerTwo.Name = name;
                 }
-                if(!string.IsNullOrEmpty(g.PlayerOne.Name) && !string.IsNullOrEmpty(g.PlayerTwo.Name))
+                if (!string.IsNullOrEmpty(g.PlayerOne.Name) && !string.IsNullOrEmpty(g.PlayerTwo.Name))
                 {
-                    await Clients.Client(g.PlayerOne.ConnectionId).GameSetup(g.PlayerOne.Color, g.PlayerTwo.Name);
-                    await Clients.Client(g.PlayerTwo.ConnectionId).GameSetup(g.PlayerTwo.Color, g.PlayerOne.Name);
+                    await Clients.Client(g.PlayerOne.ConnectionId).GameSetup(true, g.PlayerTwo.Name);
+                    await Clients.Client(g.PlayerTwo.ConnectionId).GameSetup(false, g.PlayerOne.Name);
                 }
             }
         }
@@ -73,11 +82,11 @@ namespace ALS.Services.Hub
             Game game = Repo.Games.FirstOrDefault(x => x.Id == id);
             if (game != null)
             {
-                if(game.PlayerOne.ConnectionId == Context.ConnectionId && game.RematchConfirmTwo)
+                if (game.PlayerOne.ConnectionId == Context.ConnectionId && game.RematchConfirmTwo)
                 {
                     await Clients.Client(game.PlayerTwo.ConnectionId).RematchRefused();
                 }
-                if(game.PlayerTwo.ConnectionId == Context.ConnectionId && game.RematchConfirmOne)
+                if (game.PlayerTwo.ConnectionId == Context.ConnectionId && game.RematchConfirmOne)
                 {
                     await Clients.Client(game.PlayerOne.ConnectionId).RematchRefused();
                 }
@@ -86,7 +95,7 @@ namespace ALS.Services.Hub
             bool gameFound = false;
             foreach (Game g in Repo.Games)
             {
-                if(g.PlayerOne != null && g.PlayerTwo== null)
+                if (g.PlayerOne != null && g.PlayerTwo == null)
                 {
                     g.PlayerTwo = new Player() { Color = "black", ConnectionId = Context.ConnectionId };
                     g.CurrentPlayer = g.PlayerOne;
@@ -107,15 +116,15 @@ namespace ALS.Services.Hub
             Game g = Repo.Games.FirstOrDefault(x => x.Id == id);
             if (g != null)
             {
-                if(g.PlayerOne.ConnectionId == Context.ConnectionId)
+                if (g.PlayerOne.ConnectionId == Context.ConnectionId)
                 {
                     g.RematchConfirmOne = true;
                 }
-                if(g.PlayerTwo.ConnectionId == Context.ConnectionId)
+                if (g.PlayerTwo.ConnectionId == Context.ConnectionId)
                 {
                     g.RematchConfirmTwo = true;
                 }
-                if(g.RematchConfirmTwo && g.RematchConfirmOne)
+                if (g.RematchConfirmTwo && g.RematchConfirmOne)
                 {
                     g.PlayerOne.Color = g.PlayerOne.Color == "white" ? "black" : "white";
                     g.PlayerTwo.Color = g.PlayerTwo.Color == "white" ? "black" : "white";
@@ -137,7 +146,7 @@ namespace ALS.Services.Hub
             Game g = Repo.Games.FirstOrDefault(x => x.Id == id);
             if (g != null)
             {
-                if(g.PlayerOne!=null && g.PlayerOne.ConnectionId != Context.ConnectionId)
+                if (g.PlayerOne != null && g.PlayerOne.ConnectionId != Context.ConnectionId)
                 {
                     await Clients.Client(g.PlayerOne.ConnectionId).EnemyConcede();
                 }
@@ -151,9 +160,9 @@ namespace ALS.Services.Hub
         public override async Task OnConnectedAsync()
         {
             bool gameFound = false;
-            foreach(Game g in Repo.Games)
+            foreach (Game g in Repo.Games)
             {
-                if(g.PlayerOne !=null && g.PlayerTwo == null)
+                if (g.PlayerOne != null && g.PlayerTwo == null)
                 {
                     g.PlayerTwo = new Player() { Color = "black", ConnectionId = Context.ConnectionId };
                     g.CurrentPlayer = g.PlayerOne;
@@ -172,9 +181,9 @@ namespace ALS.Services.Hub
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            for(int i=0;i<Repo.Games.Count;i++)
+            for (int i = 0; i < Repo.Games.Count; i++)
             {
-                if(Repo.Games[i].PlayerOne!=null && Repo.Games[i].PlayerOne.ConnectionId == Context.ConnectionId)
+                if (Repo.Games[i].PlayerOne != null && Repo.Games[i].PlayerOne.ConnectionId == Context.ConnectionId)
                 {
                     if (Repo.Games[i].PlayerTwo != null)
                     {
@@ -189,9 +198,9 @@ namespace ALS.Services.Hub
                     }
                     Repo.Games.Remove(Repo.Games[i]);
                     break;
-                    
+
                 }
-                if(Repo.Games[i].PlayerTwo!=null && Repo.Games[i].PlayerTwo.ConnectionId == Context.ConnectionId)
+                if (Repo.Games[i].PlayerTwo != null && Repo.Games[i].PlayerTwo.ConnectionId == Context.ConnectionId)
                 {
                     if (Repo.Games[i].PlayerOne != null)
                     {

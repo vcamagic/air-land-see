@@ -21,10 +21,9 @@ export class Board {
   lanes!: Lane[];
   player!: Player;
   opponent!: Player;
-  playerTurn!: boolean;
   deck!: Card[]; 
 
-  constructor(playerTurn: boolean) {
+  constructor() {
     const firstLane = Math.floor(Math.random() * 3);
 
     this.lanes = [
@@ -35,7 +34,6 @@ export class Board {
 
     this.player = new Player('Player');
     this.opponent = new Player('Opponent');
-    this.playerTurn = playerTurn;
     this.deck = [
       new Support(),
       new AirDrop(),

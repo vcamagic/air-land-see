@@ -13,32 +13,53 @@ interface WebSocketProviderProps {
 
 export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const [connection, setConnection] = useState({});
-  const [board, setBoard] = useState(new Board(true));
+  const [board, setBoard] = useState(new Board());
+  const [playerTurn, setPlayerTurn] = useState(true);
 
-  const joinGame = async (user: any) => {
+  let gameId = '';
+  const joinGame = async (playerName: string) => {
     try {
       const connection = new HubConnectionBuilder()
-        .withUrl('https//localhost:7095/game')
+        .withUrl('https://localhost:7095/game')
         .configureLogging(LogLevel.Information)
         .build();
 
       connection.on('BoardUpdated', (board: Board) => {
         setBoard(board);
+        setPlayerTurn(true);
       });
 
-      connection.on('GameStarted', async () => {
-        await connection.invoke('GameStart', { board: new Board(true) });
+      connection.on('GameFound', async (id: string) => {
+        gameId = id;
+        await connection.invoke('SubmitName', [id, playerName]);
+      });
+
+      connection.on(
+        'GameSetup',
+        async (isHost: boolean, opponentName: string) => {
+          if (isHost) {
+            const board = new Board();
+            await connection.invoke('PrepareGame', [board, gameId]);
+            setBoard(board);
+            setPlayerTurn(true);
+          } else {
+            setPlayerTurn(false);
+          }
+        }
+      );
+
+      connection.on('ReceivePreparedGame', (board: Board) => {
+        setBoard(board);
       });
 
       await connection.start();
-      await connection.invoke('JoinGame', { user });
       setConnection(connection);
     } catch (e) {
       console.log(e);
     }
   };
 
-  const updateBoard = async (board: Board) => {
+  const updateBoard = async (board: Board, gameId: string) => {
     try {
       await (connection as HubConnection).invoke('UpdateBoard', board);
     } catch (e) {
@@ -55,7 +76,9 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   };
 
   return (
-    <WebSocketProv value={{ joinGame, closeConnection, updateBoard, board }}>
+    <WebSocketProv
+      value={{ joinGame, closeConnection, updateBoard, board, playerTurn }}
+    >
       {children}
     </WebSocketProv>
   );

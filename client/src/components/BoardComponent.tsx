@@ -7,8 +7,9 @@ export const BoardComponent = () => {
   const { joinGame } = useContext(WebSocketContext);
 
   useEffect(() => {
+    console.log('eff');
     joinGame('username');
-  }, [joinGame]);
+  }, []);
 
   return (
     <div>
