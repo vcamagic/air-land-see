@@ -1,9 +1,10 @@
 import { faBolt, faInfinity } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Card } from '../models/Cards/Card';
 import { CardEffect } from '../models/Cards/CardEffect';
 import { LaneType } from '../models/LaneType';
+import WebSocketContext from '../websockets/WebSocketContext';
 
 const getCardIcon = (cardEffect: CardEffect) => {
   switch (cardEffect) {
@@ -33,8 +34,7 @@ interface CardComponentProps {
 }
 
 export const CardComponent = (props: CardComponentProps) => {
-  //const { boardDispatch } = useContext(BoardContext);
-
+  const { updateBoard } = useContext(WebSocketContext);
   const handleOnClick = () => {
     // boardDispatch({ type: 'CardDeployed', payload: { card: props.card } });
   };

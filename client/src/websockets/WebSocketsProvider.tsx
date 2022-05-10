@@ -90,9 +90,19 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     }
   };
 
+  const updateBoardState = (board: Board) => {
+    setBoard(board);
+  };
   return (
     <WebSocketProv
-      value={{ joinGame, closeConnection, updateBoard, board, playerTurn }}
+      value={{
+        joinGame,
+        closeConnection,
+        updateBoard,
+        board,
+        updateBoardState,
+        playerTurn
+      }}
     >
       {children}
     </WebSocketProv>

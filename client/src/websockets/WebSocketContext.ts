@@ -6,6 +6,7 @@ interface WebSocketContextProps {
   closeConnection: () => Promise<void>;
   updateBoard: (board: Board, gameId: string) => Promise<void>;
   board: Board;
+  updateBoardState: (board: Board) => void;
   playerTurn: boolean;
 }
 const WebSocketContext = React.createContext<WebSocketContextProps>({
@@ -13,6 +14,7 @@ const WebSocketContext = React.createContext<WebSocketContextProps>({
   closeConnection: () => new Promise((resolve) => resolve()),
   updateBoard: (board: Board, gameId: string) =>
     new Promise((resolve) => resolve()),
+  updateBoardState: (board: Board) => {},
   board: new Board(),
   playerTurn: true,
 });
