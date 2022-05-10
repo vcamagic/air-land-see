@@ -1,5 +1,6 @@
 import React from 'react';
 import { Lane } from '../models/Lane';
+import { LaneDeployment } from '../models/LaneDeployment';
 import { LaneType } from '../models/LaneType';
 import { CardComponent } from './CardComponent';
 
@@ -30,7 +31,15 @@ interface LaneElementComponentInterface {
 }
 
 export const LaneElementComponent = (props: LaneElementComponentInterface) => {
-  return (
+  const CardStack = () => (
+    <div className='z-50 relative w-247'>
+      {props.lane.playerCards.map((card) => (
+        <CardComponent key={card.id} inHand={false} card={card} />
+      ))}
+    </div>
+  );
+
+  const DefaultTemplate = () => (
     <div className='p-3'>
       <div>
         <img
@@ -46,11 +55,47 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
           <h1>{`- ${getLaneName(props.lane.type)} -`}</h1>
         </div>
       </div>
-      <div className='z-50 relative w-247'>
-        {props.lane.playerCards.map((card) => (
-          <CardComponent key={card.id} inHand={false} card={card} />
-        ))}
-      </div>
+      <CardStack />
     </div>
   );
+
+  const CanDeploy = () => (
+    <div className='p-3'>
+      <div className='flex-row h-200 w-247'>
+        <div className='flex 1'>
+          <h1>DEPLOY</h1>
+        </div>
+        <div className='flex-1'>
+          <h1>IMPROVISE</h1>
+        </div>
+      </div>
+      <CardStack />
+    </div>
+  );
+
+  const OnlyImprovise = () => (
+    <div className='p-3'>
+      <div className='flex-row h-200 w-247'>
+        <div className='flex-1'>
+          <h1>IMPROVISE</h1>
+        </div>
+      </div>
+      <CardStack />
+    </div>
+  );
+
+  let Template;
+  switch (props.lane.laneDeploymentStatus) {
+    case LaneDeployment.CAN_DEPLOY:
+      Template = CanDeploy;
+      break;
+    case LaneDeployment.ONLY_IMPROVISE:
+      Template = OnlyImprovise;
+      break;
+    default:
+      Template = DefaultTemplate;
+      break;
+  }
+
+  return <Template />;
 };

@@ -1,4 +1,5 @@
 import { Card } from "./Cards/Card";
+import { LaneDeployment } from "./LaneDeployment";
 import { LaneType } from "./LaneType";
 
 export class Lane {
@@ -6,6 +7,7 @@ export class Lane {
     playerCards!: Card[];
     opponentCards!:Card[];
     highlight!: boolean;
+    laneDeploymentStatus!: LaneDeployment;
     playerScore!: number;
     opponentScore!: number;
 
@@ -14,6 +16,7 @@ export class Lane {
         this.playerCards = [];
         this.opponentCards = [];
         this.highlight = false;
+        this.laneDeploymentStatus = LaneDeployment.DEFAULT;
         this.playerScore = 0;
         this.opponentScore = 0;
     }
