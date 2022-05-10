@@ -24,11 +24,6 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         .configureLogging(LogLevel.Information)
         .build();
 
-      connection.on('BoardUpdated', (board: Board) => {
-        setBoard(board);
-        setPlayerTurn(true);
-      });
-
       connection.on('GameFound', async (id: string) => {
         gameId = id;
         await connection.invoke('SubmitName', [id, playerName]);
@@ -49,7 +44,12 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       );
 
       connection.on('ReceivePreparedGame', (board: Board) => {
-        setBoard(board);
+        setBoard(board.invertBoardState());
+      });
+
+      connection.on('OpponentTurn', (board: Board) => {
+        setBoard(board.invertBoardState());
+        setPlayerTurn(true);
       });
 
       await connection.start();

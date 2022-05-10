@@ -22,25 +22,26 @@ namespace ALS.Services.Hub
                 await Clients.Client(game.PlayerTwo.ConnectionId).ReceivePreparedGame(board);
             }
         }
-        // public async void Turn(Guid id, AffectedField[] fields)
-        // {
-        //     Game g = Repo.Games.FirstOrDefault(x => x.Id == id);
-        //     if (g != null)
-        //     {
-        //         if (Context.ConnectionId == g.CurrentPlayer.ConnectionId)
-        //         {
-        //             if (g.CurrentPlayer == g.PlayerOne)
-        //             {
-        //                 g.CurrentPlayer = g.PlayerTwo;
-        //             }
-        //             else
-        //             {
-        //                 g.CurrentPlayer = g.PlayerOne;
-        //             }
-        //             await Clients.Client(g.CurrentPlayer.ConnectionId).EnemyTurn(fields);
-        //         }
-        //     }
-        // }
+
+        public async void Turn(Guid id, Board board)
+        {
+            Game g = Repo.Games.FirstOrDefault(x => x.Id == id);
+            if (g != null)
+            {
+                if (Context.ConnectionId == g.CurrentPlayer.ConnectionId)
+                {
+                    if (g.CurrentPlayer == g.PlayerOne)
+                    {
+                        g.CurrentPlayer = g.PlayerTwo;
+                    }
+                    else
+                    {
+                        g.CurrentPlayer = g.PlayerOne;
+                    }
+                    await Clients.Client(g.CurrentPlayer.ConnectionId).OpponentTurn(board);
+                }
+            }
+        }
 
         // public async void Undo(Guid id, AffectedField[] fields)
         // {
