@@ -6,7 +6,7 @@ import {
   boardReducer,
   initialBoardState,
 } from './contexts/BoardContext';
-import { WebSocketProvider } from './contexts/WebSocketProvider';
+import { WebSocketsProvider } from './websockets/WebSocketsProvider';
 
 function App() {
   const [boardState, boardDispatch] = useReducer(
@@ -20,13 +20,13 @@ function App() {
   };
 
   return (
-    <WebSocketProvider>
+    <WebSocketsProvider>
       <BoardContextProvider value={boardContextValues}>
         <div className='flex justify-center'>
           <BoardComponent />
         </div>
       </BoardContextProvider>
-    </WebSocketProvider>
+    </WebSocketsProvider>
   );
 }
 

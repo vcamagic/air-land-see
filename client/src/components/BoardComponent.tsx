@@ -1,22 +1,14 @@
 import React, { useContext, useEffect } from 'react';
-import BoardContext from '../contexts/BoardContext';
-import WebSocketContext from '../contexts/WebSocket';
+import WebSocketContext from '../websockets/WebSocketContext';
 import { HandComponent } from './HandComponent';
 import { LaneComponent } from './LaneComponent';
 
 export const BoardComponent = () => {
-  //const { boardState } = useContext(BoardContext);
-  const { connectWs, board, wsState } = useContext(WebSocketContext);
+  const { joinGame } = useContext(WebSocketContext);
 
   useEffect(() => {
-    connectWs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    console.log('WEB SOCKET BOARD.', board);
-    console.log('WEB SOCKET STATE', wsState);
-  }, [board]);
+    joinGame('username');
+  }, [joinGame]);
 
   return (
     <div>
