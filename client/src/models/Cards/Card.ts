@@ -14,6 +14,7 @@ export class Card {
   description!: string;
   img!: string;
   effect!: CardEffect;
+  targeting!: boolean;
 
   constructor(
     id: number,
@@ -33,6 +34,7 @@ export class Card {
     this.description = description;
     this.img = img;
     this.effect = effect;
+    this.targeting = false;
   }
 
   isFaceUp(): boolean {
@@ -63,6 +65,7 @@ export class Card {
     board.getLane(selectedLane).addPlayerCard(this);
     board.removeCardFromPlayerHand(this.id);
     board.clearHighlights();
+    this.targeting = this.effect === CardEffect.INSTANT ? true : false;
     return board;
   }
 
