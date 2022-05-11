@@ -1,7 +1,4 @@
-import {
-    HubConnectionBuilder,
-    LogLevel
-} from '@microsoft/signalr';
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Board } from '../models/Board';
 import { WebSocketProv } from './WebSocketContext';
@@ -20,7 +17,6 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const [board, setBoard] = useState(new Board());
   const [playerTurn, setPlayerTurn] = useState(true);
   const gameId = useRef('');
-  const renderOnce = useRef(0);
 
   const joinGame = useCallback(async (playerName: string) => {
     connection.current = new HubConnectionBuilder()
@@ -66,13 +62,6 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (renderOnce.current === 0) {
-      renderOnce.current++;
-      joinGame('player');
-    }
-  }, [joinGame]);
-
   const updateBoard = async (board: Board, gameId: string) => {
     try {
       await connection.current.invoke('UpdateBoard', board);
@@ -92,6 +81,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const updateBoardState = (board: Board) => {
     setBoard(board);
   };
+
   return (
     <WebSocketProv
       value={{
@@ -100,7 +90,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         updateBoard,
         board,
         updateBoardState,
-        playerTurn
+        playerTurn,
       }}
     >
       {children}
