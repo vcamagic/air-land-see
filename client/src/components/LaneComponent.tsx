@@ -9,7 +9,7 @@ interface LaneComponentProps {
 
 export const LaneComponent = (props: LaneComponentProps) => {
   return (
-    <div className='flex flex-col'>
+    <div className='w-full flex-col'>
       {props.lanes.map((lane) => (
         <LaneElementComponent
           key={lane.type}
