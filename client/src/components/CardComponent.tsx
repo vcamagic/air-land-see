@@ -36,6 +36,7 @@ interface CardComponentProps {
 
 export const CardComponent = (props: CardComponentProps) => {
   const { updateBoardState, board } = useContext(WebSocketContext);
+  
   const handleOnClick = () => {
     updateBoardState(props.card.highlightAvailableLanes(board));
     props.updateClickedCard(props.card);

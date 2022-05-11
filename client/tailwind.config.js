@@ -3,6 +3,7 @@ module.exports = {
   theme: {
     maxWidth: {
       247: '247px',
+      200: '200px'
     },
     minHeight: {
       145: '145px',
