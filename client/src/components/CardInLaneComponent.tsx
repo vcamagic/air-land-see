@@ -31,15 +31,18 @@ interface CardInLaneComponentProps {
   board: Board;
   card: Card;
   left: boolean;
+  updateTargetedCard: (card: Card) => void;
 }
 
 export const CardInLaneComponent = ({
   board,
   card,
   left,
+  updateTargetedCard,
 }: CardInLaneComponentProps) => {
   const cardInLaneClick = () => {
     if (board.targeting && card.highlight) {
+      updateTargetedCard(card);
     }
   };
 
@@ -110,9 +113,26 @@ export const CardInLaneComponent = ({
       </div>
     </div>
   );
+
+  const FaceDown = () => (
+    <>
+      <img
+        src='/images/face-down.jpg'
+        alt='face down card'
+        className='w-447 h-23vh'
+      ></img>
+    </>
+  );
+
   return (
     <div onClick={cardInLaneClick}>
-      {left === true ? <LeftSide /> : <RightSide />}
+      {!card.isFaceUp() ? (
+        <FaceDown />
+      ) : left === true ? (
+        <LeftSide />
+      ) : (
+        <RightSide />
+      )}
     </div>
   );
 };

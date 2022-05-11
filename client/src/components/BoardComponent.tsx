@@ -55,8 +55,10 @@ export const BoardComponent = () => {
     //   updateBoardState((card as Transport).deploy(board, lane.type)); //mora da se bira prvo karta koja se pomera pa lejn... crap
     // }
     if (card instanceof Redeploy) {
-      updateBoardState((card as Redeploy).deploy(board, target.id));
+      updateBoardState((card as Redeploy).executeEffect(board, target.id));
     }
+    board.targeting = false;
+    console.log(board, card, target);
   };
 
   const checkCardTypeAndDeploy = (card: Card, lane: Lane) => {

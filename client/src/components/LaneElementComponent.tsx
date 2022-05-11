@@ -44,6 +44,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
           key={card.id}
           card={card}
           left={true}
+          updateTargetedCard={props.updateTargetedCard}
         />
       ))}
     </div>
@@ -57,6 +58,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
           key={card.id}
           card={card}
           left={false}
+          updateTargetedCard={props.updateTargetedCard}
         />
       ))}
     </div>

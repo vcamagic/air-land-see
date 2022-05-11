@@ -57,6 +57,7 @@ export class Maneuver extends Card {
       temp.card.flip(board);
     }
     board.clearHighlights();
+    console.log(board);
     return board;
   }
 

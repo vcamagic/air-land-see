@@ -33,13 +33,14 @@ export class Redeploy extends Card {
     board: Board,
     targetId?: number,
     selectedLane?: LaneType
-  ): void {
+  ): Board {
     let temp = board.getCardById(targetId as number);
     if (temp !== null && temp.playerOwned && temp.card.isFaceUp()!) {
       board.removeCardFromLane(targetId);
       board.addCardToPlayerHand(targetId);
     }
     board.clearHighlights();
+    return board;
   }
 
   selectTargets(board: Board): void {
