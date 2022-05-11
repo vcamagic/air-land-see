@@ -27,7 +27,7 @@ export class Disrupt extends Card {
   }
 
   deploy(board: Board, selectedLane: LaneType): Board {
-    super.deploy(board, selectedLane);
+    board = super.deploy(board, selectedLane);
     this.selectTargets(board, selectedLane);
     return board;
   }

@@ -14,7 +14,7 @@ import { Blockade } from '../models/Cards/Sea/Blockade';
 import { Escalation } from '../models/Cards/Sea/Escalation';
 import { Redeploy } from '../models/Cards/Sea/Redeploy';
 import { Transport } from '../models/Cards/Sea/Transport';
-import { Support } from '../models/Cards/Support';
+import { Support } from '../models/Cards/Air/Support';
 import { Lane } from '../models/Lane';
 import WebSocketContext from '../websockets/WebSocketContext';
 import { HandComponent } from './HandComponent';

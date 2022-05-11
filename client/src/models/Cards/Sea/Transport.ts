@@ -24,8 +24,8 @@ export class Transport extends Card {
   }
 
   deploy(board: Board, selectedLane: LaneType): Board {
+    board = super.deploy(board, selectedLane);
     this.selectTargets(board);
-    super.deploy(board, selectedLane);
     return board;
   }
 
@@ -33,11 +33,7 @@ export class Transport extends Card {
     board: Board,
     targetId?: number,
     selectedLane?: LaneType
-  ): void {
-    
-  }
+  ): void {}
 
-  selectTargets(board: Board): void {
-   
-  }
+  selectTargets(board: Board): void {}
 }

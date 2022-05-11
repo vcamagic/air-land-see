@@ -30,7 +30,7 @@ export class Maneuver extends Card {
   }
 
   deploy(board: Board, selectedLane: LaneType): Board {
-    super.deploy(board, selectedLane);
+    board = super.deploy(board, selectedLane);
     this.selectTargets(board, selectedLane);
     return board;
   }
@@ -60,7 +60,7 @@ export class Maneuver extends Card {
   selectTargets(board: Board, selectedLane: LaneType): void {
     board.getAdjacentLanes(selectedLane).forEach((lane: Lane) => {
       let temp = lane.getLastPlayerCard();
-      console.log(temp)
+      console.log(temp);
       if (temp !== null) {
         temp.highlight = true;
       }

@@ -69,7 +69,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   );
 
   const handleDeployClick = () => {
-    console.log('jidjasid');
+    console.log('log123');
     props.updateClickedLane(props.lane);
   };
   const handleImproviseClick = () => {};

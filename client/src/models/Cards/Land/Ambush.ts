@@ -26,7 +26,8 @@ export class Ambush extends Card {
 
   deploy(board: Board, selectedLane: LaneType): Board {
     this.selectTargets(board);
-    return super.deploy(board, selectedLane);
+    board = super.deploy(board, selectedLane);
+    return board;
   }
 
   selectTargets(board: Board) {

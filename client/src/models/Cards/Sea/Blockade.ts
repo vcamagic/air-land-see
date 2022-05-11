@@ -23,17 +23,5 @@ export class Blockade extends Card {
     }
   }
 
-  deploy(board: Board, selectedLane: LaneType): Board {
-    this.selectTargets(board);
-    super.deploy(board, selectedLane);
-    return board;
-  }
-
-  executeEffect(
-    board: Board,
-    targetId?: number,
-    selectedLane?: LaneType
-  ): void {}
-
   selectTargets(board: Board): void {}
 }

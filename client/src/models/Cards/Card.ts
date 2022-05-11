@@ -3,7 +3,7 @@ import { Lane } from '../Lane';
 import { LaneDeployment } from '../LaneDeployment';
 import { LaneType } from '../LaneType';
 import { CardEffect } from './CardEffect';
-
+import { cloneDeep } from 'lodash';
 export class Card {
   id!: number;
   name!: string;
@@ -66,7 +66,7 @@ export class Card {
     board.removeCardFromPlayerHand(this.id);
     board.clearHighlights();
     this.targeting = this.effect === CardEffect.INSTANT ? true : false;
-    return board;
+    return cloneDeep(board);
   }
 
   improvise(board: Board, selectedLane: LaneType): void {
