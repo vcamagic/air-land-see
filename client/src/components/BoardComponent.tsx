@@ -20,23 +20,18 @@ export const BoardComponent = () => {
   };
   return (
     <div>
-      <div className='flex justify-center flex-wrap'>
-        <div className='w-247 h-392'>
-          <img src='/images/face-down.png' alt='face-down' />
-        </div>
-      </div>
       <div className='flex justify-center'>
         <LaneComponent
           lanes={board.lanes}
           updateClickedLane={updateClickedLane}
         />
-        <div className='w-247 h-392'>
+        {/* <div className='w-247 h-392'>
           <img
             className='ml-auto'
             src='/images/face-down.png'
             alt='face-down'
           />
-        </div>
+        </div> */}
       </div>
       <div>
         <HandComponent
