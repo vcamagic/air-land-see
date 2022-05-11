@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
 import { BoardComponent } from './components/BoardComponent';
-import { WebSocketsProvider } from './websockets/WebSocketsProvider';
 import { NameInputForm } from './components/NameInputForm';
-import { CardInLaneComponent } from './components/CardInLaneComponent';
+import { WebSocketsProvider } from './websockets/WebSocketsProvider';
 function App() {
   const [nameInserted, setNameInserted] = useState(false);
 

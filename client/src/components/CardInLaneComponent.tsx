@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
-import { Card } from '../models/Cards/Card';
-import { CardEffect } from '../models/Cards/CardEffect';
 import { faBolt, faInfinity } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
+import { Card } from '../models/Cards/Card';
+import { CardEffect } from '../models/Cards/CardEffect';
 import { LaneType } from '../models/LaneType';
-import WebSocketContext from '../websockets/WebSocketContext';
 
 const getCardIcon = (cardEffect: CardEffect) => {
   switch (cardEffect) {
@@ -38,7 +37,7 @@ export const CardInLaneComponent = ({
   left,
 }: CardInLaneComponentProps) => {
   const RightSide = () => (
-    <div className={`flex ${card.highlight ? 'border-6 border-red-400 ' : ''}`}>
+    <div className={`flex ${card.highlight ? 'border-4 border-red-400' : ''}`}>
       <div className={`${getBannerColor(card.type)} w-200 h-200`}>
         <div className={`flex justify-center p-3`}>
           <h1 className='text-white text-3xl'>{card.power}</h1>
@@ -70,11 +69,11 @@ export const CardInLaneComponent = ({
   );
 
   const LeftSide = () => (
-    <div className={`flex ${card.highlight ? 'border-6 border-red-400 ' : ''}`}>
-      <img src={card.img} alt='card' className='h-200 w-247' />
-      <div className={`${getBannerColor(card.type)} w-200 h-200`}>
+    <div className={`flex h-23vh ${card.highlight ? 'border-4 border-red-400' : ''}`}>
+      <img src={card.img} alt='card' className=' w-247' />
+      <div className={`${getBannerColor(card.type)} w-200`}>
         <div className={`flex justify-center p-3`}>
-          <h1 className='text-white text-3xl'>{card.power}</h1>
+          <h1 className='text-white text-2xl'>{card.power}</h1>
         </div>
         <div
           className={

@@ -5,7 +5,6 @@ import { Card } from '../models/Cards/Card';
 import { CardEffect } from '../models/Cards/CardEffect';
 import { LaneType } from '../models/LaneType';
 import WebSocketContext from '../websockets/WebSocketContext';
-import { CardInLaneComponent } from './CardInLaneComponent';
 
 const getCardIcon = (cardEffect: CardEffect) => {
   switch (cardEffect) {
