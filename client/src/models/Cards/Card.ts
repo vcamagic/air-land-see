@@ -62,6 +62,7 @@ export class Card {
   deploy(board: Board, selectedLane: LaneType): Board {
     board.getLane(selectedLane).addPlayerCard(this);
     board.removeCardFromPlayerHand(this.id);
+    board.clearHighlights();
     return board;
   }
 

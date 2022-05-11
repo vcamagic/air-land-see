@@ -33,7 +33,7 @@ interface LaneElementComponentInterface {
 
 export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   const CardStack = () => (
-    <div className='z-50 relative w-247'>
+    <div className='z-50 relative w-80'>
       {props.lane.playerCards.map((card) => (
         <CardComponent
           key={card.id}
@@ -46,20 +46,20 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   );
 
   const DefaultTemplate = () => (
-    <div className='p-3'>
+    <div className='p-3 h-56 w-80 relative'>
       <div>
-        <img
-          src={`/images/${getLaneName(props.lane.type).toLowerCase()}.jpg`}
-          alt='theater'
-          className='h-200 w-247 absolute'
-        />
         <div
           className={`flex justify-center p-2 text-white text-xl ${getBannerColor(
             props.lane.type
-          )} relative w-247`}
+          )} relative w-full`}
         >
           <h1>{`- ${getLaneName(props.lane.type)} -`}</h1>
         </div>
+        <img
+          src={`/images/${getLaneName(props.lane.type).toLowerCase()}.jpg`}
+          alt='theater'
+          className='h-48 w-full'
+        />
       </div>
       <CardStack />
     </div>
@@ -71,16 +71,23 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   const handleImproviseClick = () => {};
 
   const CanDeploy = () => (
-    <div className='p-3 text-white'>
-      <div className='flex flex-row h-200 w-247'>
+    <div className='p-3 text-white h-56 w-80 relative'>
+      <div
+        className={`flex justify-center p-2 text-white text-xl ${getBannerColor(
+          props.lane.type
+        )} relative w-full`}
+      >
+        <h1>{`- ${getLaneName(props.lane.type)} -`}</h1>
+      </div>
+      <div className='flex flex-row h-full w-full'>
         <div
-          className='flex 1 bg-green-600 place-self-auto'
+          className='flex flex-1 bg-green-600 grid place-items-center'
           onClick={handleDeployClick}
         >
           <h1>DEPLOY</h1>
         </div>
         <div
-          className='flex-1 bg-gray-700 place-self-auto'
+          className='flex flex-1 bg-gray-700 grid place-items-center'
           onClick={handleImproviseClick}
         >
           <h1>IMPROVISE</h1>
@@ -91,9 +98,19 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   );
 
   const OnlyImprovise = () => (
-    <div className='p-3'>
-      <div className='flex-row h-200 w-247'>
-        <div className='flex-1 bg-gray-700 place-self-auto'>
+    <div className='p-3 text-white h-56 w-80 relative'>
+      <div
+        className={`flex justify-center p-2 text-white text-xl ${getBannerColor(
+          props.lane.type
+        )} relative w-full`}
+      >
+        <h1>{`- ${getLaneName(props.lane.type)} -`}</h1>
+      </div>
+      <div className='flex flex-row h-full w-full'>
+        <div
+          className='flex flex-1 bg-gray-700 grid place-items-center'
+          onClick={handleImproviseClick}
+        >
           <h1>IMPROVISE</h1>
         </div>
       </div>

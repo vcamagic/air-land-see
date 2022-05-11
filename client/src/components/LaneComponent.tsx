@@ -9,7 +9,7 @@ interface LaneComponentProps {
 
 export const LaneComponent = (props: LaneComponentProps) => {
   return (
-    <>
+    <div className='flex flex-col'>
       {props.lanes.map((lane) => (
         <LaneElementComponent
           key={lane.type}
@@ -17,6 +17,6 @@ export const LaneComponent = (props: LaneComponentProps) => {
           updateClickedLane={props.updateClickedLane}
         />
       ))}
-    </>
+    </div>
   );
 };
