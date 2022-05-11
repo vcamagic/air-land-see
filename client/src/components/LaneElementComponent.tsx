@@ -71,12 +71,18 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   const handleImproviseClick = () => {};
 
   const CanDeploy = () => (
-    <div className='p-3'>
-      <div className='flex-row h-200 w-247'>
-        <div className='flex 1' onClick={handleDeployClick}>
+    <div className='p-3 text-white'>
+      <div className='flex flex-row h-200 w-247'>
+        <div
+          className='flex 1 bg-green-600 place-self-auto'
+          onClick={handleDeployClick}
+        >
           <h1>DEPLOY</h1>
         </div>
-        <div className='flex-1' onClick={handleImproviseClick}>
+        <div
+          className='flex-1 bg-gray-700 place-self-auto'
+          onClick={handleImproviseClick}
+        >
           <h1>IMPROVISE</h1>
         </div>
       </div>
@@ -87,7 +93,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   const OnlyImprovise = () => (
     <div className='p-3'>
       <div className='flex-row h-200 w-247'>
-        <div className='flex-1'>
+        <div className='flex-1 bg-gray-700 place-self-auto'>
           <h1>IMPROVISE</h1>
         </div>
       </div>
