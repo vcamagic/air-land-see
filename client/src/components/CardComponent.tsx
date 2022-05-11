@@ -45,7 +45,7 @@ export const CardComponent = (props: CardComponentProps) => {
 
   const FaceUpCard = () => (
     <div
-      className={`m-3 relative flex-1 ${
+      className={`w-247 ${
         props.card.highlight ? 'border-2 border-red-400 ' : ''
       }`}
       onClick={props.inHand ? handleOnClick : () => {}}

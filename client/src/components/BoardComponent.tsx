@@ -81,13 +81,13 @@ export const BoardComponent = () => {
 
   return (
     <>
-      <div className='flex justify-center h-75'>
+      <div className='flex justify-center h-69'>
         <LaneComponent
           lanes={board.lanes}
           updateClickedLane={updateClickedLane}
         />
       </div>
-      <div className='h-25'>
+      <div className='h-31'>
         <HandComponent
           cards={board.player.hand}
           updateClickedCard={updateClickedCard}

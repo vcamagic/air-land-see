@@ -50,10 +50,10 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   );
 
   const DefaultTemplate = () => (
-    <div className='h-full w-full'>
+    <div className='w-full'>
       <div>
         <div
-          className={`flex justify-center h-5 p-2 text-white text-xl ${getBannerColor(
+          className={`flex justify-center h-3 text-white text-xl ${getBannerColor(
             props.lane.type
           )}  w-full`}
         >
@@ -74,15 +74,15 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   const handleImproviseClick = () => {};
 
   const CanDeploy = () => (
-    <div className='p-3 text-white h-full w-full'>
+    <div className='text-white w-full'>
       <div
-        className={`flex justify-center p-2 text-white text-xl ${getBannerColor(
+        className={`flex justify-center h-3 text-white text-xl ${getBannerColor(
           props.lane.type
         )} relative w-full`}
       >
         <h1>{`- ${getLaneName(props.lane.type)} -`}</h1>
       </div>
-      <div className='flex flex-row h-full w-full'>
+      <div className='flex flex-row h-20 w-full'>
         <div
           className='flex flex-1 bg-green-600 grid place-items-center'
           onClick={handleDeployClick}
@@ -100,15 +100,15 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   );
 
   const OnlyImprovise = () => (
-    <div className='p-3 text-white h-56 w-80'>
+    <div className='text-white w-full'>
       <div
-        className={`flex justify-center p-2 text-white text-xl ${getBannerColor(
+        className={`flex justify-center h-3 text-white text-xl ${getBannerColor(
           props.lane.type
         )} relative w-full`}
       >
         <h1>{`- ${getLaneName(props.lane.type)} -`}</h1>
       </div>
-      <div className='flex flex-row h-full w-full'>
+      <div className='flex flex-row h-20 w-full'>
         <div
           className='flex flex-1 bg-gray-700 grid place-items-center'
           onClick={handleImproviseClick}
@@ -133,7 +133,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   }
 
   return (
-    <div className='flex w-full h-25'>
+    <div className='flex w-full h-23'>
       <div className='w-2/5'>
         <PlayerCardStack />
       </div>
