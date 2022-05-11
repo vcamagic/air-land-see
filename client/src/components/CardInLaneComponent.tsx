@@ -38,7 +38,7 @@ export const CardInLaneComponent = ({
   left,
 }: CardInLaneComponentProps) => {
   const RightSide = () => (
-    <div className='flex'>
+    <div className={`flex ${card.highlight ? 'border-6 border-red-400 ' : ''}`}>
       <div className={`${getBannerColor(card.type)} w-200 h-200`}>
         <div className={`flex justify-center p-3`}>
           <h1 className='text-white text-3xl'>{card.power}</h1>
@@ -70,7 +70,7 @@ export const CardInLaneComponent = ({
   );
 
   const LeftSide = () => (
-    <div className='flex'>
+    <div className={`flex ${card.highlight ? 'border-6 border-red-400 ' : ''}`}>
       <img src={card.img} alt='card' className='h-200 w-247' />
       <div className={`${getBannerColor(card.type)} w-200 h-200`}>
         <div className={`flex justify-center p-3`}>
