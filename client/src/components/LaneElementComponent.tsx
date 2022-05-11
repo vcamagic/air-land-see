@@ -1,4 +1,6 @@
 import React from 'react';
+import { Board } from '../models/Board';
+import { Card } from '../models/Cards/Card';
 import { Lane } from '../models/Lane';
 import { LaneDeployment } from '../models/LaneDeployment';
 import { LaneType } from '../models/LaneType';
@@ -28,7 +30,9 @@ const getBannerColor = (laneType: LaneType): string => {
 };
 
 interface LaneElementComponentInterface {
+  board: Board;
   lane: Lane;
+  updateTargetedCard: (card: Card) => void;
   updateClickedLane: (lane: Lane) => void;
 }
 
@@ -36,7 +40,12 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   const PlayerCardStack = () => (
     <div className='flex flex-row-reverse'>
       {props.lane.playerCards.map((card) => (
-        <CardInLaneComponent key={card.id} card={card} left={true} />
+        <CardInLaneComponent
+          board={props.board}
+          key={card.id}
+          card={card}
+          left={true}
+        />
       ))}
     </div>
   );
@@ -44,7 +53,12 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   const OpponentCardStack = () => (
     <div>
       {props.lane.opponentCards.map((card) => (
-        <CardInLaneComponent key={card.id} card={card} left={false} />
+        <CardInLaneComponent
+          board={props.board}
+          key={card.id}
+          card={card}
+          left={false}
+        />
       ))}
     </div>
   );

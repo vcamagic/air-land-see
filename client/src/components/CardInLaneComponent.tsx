@@ -5,6 +5,7 @@ import { faBolt, faInfinity } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LaneType } from '../models/LaneType';
 import WebSocketContext from '../websockets/WebSocketContext';
+import { Board } from '../models/Board';
 
 const getCardIcon = (cardEffect: CardEffect) => {
   switch (cardEffect) {
@@ -29,14 +30,21 @@ const getBannerColor = (laneType: LaneType): string => {
 };
 
 interface CardInLaneComponentProps {
+  board: Board;
   card: Card;
   left: boolean;
 }
 
 export const CardInLaneComponent = ({
+  board,
   card,
   left,
 }: CardInLaneComponentProps) => {
+  const cardInLaneClick = () => {
+    if (board.targeting && card.highlight) {
+    }
+  };
+
   const RightSide = () => (
     <div className={`flex ${card.highlight ? 'border-6 border-red-400 ' : ''}`}>
       <div className={`${getBannerColor(card.type)} w-200 h-200`}>
@@ -100,5 +108,9 @@ export const CardInLaneComponent = ({
       </div>
     </div>
   );
-  return <>{left === true ? <LeftSide /> : <RightSide />}</>;
+  return (
+    <div onClick={cardInLaneClick}>
+      {left === true ? <LeftSide /> : <RightSide />}
+    </div>
+  );
 };
