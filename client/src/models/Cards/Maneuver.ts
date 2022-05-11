@@ -3,6 +3,7 @@ import { Lane } from '../Lane';
 import { LaneType } from '../LaneType';
 import { Card } from './Card';
 import { CardEffect } from './CardEffect';
+import { cloneDeep } from 'lodash';
 
 export class Maneuver extends Card {
   constructor(type: LaneType) {
@@ -32,7 +33,8 @@ export class Maneuver extends Card {
   deploy(board: Board, selectedLane: LaneType): Board {
     board = super.deploy(board, selectedLane);
     this.selectTargets(board, selectedLane);
-    return board;
+    console.log(board);
+    return cloneDeep(board);
   }
 
   flip(board: Board): void {
@@ -60,7 +62,6 @@ export class Maneuver extends Card {
   selectTargets(board: Board, selectedLane: LaneType): void {
     board.getAdjacentLanes(selectedLane).forEach((lane: Lane) => {
       let temp = lane.getLastPlayerCard();
-      console.log(temp);
       if (temp !== null) {
         temp.highlight = true;
       }
@@ -69,6 +70,5 @@ export class Maneuver extends Card {
         temp.highlight = true;
       }
     });
-    console.log(board);
   }
 }

@@ -25,14 +25,15 @@ export class Ambush extends Card {
   }
 
   deploy(board: Board, selectedLane: LaneType): Board {
-    this.selectTargets(board);
     board = super.deploy(board, selectedLane);
+    this.selectTargets(board);
     return board;
   }
 
   selectTargets(board: Board) {
     board.lanes.forEach((lane: Lane) => {
       let temp = lane.getLastPlayerCard();
+      console.log(temp)
       if (temp !== null) {
         temp.highlight = true;
       }
@@ -41,6 +42,7 @@ export class Ambush extends Card {
         temp.highlight = true;
       }
     });
+    console.log(board);
   }
 
   executeEffect(
