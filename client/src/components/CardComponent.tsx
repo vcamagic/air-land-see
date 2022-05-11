@@ -5,6 +5,7 @@ import { Card } from '../models/Cards/Card';
 import { CardEffect } from '../models/Cards/CardEffect';
 import { LaneType } from '../models/LaneType';
 import WebSocketContext from '../websockets/WebSocketContext';
+import { CardInLaneComponent } from './CardInLaneComponent';
 
 const getCardIcon = (cardEffect: CardEffect) => {
   switch (cardEffect) {
@@ -36,7 +37,7 @@ interface CardComponentProps {
 
 export const CardComponent = (props: CardComponentProps) => {
   const { updateBoardState, board } = useContext(WebSocketContext);
-  
+
   const handleOnClick = () => {
     updateBoardState(props.card.highlightAvailableLanes(board));
     props.updateClickedCard(props.card);
@@ -44,14 +45,12 @@ export const CardComponent = (props: CardComponentProps) => {
 
   const FaceUpCard = () => (
     <div
-      className={`m-3 ${props.card.highlight ? 'border-2 border-red-400' : ''}`}
+      className={`m-3 relative flex-1 ${
+        props.card.highlight ? 'border-2 border-red-400 ' : ''
+      }`}
       onClick={props.inHand ? handleOnClick : () => {}}
     >
-      <div
-        className={`flex justify-evenly ${getBannerColor(
-          props.card.type
-        )} p-2 max-w-247 min-h-145`}
-      >
+      <div className={`flex   ${getBannerColor(props.card.type)} p-2 h-2/5`}>
         <h1 className='text-7xl font-bold text-white mr-3'>
           {props.card.power}
         </h1>
@@ -77,7 +76,7 @@ export const CardComponent = (props: CardComponentProps) => {
           </p>
         </div>
       </div>
-      <img src={props.card.img} alt='card' className='h-247 w-247' />
+      <img src={props.card.img} alt='card' className='h-3/5 w-full' />
     </div>
   );
 

@@ -3,6 +3,7 @@ import { Lane } from '../models/Lane';
 import { LaneDeployment } from '../models/LaneDeployment';
 import { LaneType } from '../models/LaneType';
 import { CardComponent } from './CardComponent';
+import { CardInLaneComponent } from './CardInLaneComponent';
 
 const getLaneName = (type: LaneType) => {
   switch (type) {
@@ -32,36 +33,38 @@ interface LaneElementComponentInterface {
 }
 
 export const LaneElementComponent = (props: LaneElementComponentInterface) => {
-  const CardStack = () => (
-    <div className='z-50 relative w-80'>
+  const PlayerCardStack = () => (
+    <div className='flex flex-row-reverse'>
       {props.lane.playerCards.map((card) => (
-        <CardComponent
-          key={card.id}
-          inHand={false}
-          card={card}
-          updateClickedCard={() => {}}
-        />
+        <CardInLaneComponent key={card.id} card={card} left={true} />
+      ))}
+    </div>
+  );
+
+  const OpponentCardStack = () => (
+    <div>
+      {props.lane.opponentCards.map((card) => (
+        <CardInLaneComponent key={card.id} card={card} left={false} />
       ))}
     </div>
   );
 
   const DefaultTemplate = () => (
-    <div className='p-3 h-56 w-80 relative'>
+    <div className='h-full w-full'>
       <div>
         <div
-          className={`flex justify-center p-2 text-white text-xl ${getBannerColor(
+          className={`flex justify-center h-5 p-2 text-white text-xl ${getBannerColor(
             props.lane.type
-          )} relative w-full`}
+          )}  w-full`}
         >
           <h1>{`- ${getLaneName(props.lane.type)} -`}</h1>
         </div>
         <img
           src={`/images/${getLaneName(props.lane.type).toLowerCase()}.jpg`}
           alt='theater'
-          className='h-48 w-full'
+          className='h-20 w-full'
         />
       </div>
-      <CardStack />
     </div>
   );
 
@@ -71,7 +74,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   const handleImproviseClick = () => {};
 
   const CanDeploy = () => (
-    <div className='p-3 text-white h-56 w-80 relative'>
+    <div className='p-3 text-white h-full w-full'>
       <div
         className={`flex justify-center p-2 text-white text-xl ${getBannerColor(
           props.lane.type
@@ -93,12 +96,11 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
           <h1>IMPROVISE</h1>
         </div>
       </div>
-      <CardStack />
     </div>
   );
 
   const OnlyImprovise = () => (
-    <div className='p-3 text-white h-56 w-80 relative'>
+    <div className='p-3 text-white h-56 w-80'>
       <div
         className={`flex justify-center p-2 text-white text-xl ${getBannerColor(
           props.lane.type
@@ -114,7 +116,6 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
           <h1>IMPROVISE</h1>
         </div>
       </div>
-      <CardStack />
     </div>
   );
 
@@ -131,5 +132,17 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
       break;
   }
 
-  return <Template />;
+  return (
+    <div className='flex w-full h-25'>
+      <div className='w-2/5'>
+        <PlayerCardStack />
+      </div>
+      <div className='w-1/5'>
+        <Template />
+      </div>
+      <div className='w-2/5'>
+        <OpponentCardStack />
+      </div>
+    </div>
+  );
 };

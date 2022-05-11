@@ -13,13 +13,11 @@ function App() {
 
   return (
     <WebSocketsProvider>
-      <div className='flex justify-center'>
-        {nameInserted ? (
-          <BoardComponent />
-        ) : (
-          <NameInputForm insertName={insertName} />
-        )}
-      </div>
+      {nameInserted ? (
+        <BoardComponent />
+      ) : (
+        <NameInputForm insertName={insertName} />
+      )}
     </WebSocketsProvider>
   );
 }

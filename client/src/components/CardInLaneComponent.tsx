@@ -29,26 +29,75 @@ const getBannerColor = (laneType: LaneType): string => {
 
 interface CardInLaneComponentProps {
   card: Card;
+  left: boolean;
 }
 
-export const CardInLaneComponent = ({ card }: CardInLaneComponentProps) => {
-  return (
+export const CardInLaneComponent = ({
+  card,
+  left,
+}: CardInLaneComponentProps) => {
+  const RightSide = () => (
     <div className='flex'>
       <div className={`${getBannerColor(card.type)} w-200 h-200`}>
         <div className={`flex justify-center p-3`}>
           <h1 className='text-white text-3xl'>{card.power}</h1>
         </div>
-        <div className={ card.effect === CardEffect.PERMANENT ? 'flex justify-center text-white' : 'flex justify-center'}>
+        <div
+          className={
+            card.effect === CardEffect.PERMANENT
+              ? 'flex justify-center text-white'
+              : 'flex justify-center'
+          }
+        >
           <h1>
             <span className='mr-2'>{getCardIcon(card.effect)}</span>
             {card.name}
           </h1>
         </div>
-        <div  className={ card.effect === CardEffect.PERMANENT ? 'text-center p-3 text-white' : 'text-center p-3'}>
+        <div
+          className={
+            card.effect === CardEffect.PERMANENT
+              ? 'text-center p-3 text-white'
+              : 'text-center p-3'
+          }
+        >
           <p>{card.description}</p>
         </div>
       </div>
       <img src={card.img} alt='card' className='h-200 w-247' />
     </div>
   );
+
+  const LeftSide = () => (
+    <div className='flex'>
+      <img src={card.img} alt='card' className='h-200 w-247' />
+      <div className={`${getBannerColor(card.type)} w-200 h-200`}>
+        <div className={`flex justify-center p-3`}>
+          <h1 className='text-white text-3xl'>{card.power}</h1>
+        </div>
+        <div
+          className={
+            card.effect === CardEffect.PERMANENT
+              ? 'flex justify-center text-white'
+              : 'flex justify-center'
+          }
+        >
+          <h1>
+            <span className='mr-2'>{getCardIcon(card.effect)}</span>
+            {card.name}
+          </h1>
+        </div>
+        <div
+          className={
+            card.effect === CardEffect.PERMANENT
+              ? 'text-center p-3 text-white'
+              : 'text-center p-3'
+          }
+        >
+          <p>{card.description}</p>
+        </div>
+      </div>
+    </div>
+  );
+  return <>{left === true ? <LeftSide /> : <RightSide />}</>;
 };

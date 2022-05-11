@@ -19,26 +19,19 @@ export const BoardComponent = () => {
     updateBoardState((clickedCard as Card).deploy(board, lane.type));
   };
   return (
-    <div>
-      <div className='flex justify-center'>
+    <>
+      <div className='flex justify-center h-75'>
         <LaneComponent
           lanes={board.lanes}
           updateClickedLane={updateClickedLane}
         />
-        {/* <div className='w-247 h-392'>
-          <img
-            className='ml-auto'
-            src='/images/face-down.png'
-            alt='face-down'
-          />
-        </div> */}
       </div>
-      <div>
+      <div className='h-25'>
         <HandComponent
           cards={board.player.hand}
           updateClickedCard={updateClickedCard}
         />
       </div>
-    </div>
+    </>
   );
 };
