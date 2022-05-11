@@ -5,14 +5,13 @@ import { Card } from '../models/Cards/Card';
 import { CardEffect } from '../models/Cards/CardEffect';
 import { LaneType } from '../models/LaneType';
 import WebSocketContext from '../websockets/WebSocketContext';
-import { CardInLaneComponent } from './CardInLaneComponent';
 
 const getCardIcon = (cardEffect: CardEffect) => {
   switch (cardEffect) {
     case CardEffect.INSTANT:
       return <FontAwesomeIcon className='h-4 w-4' icon={faBolt} />;
     case CardEffect.PERMANENT:
-      return <FontAwesomeIcon className='h-5 w-5' icon={faInfinity} />;
+      return <FontAwesomeIcon className='h-4 w-4' icon={faInfinity} />;
     case CardEffect.NO_EFFECT:
       return '';
   }
@@ -51,7 +50,7 @@ export const CardComponent = (props: CardComponentProps) => {
       onClick={props.inHand ? handleOnClick : () => {}}
     >
       <div className={`flex   ${getBannerColor(props.card.type)} p-2 h-2/5`}>
-        <h1 className='text-7xl font-bold text-white mr-3'>
+        <h1 className='text-5xl font-bold text-white mr-3'>
           {props.card.power}
         </h1>
         <div
@@ -60,7 +59,7 @@ export const CardComponent = (props: CardComponentProps) => {
           }`}
         >
           <div className='flex justify-end'>
-            <h1 className='text-2xl font-bold'>
+            <h1 className='text-xl font-bold'>
               <span className='p-2'>{getCardIcon(props.card.effect)}</span>
               <span
                 className={`${

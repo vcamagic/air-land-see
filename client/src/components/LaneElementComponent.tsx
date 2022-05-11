@@ -4,7 +4,6 @@ import { Card } from '../models/Cards/Card';
 import { Lane } from '../models/Lane';
 import { LaneDeployment } from '../models/LaneDeployment';
 import { LaneType } from '../models/LaneType';
-import { CardComponent } from './CardComponent';
 import { CardInLaneComponent } from './CardInLaneComponent';
 
 const getLaneName = (type: LaneType) => {

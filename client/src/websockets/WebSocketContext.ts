@@ -1,4 +1,3 @@
-import { resolve } from 'path';
 import React from 'react';
 import { Board } from '../models/Board';
 

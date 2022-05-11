@@ -1,5 +1,5 @@
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Board } from '../models/Board';
 import { WebSocketProv } from './WebSocketContext';
 
@@ -79,6 +79,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   };
 
   const updateBoardState = (board: Board) => {
+    console.log('Provider', board);
     setBoard(board);
   };
 

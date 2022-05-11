@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card } from '../models/Cards/Card';
 import { CardComponent } from './CardComponent';
-import { CardInLaneComponent } from './CardInLaneComponent';
 
 interface HandComponentProps {
   cards: Card[];
