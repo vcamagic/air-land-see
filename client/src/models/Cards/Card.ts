@@ -9,7 +9,7 @@ export class Card {
   name!: string;
   power!: number;
   type!: LaneType;
-  protected faceUp!: boolean;
+  faceUp!: boolean;
   highlight!: boolean;
   description!: string;
   img!: string;

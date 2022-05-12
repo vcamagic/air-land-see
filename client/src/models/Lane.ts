@@ -32,7 +32,7 @@ export class Lane {
         if(this.opponentCards.length === 0) {
             return null;
         }
-        return this.opponentCards[this.opponentCards.length];
+        return this.opponentCards[this.opponentCards.length - 1];
     }
 
     addPlayerCard(card: Card): void {

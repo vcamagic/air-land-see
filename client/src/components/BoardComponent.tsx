@@ -81,8 +81,11 @@ export const BoardComponent = () => {
     }
     if (card instanceof Maneuver) {
       let boardTemp = (card as Maneuver).deploy(board, lane.type);
-      if (!card.selectTargets(boardTemp, lane.type).targeting) {
-        turn(boardTemp);
+      const temp = boardTemp.getCardById(card.id);
+      if (temp !== null && temp.card.isFaceUp()) {
+        if (!card.selectTargets(boardTemp, lane.type).targeting) {
+          turn(boardTemp);
+        }
       }
       updateBoardState(boardTemp);
     }
