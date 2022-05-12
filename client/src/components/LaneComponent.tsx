@@ -6,7 +6,7 @@ import { LaneElementComponent } from './LaneElementComponent';
 
 interface LaneComponentProps {
   board: Board;
-  updateClickedLane: (lane: Lane) => void;
+  updateClickedLane: (lane: Lane, deploy?: boolean) => void;
   updateTargetedCard: (card: Card) => void;
 }
 
