@@ -218,4 +218,23 @@ export class Board {
     this.opponent.hand = [...this.deck.slice(3, 6), ...this.deck.slice(9, 12)];
     this.deck = this.deck.slice(12);
   };
+
+  survivesBlockade(selectedLane: LaneType): boolean {
+    let temp = this.getCardById(17);
+    if(temp!==null && temp.card.isFaceUp()) {
+      let tempLane = this.getAdjacentLanes(temp.lane).find(x=>x.type === selectedLane)
+      if(tempLane!==undefined) {
+        const count = (tempLane.playerCards ? tempLane.playerCards.length : 0) + (tempLane.opponentCards ? tempLane.opponentCards.length : 0);
+        if(count >= 3) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  survivesContainment(): boolean {
+    let temp = this.getCardById(5);
+    return temp!==null && temp.card.isFaceUp() ? false : true;
+  }
 }
