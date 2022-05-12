@@ -1,22 +1,22 @@
-import { Ambush } from './Cards/Land/Ambush';
+import { Aerodrome } from './Cards/Air/Aerodrome';
+import { AirDrop } from './Cards/Air/AirDrop';
+import { Containment } from './Cards/Air/Containment';
+import { Support } from './Cards/Air/Support';
 import { Card } from './Cards/Card';
-import { CoverFire } from './Cards/Land/CoverFire';
 import { Heavy } from './Cards/Heavy';
-import { Maneuver } from './Cards/Maneuver';
-import { Redeploy } from './Cards/Sea/Redeploy';
+import { Ambush } from './Cards/Land/Ambush';
+import { CoverFire } from './Cards/Land/CoverFire';
+import { Disrupt } from './Cards/Land/Disrupt';
 import { Reinforce } from './Cards/Land/Reinforce';
+import { Maneuver } from './Cards/Maneuver';
+import { Blockade } from './Cards/Sea/Blockade';
+import { Escalation } from './Cards/Sea/Escalation';
+import { Redeploy } from './Cards/Sea/Redeploy';
+import { Transport } from './Cards/Sea/Transport';
 import { Lane } from './Lane';
+import { LaneDeployment } from './LaneDeployment';
 import { LaneType } from './LaneType';
 import { Player } from './Player';
-import { Disrupt } from './Cards/Land/Disrupt';
-import { Blockade } from './Cards/Sea/Blockade';
-import { Transport } from './Cards/Sea/Transport';
-import { Escalation } from './Cards/Sea/Escalation';
-import { Support } from './Cards/Air/Support';
-import { AirDrop } from './Cards/Air/AirDrop';
-import { Aerodrome } from './Cards/Air/Aerodrome';
-import { Containment } from './Cards/Air/Containment';
-import { LaneDeployment } from './LaneDeployment';
 
 export class Board {
   lanes!: Lane[];
@@ -218,43 +218,4 @@ export class Board {
     this.opponent.hand = [...this.deck.slice(3, 6), ...this.deck.slice(9, 12)];
     this.deck = this.deck.slice(12);
   };
-
-  invertBoardState(): Board {
-    let temp: Board = new Board();
-    temp.deck = this.deck;
-    [temp.player, temp.opponent] = [this.opponent, this.player];
-    this.lanes.forEach((lane: Lane, index: number) => {
-      [
-        temp.lanes[index].playerCards,
-        temp.lanes[index].opponentCards,
-        temp.lanes[index].playerScore,
-        temp.lanes[index].opponentScore,
-      ] = [
-        lane.opponentCards,
-        lane.playerCards,
-        lane.opponentScore,
-        lane.playerScore,
-      ];
-    });
-    return temp;
-  }
-
-  survivesBlockade(selectedLane: LaneType): boolean {
-    let temp = this.getCardById(17);
-    if(temp!==null && temp.card.isFaceUp()) {
-      let tempLane = this.getAdjacentLanes(temp.lane).find(x=>x.type === selectedLane)
-      if(tempLane!==undefined) {
-        const count = (tempLane.playerCards ? tempLane.playerCards.length : 0) + (tempLane.opponentCards ? tempLane.opponentCards.length : 0);
-        if(count >= 3) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
-  survivesContainment(): boolean {
-    let temp = this.getCardById(5);
-    return temp!==null && temp.card.isFaceUp() ? false : true;
-  }
 }
