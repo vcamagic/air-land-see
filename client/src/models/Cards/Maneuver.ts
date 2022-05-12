@@ -51,12 +51,14 @@ export class Maneuver extends Card {
     board: Board,
     targetId?: number,
     selectedLane?: LaneType
-  ): void {
+  ): Board {
     let temp = board.getCardById(targetId as number);
     if (temp !== null) {
       temp.card.flip(board);
     }
     board.clearHighlights();
+    console.log(board);
+    return board;
   }
 
   selectTargets(board: Board, selectedLane: LaneType): void {

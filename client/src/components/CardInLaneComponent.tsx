@@ -1,9 +1,9 @@
 import { faBolt, faInfinity } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 import { Card } from '../models/Cards/Card';
 import { CardEffect } from '../models/Cards/CardEffect';
 import { LaneType } from '../models/LaneType';
+import { Board } from '../models/Board';
 
 const getCardIcon = (cardEffect: CardEffect) => {
   switch (cardEffect) {
@@ -28,20 +28,28 @@ const getBannerColor = (laneType: LaneType): string => {
 };
 
 interface CardInLaneComponentProps {
+  board: Board;
   card: Card;
   left: boolean;
   right: number;
   zIndex: number;
+  updateTargetedCard: (card: Card) => void;
 }
 
 export const CardInLaneComponent = ({
+  board,
   card,
   left,
+  updateTargetedCard,
   right,
   zIndex,
 }: CardInLaneComponentProps) => {
-  console.log(right);
-  console.log(zIndex);
+  const cardInLaneClick = () => {
+    if (board.targeting && card.highlight) {
+      updateTargetedCard(card);
+    }
+  };
+
   const RightSide = () => (
     <div className={`flex ${card.highlight ? 'border-4 border-red-400' : ''}`}>
       <div className={`${getBannerColor(card.type)} w-200 h-200`}>
@@ -115,5 +123,26 @@ export const CardInLaneComponent = ({
       </div>
     </div>
   );
-  return <>{left === true ? <LeftSide /> : <RightSide />}</>;
+
+  const FaceDown = () => (
+    <>
+      <img
+        src='/images/face-down.jpg'
+        alt='face down card'
+        className='w-447 h-23vh'
+      ></img>
+    </>
+  );
+
+  return (
+    <div onClick={cardInLaneClick}>
+      {!card.isFaceUp() ? (
+        <FaceDown />
+      ) : left === true ? (
+        <LeftSide />
+      ) : (
+        <RightSide />
+      )}
+    </div>
+  );
 };

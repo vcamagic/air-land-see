@@ -25,14 +25,43 @@ export const BoardComponent = () => {
   const [clickedLane, setClickedLane] = useState({});
 
   const updateClickedCard = (card: Card) => {
-    setClickedCard(card);
+    if (!board.targeting) {
+      setClickedCard(card);
+    }
   };
   const updateClickedLane = (lane: Lane) => {
     setClickedLane(lane);
-    checkCardTypeAndExecute(clickedCard as Card, lane);
+    checkCardTypeAndDeploy(clickedCard as Card, lane);
   };
 
-  const checkCardTypeAndExecute = (card: Card, lane: Lane) => {
+  const updateTargetedCard = (card: Card) => {
+    checkCardTypeExecute(clickedCard as Card, card);
+  };
+
+  const checkCardTypeExecute = (card: Card, target: Card) => {
+    // if (card instanceof Reinforce) {
+    //   updateBoardState((card as Reinforce).executeEffect(board, lane.type));
+    // }
+    if (card instanceof Ambush) {
+      updateBoardState((card as Ambush).executeEffect(board, target.id));
+    }
+    if (card instanceof Maneuver) {
+      updateBoardState((card as Maneuver).executeEffect(board, target.id));
+    }
+    // if (card instanceof Disrupt) {
+    //   updateBoardState((card as Disrupt).deploy(board, lane.type));
+    // }
+    // if (card instanceof Transport) {
+    //   updateBoardState((card as Transport).deploy(board, lane.type)); //mora da se bira prvo karta koja se pomera pa lejn... crap
+    // }
+    if (card instanceof Redeploy) {
+      updateBoardState((card as Redeploy).executeEffect(board, target.id));
+    }
+    board.targeting = false;
+    console.log(board, card, target);
+  };
+
+  const checkCardTypeAndDeploy = (card: Card, lane: Lane) => {
     if (card instanceof Reinforce) {
       updateBoardState((card as Reinforce).deploy(board, lane.type));
     }
@@ -82,8 +111,9 @@ export const BoardComponent = () => {
     <>
       <div className='flex justify-center h-69'>
         <LaneComponent
-          lanes={board.lanes}
+          board={board}
           updateClickedLane={updateClickedLane}
+          updateTargetedCard={updateTargetedCard}
         />
       </div>
       <div className='h-31'>

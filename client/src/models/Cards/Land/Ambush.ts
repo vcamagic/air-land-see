@@ -49,11 +49,12 @@ export class Ambush extends Card {
     board: Board,
     targetId?: number,
     selectedLane?: LaneType
-  ): void {
+  ): Board {
     let temp = board.getCardById(targetId as number);
     if (temp !== null) {
       temp.card.flip(board);
     }
     board.clearHighlights();
+    return board;
   }
 }

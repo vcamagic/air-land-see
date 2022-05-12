@@ -79,7 +79,6 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   };
 
   const updateBoardState = (board: Board) => {
-    console.log('Provider', board);
     setBoard(board);
   };
 

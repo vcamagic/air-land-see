@@ -1,4 +1,6 @@
 import React, { useEffect, useRef } from 'react';
+import { Board } from '../models/Board';
+import { Card } from '../models/Cards/Card';
 import { Lane } from '../models/Lane';
 import { LaneDeployment } from '../models/LaneDeployment';
 import { LaneType } from '../models/LaneType';
@@ -27,7 +29,9 @@ const getBannerColor = (laneType: LaneType): string => {
 };
 
 interface LaneElementComponentInterface {
+  board: Board;
   lane: Lane;
+  updateTargetedCard: (card: Card) => void;
   updateClickedLane: (lane: Lane) => void;
 }
 
@@ -45,6 +49,8 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
             zIndex={
               props.lane.playerCards.findIndex((c) => c.id === card.id) * 10
             }
+            updateTargetedCard={props.updateTargetedCard}
+            board={props.board}
           />
         </div>
       ))}
@@ -64,6 +70,8 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
           zIndex={
             props.lane.opponentCards.findIndex((c) => c.id === card.id) * 10
           }
+          updateTargetedCard={props.updateTargetedCard}
+          board={props.board}
         />
       ))}
     </div>
