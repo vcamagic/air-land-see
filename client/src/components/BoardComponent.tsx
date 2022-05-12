@@ -57,8 +57,6 @@ export const BoardComponent = () => {
     if (card instanceof Redeploy) {
       updateBoardState((card as Redeploy).executeEffect(board, target.id));
     }
-    board.targeting = false;
-    console.log(board, card, target);
   };
 
   const checkCardTypeAndDeploy = (card: Card, lane: Lane) => {
@@ -104,7 +102,6 @@ export const BoardComponent = () => {
     if (card instanceof Blockade) {
       updateBoardState((card as Blockade).deploy(board, lane.type));
     }
-    console.log(board);
   };
 
   return (

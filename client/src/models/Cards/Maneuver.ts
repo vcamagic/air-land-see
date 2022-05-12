@@ -33,7 +33,6 @@ export class Maneuver extends Card {
   deploy(board: Board, selectedLane: LaneType): Board {
     board = super.deploy(board, selectedLane);
     this.selectTargets(board, selectedLane);
-    console.log(board);
     return cloneDeep(board);
   }
 
@@ -57,8 +56,8 @@ export class Maneuver extends Card {
       temp.card.flip(board);
     }
     board.clearHighlights();
-    console.log(board);
-    return board;
+    board.targeting = false;
+    return cloneDeep(board);
   }
 
   selectTargets(board: Board, selectedLane: LaneType): void {

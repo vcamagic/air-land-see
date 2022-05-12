@@ -93,16 +93,16 @@ export class Board {
   getCardById(
     targetId: number
   ): { card: Card; lane: LaneType; playerOwned: boolean } | null {
-    this.lanes.forEach((lane: Lane) => {
-      let temp = lane.playerCards.find((x) => x.id === targetId);
-      if (temp !== null) {
-        return { card: temp, lane: lane.type, playerOwned: true };
+    for(let i=0; i<=this.lanes.length; i++) {
+      let temp = this.lanes[i].playerCards.find((x) => x.id === targetId);
+      if (temp !== undefined) {
+        return { card: temp, lane: this.lanes[i].type, playerOwned: true };
       }
-      temp = lane.opponentCards.find((x) => x.id === targetId);
-      if (temp !== null) {
-        return { card: temp, lane: lane.type, playerOwned: false };
+      temp = this.lanes[i].opponentCards.find((x) => x.id === targetId);
+      if (temp !== undefined) {
+        return { card: temp, lane: this.lanes[i].type, playerOwned: false };
       }
-    });
+    }
     return null;
   }
 

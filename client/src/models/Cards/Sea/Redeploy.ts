@@ -40,6 +40,7 @@ export class Redeploy extends Card {
       board.addCardToPlayerHand(targetId);
     }
     board.clearHighlights();
+    board.targeting = false;
     return board;
   }
 

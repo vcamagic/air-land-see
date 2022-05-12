@@ -117,7 +117,7 @@ export const CardInLaneComponent = ({
   const FaceDown = () => (
     <>
       <img
-        src='/images/face-down.jpg'
+        src='/images/face-down.png'
         alt='face down card'
         className='w-447 h-23vh'
       ></img>
