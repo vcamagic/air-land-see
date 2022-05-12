@@ -41,7 +41,9 @@ export const BoardComponent = () => {
   };
 
   const improvise = (card: Card, lane: Lane) => {
-    updateBoardState(card.improvise(board, lane.type));
+    const tempBoard = card.improvise(board, lane.type);
+    updateBoardState(tempBoard);
+    turn(tempBoard);
   };
 
   const updateTargetedCard = (card: Card) => {
