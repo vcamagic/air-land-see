@@ -20,7 +20,8 @@ import { HandComponent } from './HandComponent';
 import { LaneComponent } from './LaneComponent';
 
 export const BoardComponent = () => {
-  const { board, updateBoardState, playerTurn } = useContext(WebSocketContext);
+  const { board, updateBoardState, playerTurn, turn } =
+    useContext(WebSocketContext);
   const [clickedCard, setClickedCard] = useState({});
   const [clickedLane, setClickedLane] = useState({});
 
@@ -74,9 +75,12 @@ export const BoardComponent = () => {
     }
     if (card instanceof Disrupt) {
       updateBoardState((card as Disrupt).deploy(board, lane.type));
+      turn((card as Disrupt).deploy(board, lane.type));
     }
     if (card instanceof Heavy) {
-      updateBoardState((card as Heavy).deploy(board, lane.type));
+      const tempBoard = (card as Heavy).deploy(board, lane.type);
+      updateBoardState(tempBoard);
+      turn(tempBoard);
     }
     if (card instanceof Support) {
       updateBoardState((card as Support).deploy(board, lane.type));

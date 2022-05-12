@@ -1,12 +1,36 @@
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import React, { useCallback, useRef, useState } from 'react';
+import { makeBoardInstance } from '../helpers';
 import { Board } from '../models/Board';
+import { Lane } from '../models/Lane';
+import { ServerBoard } from '../models/ServerBoard';
 import { WebSocketProv } from './WebSocketContext';
+const invertBoardState = (board: Board): Board => {
+  let temp: Board = new Board();
+  temp.deck = board.deck;
+  [temp.player, temp.opponent] = [board.opponent, board.player];
+  board.lanes.forEach((lane: Lane, index: number) => {
+    [
+      temp.lanes[index].playerCards,
+      temp.lanes[index].opponentCards,
+      temp.lanes[index].playerScore,
+      temp.lanes[index].opponentScore,
+      temp.lanes[index].type,
+    ] = [
+      lane.opponentCards,
+      lane.playerCards,
+      lane.opponentScore,
+      lane.playerScore,
+      lane.type,
+    ];
+  });
+  console.log('INVERTED', temp);
+  return temp;
+};
 
 interface WebSocketProviderProps {
   children: JSX.Element;
 }
-
 export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const connection = useRef(
     new HubConnectionBuilder()
@@ -18,7 +42,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const [playerTurn, setPlayerTurn] = useState(true);
   const gameId = useRef('');
 
-  const joinGame = useCallback(async (playerName: string) => {
+  const joinGame = useCallback(async (name: string) => {
     connection.current = new HubConnectionBuilder()
       .withUrl('https://localhost:7095/game')
       .configureLogging(LogLevel.Information)
@@ -27,7 +51,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     try {
       connection.current.on('GameFound', async (id: string) => {
         gameId.current = id;
-        await connection.current.invoke('SubmitName', [id, playerName]);
+        await connection.current.invoke('SubmitName', id, name);
       });
 
       connection.current.on(
@@ -35,10 +59,11 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         async (isHost: boolean, opponentName: string) => {
           if (isHost) {
             const board = new Board();
-            await connection.current.invoke('PrepareGame', [
+            await connection.current.invoke(
+              'PrepareGame',
               board,
-              gameId.current,
-            ]);
+              gameId.current
+            );
             setBoard(board);
             setPlayerTurn(true);
           } else {
@@ -47,12 +72,14 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         }
       );
 
-      connection.current.on('ReceivePreparedGame', (board: Board) => {
-        setBoard(board.invertBoardState());
+      connection.current.on('ReceivePreparedGame', (board: ServerBoard) => {
+        const temp = makeBoardInstance(board);
+        setBoard(invertBoardState(temp));
       });
 
-      connection.current.on('OpponentTurn', (board: Board) => {
-        setBoard(board.invertBoardState());
+      connection.current.on('OpponentTurn', (board: ServerBoard) => {
+        const temp = makeBoardInstance(board);
+        setBoard(invertBoardState(temp));
         setPlayerTurn(true);
       });
 
@@ -63,10 +90,8 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   }, []);
 
   const turn = async (board: Board) => {
-    console.log(board);
-    console.log('Game id', gameId.current);
     try {
-      await connection.current.invoke('Turn', [gameId.current, board]);
+      await connection.current.invoke('Turn', gameId.current, board);
       setPlayerTurn(false);
     } catch (e) {
       console.error(e);
@@ -83,7 +108,6 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
 
   const updateBoardState = (board: Board) => {
     setBoard(board);
-    turn(board);
   };
 
   return (

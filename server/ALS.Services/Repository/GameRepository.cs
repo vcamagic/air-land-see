@@ -3,13 +3,12 @@ using ALS.Models.Models;
 
 namespace ALS.Services.Repository
 {
-    public class GameRepository:IGameRepository
+    public class GameRepository : IGameRepository
     {
-        public List<Game> Games { get; set; }
+        public static List<Game> Games { get; set; } = new List<Game>();
 
         public GameRepository()
         {
-            Games = new List<Game>();
         }
     }
 }

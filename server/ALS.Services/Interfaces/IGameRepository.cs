@@ -4,6 +4,6 @@ namespace ALS.Services.Interfaces
 {
     public interface IGameRepository
     {
-        public List<Game> Games { get; set; }
+        public static List<Game> Games { get; set; }
     }
 }
