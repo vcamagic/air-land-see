@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Lane } from '../models/Lane';
 import { LaneDeployment } from '../models/LaneDeployment';
 import { LaneType } from '../models/LaneType';
@@ -33,9 +33,20 @@ interface LaneElementComponentInterface {
 
 export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   const PlayerCardStack = () => (
-    <div className='flex flex-row-reverse'>
+    <div className='flex flex-row-reverse relative'>
       {props.lane.playerCards.map((card) => (
-        <CardInLaneComponent key={card.id} card={card} left={true} />
+        <div key={card.id}>
+          <CardInLaneComponent
+            card={card}
+            left={true}
+            right={
+              props.lane.playerCards.findIndex((c) => c.id === card.id) * 200
+            }
+            zIndex={
+              props.lane.playerCards.findIndex((c) => c.id === card.id) * 10
+            }
+          />
+        </div>
       ))}
     </div>
   );
@@ -43,7 +54,17 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   const OpponentCardStack = () => (
     <div>
       {props.lane.opponentCards.map((card) => (
-        <CardInLaneComponent key={card.id} card={card} left={false} />
+        <CardInLaneComponent
+          key={card.id}
+          card={card}
+          left={false}
+          right={
+            props.lane.opponentCards.findIndex((c) => c.id === card.id) * 200
+          }
+          zIndex={
+            props.lane.opponentCards.findIndex((c) => c.id === card.id) * 10
+          }
+        />
       ))}
     </div>
   );
@@ -52,7 +73,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
     <div className='w-full'>
       <div>
         <div
-          className={`flex justify-center h-3 text-white text-xl ${getBannerColor(
+          className={`flex justify-center h-3vh text-white text-xl ${getBannerColor(
             props.lane.type
           )}  w-full`}
         >
@@ -133,13 +154,13 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
 
   return (
     <div className='flex w-full h-23'>
-      <div className='w-2/5'>
+      <div className='w-46%'>
         <PlayerCardStack />
       </div>
-      <div className='w-1/5'>
+      <div className='w-8%'>
         <Template />
       </div>
-      <div className='w-2/5'>
+      <div className='w-46%'>
         <OpponentCardStack />
       </div>
     </div>
