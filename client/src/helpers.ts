@@ -88,6 +88,6 @@ const makeCardInstance = (card: ServerCard): Card => {
   } else {
     returnCard = new Blockade();
   }
-
+  returnCard.faceUp = card.faceUp;
   return returnCard;
 };

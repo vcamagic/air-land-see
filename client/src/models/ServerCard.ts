@@ -7,6 +7,7 @@ export class ServerCard {
   power!: number;
   type!: LaneType;
   highlight!: boolean;
+  faceUp!: boolean;
   description!: string;
   img!: string;
   effect!: CardEffect;
