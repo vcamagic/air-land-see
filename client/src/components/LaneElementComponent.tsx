@@ -58,7 +58,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   );
 
   const OpponentCardStack = () => (
-    <div>
+    <div className='flex flex-row-reverse relative'>
       {props.lane.opponentCards.map((card) => (
         <CardInLaneComponent
           key={card.id}

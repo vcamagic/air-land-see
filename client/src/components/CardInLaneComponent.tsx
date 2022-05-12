@@ -53,11 +53,14 @@ export const CardInLaneComponent = ({
   const RightSide = () => (
     <div
       onClick={cardInLaneClick}
-      className={`flex ${card.highlight ? 'border-4 border-red-400' : ''}`}
+      className={`flex absolute  h-23vh ${
+        card.highlight ? 'border-4 border-red-400' : ''
+      }`}
+      style={{ left: right, zIndex: zIndex }}
     >
-      <div className={`${getBannerColor(card.type)} w-200 h-200`}>
-        <div className={`flex justify-center p-3`}>
-          <h1 className='text-white text-3xl'>{card.power}</h1>
+      <div className={`${getBannerColor(card.type)} w-200`}>
+        <div className={`flex justify-center p-1`}>
+          <h1 className='text-white text-2xl'>{card.power}</h1>
         </div>
         <div
           className={
@@ -66,7 +69,7 @@ export const CardInLaneComponent = ({
               : 'flex justify-center'
           }
         >
-          <h1>
+          <h1 className='font-bold'>
             <span className='mr-2'>{getCardIcon(card.effect)}</span>
             {card.name}
           </h1>
@@ -81,7 +84,7 @@ export const CardInLaneComponent = ({
           <p>{card.description}</p>
         </div>
       </div>
-      <img src={card.img} alt='card' className='h-200 w-247' />
+      <img src={card.img} alt='card' className='w-247' />
     </div>
   );
 
@@ -163,8 +166,7 @@ export const CardInLaneComponent = ({
   if (card.isFaceUp()) {
     if (left) {
       return <LeftSide />;
-    }
-    if (right) {
+    } else {
       return <RightSide />;
     }
   } else {
