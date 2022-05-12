@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Board } from '../models/Board';
 import { Card } from '../models/Cards/Card';
 import { Lane } from '../models/Lane';
@@ -37,15 +37,22 @@ interface LaneElementComponentInterface {
 
 export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   const PlayerCardStack = () => (
-    <div className='flex flex-row-reverse'>
+    <div className='flex flex-row-reverse relative'>
       {props.lane.playerCards.map((card) => (
-        <CardInLaneComponent
-          board={props.board}
-          key={card.id}
-          card={card}
-          left={true}
-          updateTargetedCard={props.updateTargetedCard}
-        />
+        <div key={card.id}>
+          <CardInLaneComponent
+            card={card}
+            left={true}
+            right={
+              props.lane.playerCards.findIndex((c) => c.id === card.id) * 200
+            }
+            zIndex={
+              props.lane.playerCards.findIndex((c) => c.id === card.id) * 10
+            }
+            updateTargetedCard={props.updateTargetedCard}
+            board={props.board}
+          />
+        </div>
       ))}
     </div>
   );
@@ -54,11 +61,17 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
     <div>
       {props.lane.opponentCards.map((card) => (
         <CardInLaneComponent
-          board={props.board}
           key={card.id}
           card={card}
           left={false}
+          right={
+            props.lane.opponentCards.findIndex((c) => c.id === card.id) * 200
+          }
+          zIndex={
+            props.lane.opponentCards.findIndex((c) => c.id === card.id) * 10
+          }
           updateTargetedCard={props.updateTargetedCard}
+          board={props.board}
         />
       ))}
     </div>
@@ -68,7 +81,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
     <div className='w-full'>
       <div>
         <div
-          className={`flex justify-center h-3 text-white text-xl ${getBannerColor(
+          className={`flex justify-center h-3vh text-white text-xl ${getBannerColor(
             props.lane.type
           )}  w-full`}
         >
@@ -149,13 +162,13 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
 
   return (
     <div className='flex w-full h-23'>
-      <div className='w-2/5'>
+      <div className='w-46%'>
         <PlayerCardStack />
       </div>
-      <div className='w-1/5'>
+      <div className='w-8%'>
         <Template />
       </div>
-      <div className='w-2/5'>
+      <div className='w-46%'>
         <OpponentCardStack />
       </div>
     </div>
