@@ -53,7 +53,9 @@ export const BoardComponent = () => {
     //   updateBoardState((card as Reinforce).executeEffect(board, lane.type));
     // }
     if (card instanceof Ambush) {
-      updateBoardState((card as Ambush).executeEffect(board, target.id));
+      let tempBoard = (card as Ambush).executeEffect(board, target.id);
+      updateBoardState(tempBoard);
+      turn(tempBoard);
     }
     if (card instanceof Maneuver) {
       let tempBoard = (card as Maneuver).executeEffect(board, target.id);
@@ -77,7 +79,11 @@ export const BoardComponent = () => {
       updateBoardState((card as Reinforce).deploy(board, lane.type));
     }
     if (card instanceof Ambush) {
-      updateBoardState((card as Ambush).deploy(board, lane.type));
+      let boardTemp = (card as Ambush).deploy(board, lane.type);
+      if (!card.selectTargets(boardTemp).targeting) {
+        turn(boardTemp);
+      }
+      updateBoardState(boardTemp);
     }
     if (card instanceof Maneuver) {
       let boardTemp = (card as Maneuver).deploy(board, lane.type);

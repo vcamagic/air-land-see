@@ -27,24 +27,23 @@ export class Ambush extends Card {
 
   deploy(board: Board, selectedLane: LaneType): Board {
     board = super.deploy(board, selectedLane);
-    const temp = board.getCardById(this.id);
-    if(temp !== null && temp.card.isFaceUp()){
-      this.selectTargets(board);
-    }
     return board;
   }
 
-  selectTargets(board: Board) {
+  selectTargets(board: Board): Board {
     board.lanes.forEach((lane: Lane) => {
       let temp = lane.getLastPlayerCard();
       if (temp !== null) {
         temp.highlight = true;
+        board.targeting = true;
       }
       temp = lane.getLastOpponentCard();
       if (temp !== null) {
         temp.highlight = true;
+        board.targeting = true;
       }
     });
+    return cloneDeep(board);
   }
 
   executeEffect(
