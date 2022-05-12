@@ -65,6 +65,7 @@ export class Card {
       board.getLane(selectedLane).addPlayerCard(this);
       board.targeting = this.effect === CardEffect.INSTANT ? true : false;
     }
+    board.player.airdrop = false;
     board.removeCardFromPlayerHand(this.id);
     return cloneDeep(board);
   }

@@ -34,7 +34,7 @@ export class Maneuver extends Card {
     board = super.deploy(board, selectedLane);
     const temp = board.getCardById(this.id);
     if(temp !== null && temp.card.isFaceUp()){
-      this.selectTargets(board, selectedLane);
+      board = this.selectTargets(board, selectedLane);
     }
     return cloneDeep(board);
   }
@@ -44,7 +44,7 @@ export class Maneuver extends Card {
     if (this.faceUp) {
       let temp = board.getCardById(this.id);
       if (temp !== null) {
-        this.selectTargets(board, temp.lane);
+        board = this.selectTargets(board, temp.lane);
       }
     }
   }
@@ -63,16 +63,23 @@ export class Maneuver extends Card {
     return cloneDeep(board);
   }
 
-  selectTargets(board: Board, selectedLane: LaneType): void {
+  selectTargets(board: Board, selectedLane: LaneType): Board {
+    let foundTarget: boolean = false;
     board.getAdjacentLanes(selectedLane).forEach((lane: Lane) => {
       let temp = lane.getLastPlayerCard();
       if (temp !== null) {
+        foundTarget = true;
         temp.highlight = true;
       }
       temp = lane.getLastOpponentCard();
       if (temp !== null) {
+        foundTarget = true;
         temp.highlight = true;
       }
     });
+    if(foundTarget) {
+      board.targeting = false;
+    }
+    return cloneDeep(board);
   }
 }
