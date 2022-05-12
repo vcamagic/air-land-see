@@ -62,9 +62,12 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     }
   }, []);
 
-  const updateBoard = async (board: Board, gameId: string) => {
+  const turn = async (board: Board) => {
+    console.log(board);
+    console.log('Game id', gameId.current);
     try {
-      await connection.current.invoke('UpdateBoard', board);
+      await connection.current.invoke('Turn', [gameId.current, board]);
+      setPlayerTurn(false);
     } catch (e) {
       console.error(e);
     }
@@ -80,6 +83,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
 
   const updateBoardState = (board: Board) => {
     setBoard(board);
+    turn(board);
   };
 
   return (
@@ -87,7 +91,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       value={{
         joinGame,
         closeConnection,
-        updateBoard,
+        turn,
         board,
         updateBoardState,
         playerTurn,

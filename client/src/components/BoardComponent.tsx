@@ -20,7 +20,7 @@ import { HandComponent } from './HandComponent';
 import { LaneComponent } from './LaneComponent';
 
 export const BoardComponent = () => {
-  const { board, updateBoardState } = useContext(WebSocketContext);
+  const { board, updateBoardState, playerTurn } = useContext(WebSocketContext);
   const [clickedCard, setClickedCard] = useState({});
   const [clickedLane, setClickedLane] = useState({});
 
@@ -105,7 +105,7 @@ export const BoardComponent = () => {
   };
 
   return (
-    <>
+    <div style={{ pointerEvents: `${playerTurn ? 'auto' : 'none'}` }}>
       <div className='flex justify-center h-69'>
         <LaneComponent
           board={board}
@@ -119,6 +119,6 @@ export const BoardComponent = () => {
           updateClickedCard={updateClickedCard}
         />
       </div>
-    </>
+    </div>
   );
 };
