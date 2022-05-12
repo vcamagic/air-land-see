@@ -32,7 +32,7 @@ interface LaneElementComponentInterface {
   board: Board;
   lane: Lane;
   updateTargetedCard: (card: Card) => void;
-  updateClickedLane: (lane: Lane) => void;
+  updateClickedLane: (lane: Lane, deploy?: boolean) => void;
 }
 
 export const LaneElementComponent = (props: LaneElementComponentInterface) => {
@@ -97,9 +97,19 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   );
 
   const handleDeployClick = () => {
-    props.updateClickedLane(props.lane);
+    if (!props.board.targeting) {
+      props.updateClickedLane(props.lane, true);
+    } else {
+      props.updateClickedLane(props.lane);
+    }
   };
-  const handleImproviseClick = () => {};
+  const handleImproviseClick = () => {
+    if (!props.board.targeting) {
+      props.updateClickedLane(props.lane, false);
+    } else {
+      props.updateClickedLane(props.lane);
+    }
+  };
 
   const CanDeploy = () => (
     <div className='text-white w-full'>
@@ -121,7 +131,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
           className='flex flex-1 bg-gray-700 grid place-items-center'
           onClick={handleImproviseClick}
         >
-          <h1>IMPROVISE</h1>
+          IMPROVISE
         </div>
       </div>
     </div>
@@ -141,7 +151,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
           className='flex flex-1 bg-gray-700 grid place-items-center'
           onClick={handleImproviseClick}
         >
-          <h1>IMPROVISE</h1>
+          IMPROVISE
         </div>
       </div>
     </div>

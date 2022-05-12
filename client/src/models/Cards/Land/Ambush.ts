@@ -3,6 +3,7 @@ import { Lane } from '../../Lane';
 import { LaneType } from '../../LaneType';
 import { Card } from '../Card';
 import { CardEffect } from '../CardEffect';
+import { cloneDeep } from 'lodash';
 
 export class Ambush extends Card {
   constructor() {
@@ -26,7 +27,10 @@ export class Ambush extends Card {
 
   deploy(board: Board, selectedLane: LaneType): Board {
     board = super.deploy(board, selectedLane);
-    this.selectTargets(board);
+    const temp = board.getCardById(this.id);
+    if(temp !== null && temp.card.isFaceUp()){
+      this.selectTargets(board);
+    }
     return board;
   }
 
@@ -54,6 +58,6 @@ export class Ambush extends Card {
     }
     board.clearHighlights();
     board.targeting = false;
-    return board;
+    return cloneDeep(board);
   }
 }

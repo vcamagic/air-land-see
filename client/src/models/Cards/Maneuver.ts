@@ -32,7 +32,10 @@ export class Maneuver extends Card {
 
   deploy(board: Board, selectedLane: LaneType): Board {
     board = super.deploy(board, selectedLane);
-    this.selectTargets(board, selectedLane);
+    const temp = board.getCardById(this.id);
+    if(temp !== null && temp.card.isFaceUp()){
+      this.selectTargets(board, selectedLane);
+    }
     return cloneDeep(board);
   }
 

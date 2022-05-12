@@ -60,19 +60,23 @@ export class Card {
   }
 
   deploy(board: Board, selectedLane: LaneType): Board {
-    board.getLane(selectedLane).addPlayerCard(this);
-    board.removeCardFromPlayerHand(this.id);
     board.clearHighlights();
-    board.targeting = this.effect === CardEffect.INSTANT ? true : false;
+    if(board.survivesBlockade(selectedLane)){
+      board.getLane(selectedLane).addPlayerCard(this);
+      board.targeting = this.effect === CardEffect.INSTANT ? true : false;
+    }
+    board.removeCardFromPlayerHand(this.id);
     return cloneDeep(board);
   }
 
-  improvise(board: Board, selectedLane: LaneType): void {
+  improvise(board: Board, selectedLane: LaneType): Board {
     this.faceUp = false;
-    const containment = board.getCardById(5);
-    if (containment === null) {
+    board.clearHighlights();
+    if(board.survivesContainment() && board.survivesBlockade(selectedLane)){
       board.getLane(selectedLane).addPlayerCard(this);
     }
+    board.removeCardFromPlayerHand(this.id);
+    return cloneDeep(board);
   }
 
   executeEffect(

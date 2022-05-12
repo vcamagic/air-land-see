@@ -30,9 +30,18 @@ export const BoardComponent = () => {
       setClickedCard(card);
     }
   };
-  const updateClickedLane = (lane: Lane) => {
+  const updateClickedLane = (lane: Lane, deploy?: boolean) => {
     setClickedLane(lane);
-    checkCardTypeAndDeploy(clickedCard as Card, lane);
+    if (deploy === true) {
+      checkCardTypeAndDeploy(clickedCard as Card, lane);
+    }
+    if (deploy === false) {
+      improvise(clickedCard as Card, lane);
+    }
+  };
+
+  const improvise = (card: Card, lane: Lane) => {
+    updateBoardState(card.improvise(board, lane.type));
   };
 
   const updateTargetedCard = (card: Card) => {
@@ -58,6 +67,7 @@ export const BoardComponent = () => {
     if (card instanceof Redeploy) {
       updateBoardState((card as Redeploy).executeEffect(board, target.id));
     }
+    console.log(board);
   };
 
   const checkCardTypeAndDeploy = (card: Card, lane: Lane) => {

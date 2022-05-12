@@ -93,7 +93,7 @@ export class Board {
   getCardById(
     targetId: number
   ): { card: Card; lane: LaneType; playerOwned: boolean } | null {
-    for (let i = 0; i <= this.lanes.length; i++) {
+    for(let i=0; i<this.lanes.length; i++) {
       let temp = this.lanes[i].playerCards.find((x) => x.id === targetId);
       if (temp !== undefined) {
         return { card: temp, lane: this.lanes[i].type, playerOwned: true };
@@ -118,6 +118,7 @@ export class Board {
       });
     });
   }
+
   calculateScores(): void {
     const escalation = this.getCardById(14);
     this.lanes.forEach((lane: Lane) => {

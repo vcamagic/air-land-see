@@ -51,7 +51,10 @@ export const CardInLaneComponent = ({
   };
 
   const RightSide = () => (
-    <div className={`flex ${card.highlight ? 'border-4 border-red-400' : ''}`}>
+    <div
+      onClick={cardInLaneClick}
+      className={`flex ${card.highlight ? 'border-4 border-red-400' : ''}`}
+    >
       <div className={`${getBannerColor(card.type)} w-200 h-200`}>
         <div className={`flex justify-center p-3`}>
           <h1 className='text-white text-3xl'>{card.power}</h1>
@@ -84,6 +87,7 @@ export const CardInLaneComponent = ({
 
   const LeftSide = () => (
     <div
+      onClick={cardInLaneClick}
       className={`absolute flex h-23vh ${
         card.highlight ? 'border-4 border-red-400' : ''
       }`}
@@ -124,25 +128,49 @@ export const CardInLaneComponent = ({
     </div>
   );
 
-  const FaceDown = () => (
-    <>
+  const FaceDownLeft = () => (
+    <div
+      onClick={cardInLaneClick}
+      className={`absolute flex h-23vh ${
+        card.highlight ? 'border-4 border-red-400' : ''
+      }`}
+      style={{ right: right, zIndex: zIndex }}
+    >
       <img
         src='/images/face-down.png'
         alt='face down card'
-        className='w-447 h-23vh'
+        className='h-23vh'
       ></img>
-    </>
-  );
-
-  return (
-    <div onClick={cardInLaneClick}>
-      {!card.isFaceUp() ? (
-        <FaceDown />
-      ) : left === true ? (
-        <LeftSide />
-      ) : (
-        <RightSide />
-      )}
     </div>
   );
+
+  const FaceDownRight = () => (
+    <div
+      onClick={cardInLaneClick}
+      className={`absolute flex h-23vh ${
+        card.highlight ? 'border-4 border-red-400' : ''
+      }`}
+      style={{ left: right, zIndex: zIndex }}
+    >
+      <img
+        src='/images/face-down-right.png'
+        alt='face down card'
+        className='h-23vh'
+      ></img>
+    </div>
+  );
+
+  if (card.isFaceUp()) {
+    if (left) {
+      return <LeftSide />;
+    }
+    if (right) {
+      return <RightSide />;
+    }
+  } else {
+    if (left) {
+      return <FaceDownLeft />;
+    }
+  }
+  return <FaceDownRight />;
 };
