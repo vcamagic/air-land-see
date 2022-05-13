@@ -48,7 +48,7 @@ export class Maneuver extends Card {
   executeEffect(
     board: Board,
     targetId?: number,
-    selectedLane?: LaneType
+    selectedLane?: Lane
   ): Board {
     let temp = board.getCardById(targetId as number);
     if (temp !== null) {

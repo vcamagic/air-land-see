@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { Board } from '../models/Board';
 import { Aerodrome } from '../models/Cards/Air/Aerodrome';
 import { AirDrop } from '../models/Cards/Air/AirDrop';
 import { Containment } from '../models/Cards/Air/Containment';
@@ -38,6 +39,15 @@ export const BoardComponent = () => {
     if (deploy === false) {
       improvise(clickedCard as Card, lane);
     }
+    if (
+      deploy === undefined &&
+      lane.highlight &&
+      clickedCard instanceof Reinforce
+    ) {
+      let tempBoard = clickedCard.executeEffect(board, undefined, lane);
+      updateBoardState(tempBoard);
+      turn(tempBoard);
+    }
   };
 
   const improvise = (card: Card, lane: Lane) => {
@@ -51,16 +61,16 @@ export const BoardComponent = () => {
   };
 
   const checkCardTypeExecute = (card: Card, target: Card) => {
-    // if (card instanceof Reinforce) {
-    //   updateBoardState((card as Reinforce).executeEffect(board, lane.type));
-    // }
     if (card instanceof Ambush) {
       updateBoardState((card as Ambush).executeEffect(board, target.id));
     }
     if (card instanceof Maneuver) {
       let tempBoard = (card as Maneuver).executeEffect(board, target.id);
-      updateBoardState(tempBoard);
-      turn(tempBoard);
+      if (!tempBoard.targeting) {
+        //ako posle uradjenog efekta targeting idalje stoji true, znaci da je neka druga metoda to podesila
+        updateBoardState(tempBoard);
+        turn(tempBoard);
+      }
     }
     // if (card instanceof Disrupt) {
     //   updateBoardState((card as Disrupt).deploy(board, lane.type));
@@ -75,14 +85,20 @@ export const BoardComponent = () => {
   };
 
   const checkCardTypeAndDeploy = (card: Card, lane: Lane) => {
+    let boardTemp!: Board;
     if (card instanceof Reinforce) {
-      updateBoardState((card as Reinforce).deploy(board, lane.type));
+      boardTemp = (card as Reinforce).deploy(board, lane.type);
+      const temp = boardTemp.getCardById(card.id);
+      if (temp !== null && temp.card.isFaceUp()) {
+        boardTemp = card.selectTargets(boardTemp, lane.type);
+      }
+      updateBoardState(boardTemp);
     }
     if (card instanceof Ambush) {
       updateBoardState((card as Ambush).deploy(board, lane.type));
     }
     if (card instanceof Maneuver) {
-      let boardTemp = (card as Maneuver).deploy(board, lane.type);
+      boardTemp = (card as Maneuver).deploy(board, lane.type);
       const temp = boardTemp.getCardById(card.id);
       if (temp !== null && temp.card.isFaceUp()) {
         if (!card.selectTargets(boardTemp, lane.type).targeting) {
