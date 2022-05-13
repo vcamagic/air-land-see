@@ -78,7 +78,12 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   );
 
   const DefaultTemplate = () => (
-    <div className='w-full' onClick={handleLaneSelection}>
+    <div
+      className={`w-full ${
+        props.lane.highlight ? 'border-4 border-red-400' : ''
+      }`}
+      onClick={handleLaneSelection}
+    >
       <div>
         <div
           className={`flex justify-center h-3vh text-white text-xl ${getBannerColor(

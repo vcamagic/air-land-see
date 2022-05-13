@@ -23,6 +23,7 @@ export class Reinforce extends Card {
     if (this.isFaceUp()) {
       let temp = board.getCardById(this.id);
       if (temp !== null) {
+        board.targeting = true;
         this.selectTargets(board, temp.lane);
       }
     }

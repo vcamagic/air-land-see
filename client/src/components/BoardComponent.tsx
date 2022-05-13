@@ -21,7 +21,7 @@ import { HandComponent } from './HandComponent';
 import { LaneComponent } from './LaneComponent';
 
 export const BoardComponent = () => {
-  const { board, updateBoardState, playerTurn, turn } =
+  const { board, updateBoardState, playerTurn, turn, receivedTargetId } =
     useContext(WebSocketContext);
   const [clickedCard, setClickedCard] = useState({});
   const [clickedLane, setClickedLane] = useState({});
@@ -61,16 +61,15 @@ export const BoardComponent = () => {
   };
 
   const checkCardTypeExecute = (card: Card, target: Card) => {
+    if (receivedTargetId !== -1) {
+      setClickedCard(board.getCardById(receivedTargetId)?.card as Card);
+    }
+    let tempBoard: Board = board;
     if (card instanceof Ambush) {
-      updateBoardState((card as Ambush).executeEffect(board, target.id));
+      tempBoard = (card as Ambush).executeEffect(board, target.id);
     }
     if (card instanceof Maneuver) {
-      let tempBoard = (card as Maneuver).executeEffect(board, target.id);
-      if (!tempBoard.targeting) {
-        //ako posle uradjenog efekta targeting idalje stoji true, znaci da je neka druga metoda to podesila
-        updateBoardState(tempBoard);
-        turn(tempBoard);
-      }
+      tempBoard = (card as Maneuver).executeEffect(board, target.id);
     }
     // if (card instanceof Disrupt) {
     //   updateBoardState((card as Disrupt).deploy(board, lane.type));
@@ -79,9 +78,17 @@ export const BoardComponent = () => {
     //   updateBoardState((card as Transport).deploy(board, lane.type)); //mora da se bira prvo karta koja se pomera pa lejn... crap
     // }
     if (card instanceof Redeploy) {
-      updateBoardState((card as Redeploy).executeEffect(board, target.id));
+      tempBoard = (card as Redeploy).executeEffect(board, target.id);
     }
-    console.log(board);
+    const tempTarget = board.getCardById(target.id);
+    if (
+      !tempBoard.targeting ||
+      (!tempTarget !== null && !tempTarget?.playerOwned)
+    ) {
+      turn(tempBoard, target.id);
+    }
+    updateBoardState(tempBoard);
+    console.log(tempBoard);
   };
 
   const checkCardTypeAndDeploy = (card: Card, lane: Lane) => {
@@ -117,7 +124,8 @@ export const BoardComponent = () => {
     if (card instanceof Heavy) {
       const tempBoard = (card as Heavy).deploy(board, lane.type);
       updateBoardState(tempBoard);
-      turn(tempBoard);
+      console.log('tempBoard posle igranja heavy', tempBoard);
+      turn(tempBoard); //play posle flip fieste se desi samo lokalno, da li se uopste posalje, i sta
     }
     if (card instanceof Support) {
       updateBoardState((card as Support).deploy(board, lane.type));
