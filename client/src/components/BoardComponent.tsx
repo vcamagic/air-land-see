@@ -24,6 +24,7 @@ export const BoardComponent = () => {
   const { board, updateBoardState, playerTurn, turn, receivedTargetId } =
     useContext(WebSocketContext);
   const [clickedCard, setClickedCard] = useState({});
+  const [targetedCard, setTargetedCard] = useState({});
   const [clickedLane, setClickedLane] = useState({});
 
   const updateClickedCard = (card: Card) => {
@@ -32,6 +33,11 @@ export const BoardComponent = () => {
     }
   };
   const updateClickedLane = (lane: Lane, deploy?: boolean) => {
+    console.log(lane, deploy);
+    if (receivedTargetId !== -1) {
+      setTargetedCard(board.getCardById(receivedTargetId)?.card as Card);
+    }
+    console.log(targetedCard);
     setClickedLane(lane);
     if (deploy === true) {
       checkCardTypeAndDeploy(clickedCard as Card, lane);
@@ -42,9 +48,19 @@ export const BoardComponent = () => {
     if (
       deploy === undefined &&
       lane.highlight &&
-      clickedCard instanceof Reinforce
+      (clickedCard instanceof Reinforce || targetedCard instanceof Reinforce)
     ) {
-      let tempBoard = clickedCard.executeEffect(board, undefined, lane);
+      let tempBoard;
+      if (clickedCard instanceof Reinforce) {
+        tempBoard = clickedCard.executeEffect(board, undefined, lane);
+      } else {
+        tempBoard = (targetedCard as Reinforce).executeEffect(
+          board,
+          undefined,
+          lane
+        );
+      }
+      console.log('reinforce after lane selection board', tempBoard);
       updateBoardState(tempBoard);
       turn(tempBoard);
     }
@@ -57,6 +73,7 @@ export const BoardComponent = () => {
   };
 
   const updateTargetedCard = (card: Card) => {
+    setTargetedCard(card);
     checkCardTypeExecute(clickedCard as Card, card);
   };
 
@@ -134,7 +151,9 @@ export const BoardComponent = () => {
       updateBoardState((card as AirDrop).deploy(board, lane.type));
     }
     if (card instanceof Aerodrome) {
-      updateBoardState((card as Aerodrome).deploy(board, lane.type));
+      const tempBoard = (card as Aerodrome).deploy(board, lane.type);
+      updateBoardState(tempBoard);
+      turn(tempBoard);
     }
     if (card instanceof Containment) {
       updateBoardState((card as Containment).deploy(board, lane.type));

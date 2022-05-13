@@ -134,21 +134,21 @@ export const CardInLaneComponent = ({
   );
 
   const FaceDownLeft = () => (
-    <Tippy content={<LeftSide />}>
-      <div
-        onClick={cardInLaneClick}
-        className={`absolute flex h-23vh ${
-          card.highlight ? 'border-4 border-red-400' : ''
-        }`}
-        style={{ right: right, zIndex: zIndex }}
-      >
-        <img
-          src='/images/face-down.png'
-          alt='face down card'
-          className='h-23vh'
-        ></img>
-      </div>
-    </Tippy>
+    <div
+      onClick={cardInLaneClick}
+      className={`absolute flex h-23vh ${
+        card.highlight ? 'border-4 border-red-400' : ''
+      }`}
+      style={{ right: right, zIndex: zIndex }}
+    >
+      {/* <Tippy content={<LeftSide />}> */}
+      <img
+        src='/images/face-down.png'
+        alt='face down card'
+        className='h-23vh'
+      ></img>
+      {/* </Tippy> */}
+    </div>
   );
 
   const FaceDownRight = () => (
