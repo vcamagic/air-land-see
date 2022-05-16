@@ -31,7 +31,6 @@ export const BoardComponent = () => {
   } = useContext(WebSocketContext);
   const [clickedCard, setClickedCard] = useState({});
   const [targetedCard, setTargetedCard] = useState({});
-  const [clickedLane, setClickedLane] = useState({});
   const transportActive = useRef(false);
 
   const updateClickedCard = (card: Card) => {
@@ -44,7 +43,6 @@ export const BoardComponent = () => {
     if (receivedTargetId !== -1) {
       setTargetedCard(board.getCardById(receivedTargetId)?.card as Card);
     }
-    setClickedLane(lane);
     if (deploy === true) {
       checkCardTypeAndDeploy(clickedCard as Card, lane);
     }
@@ -118,8 +116,6 @@ export const BoardComponent = () => {
     }
     if (card instanceof Redeploy) {
       tempBoard = (card as Redeploy).executeEffect(board, target.id);
-      tempBoard.calculateScores();
-      updateBoardState(tempBoard);
     }
     const tempTarget = board.getCardById(target.id);
     if (tempBoard.targeting) {
@@ -230,9 +226,18 @@ export const BoardComponent = () => {
       turn(boardTemp);
     }
     if (card instanceof Redeploy) {
-      const tempBoard = (card as Redeploy).deploy(board, lane.type);
-      tempBoard.calculateScores();
-      updateBoardState(tempBoard);
+      boardTemp = (card as Redeploy).deploy(board, lane.type);
+      const temp = boardTemp.getCardById(card.id);
+      if(temp!== null && temp.card.isFaceUp()){
+        if(!card.selectTargets(boardTemp).targeting){
+          turn(boardTemp);
+        }
+      }
+      else{
+        turn(boardTemp);
+      }
+      boardTemp.calculateScores();
+      updateBoardState(boardTemp);
     }
     if (card instanceof Blockade) {
       boardTemp = (card as Blockade).deploy(board, lane.type);

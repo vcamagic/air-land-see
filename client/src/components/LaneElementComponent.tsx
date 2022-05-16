@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Board } from '../models/Board';
 import { Card } from '../models/Cards/Card';
 import { Lane } from '../models/Lane';
