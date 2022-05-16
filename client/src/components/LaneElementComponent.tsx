@@ -78,7 +78,12 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   );
 
   const DefaultTemplate = () => (
-    <div className='w-full'>
+    <div
+      className={`w-full ${
+        props.lane.highlight ? 'border-4 border-red-400' : ''
+      }`}
+      onClick={handleLaneSelection}
+    >
       <div>
         <div
           className={`flex justify-center h-3vh text-white text-xl ${getBannerColor(
@@ -99,14 +104,17 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   const handleDeployClick = () => {
     if (!props.board.targeting) {
       props.updateClickedLane(props.lane, true);
-    } else {
-      props.updateClickedLane(props.lane);
     }
   };
+
   const handleImproviseClick = () => {
     if (!props.board.targeting) {
       props.updateClickedLane(props.lane, false);
-    } else {
+    }
+  };
+
+  const handleLaneSelection = () => {
+    if (props.board.targeting) {
       props.updateClickedLane(props.lane);
     }
   };

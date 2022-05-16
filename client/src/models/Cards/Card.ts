@@ -83,7 +83,7 @@ export class Card {
   executeEffect(
     board: Board,
     targetId?: number,
-    selectedLane?: LaneType
+    selectedLane?: Lane
   ): void {}
 
   onDestroy(): void {}

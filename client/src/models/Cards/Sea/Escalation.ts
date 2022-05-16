@@ -15,19 +15,4 @@ export class Escalation extends Card {
       CardEffect.PERMANENT
     );
   }
-
-  flip(board: Board): void {
-    this.faceUp = !this.faceUp;
-    if (this.isFaceUp()) {
-      this.selectTargets(board);
-    }
-  }
-
-  executeEffect(
-    board: Board,
-    targetId?: number,
-    selectedLane?: LaneType
-  ): void {}
-
-  selectTargets(board: Board): void {}
 }

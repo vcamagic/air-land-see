@@ -40,6 +40,7 @@ export class Maneuver extends Card {
     if (this.faceUp) {
       let temp = board.getCardById(this.id);
       if (temp !== null) {
+        board.targeting = true;
         board = this.selectTargets(board, temp.lane);
       }
     }
@@ -48,14 +49,14 @@ export class Maneuver extends Card {
   executeEffect(
     board: Board,
     targetId?: number,
-    selectedLane?: LaneType
+    selectedLane?: Lane
   ): Board {
+    board.clearHighlights();
+    board.targeting = false;
     let temp = board.getCardById(targetId as number);
     if (temp !== null) {
       temp.card.flip(board);
     }
-    board.clearHighlights();
-    board.targeting = false;
     return cloneDeep(board);
   }
 

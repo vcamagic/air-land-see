@@ -5,8 +5,10 @@ import { Board } from '../models/Board';
 import { Lane } from '../models/Lane';
 import { ServerBoard } from '../models/ServerBoard';
 import { WebSocketProv } from './WebSocketContext';
+
 const invertBoardState = (board: Board): Board => {
   let temp: Board = new Board();
+  temp.targeting = board.targeting;
   temp.deck = board.deck;
   [temp.player, temp.opponent] = [board.opponent, board.player];
   board.lanes.forEach((lane: Lane, index: number) => {
@@ -16,12 +18,14 @@ const invertBoardState = (board: Board): Board => {
       temp.lanes[index].playerScore,
       temp.lanes[index].opponentScore,
       temp.lanes[index].type,
+      temp.lanes[index].highlight,
     ] = [
       lane.opponentCards,
       lane.playerCards,
       lane.opponentScore,
       lane.playerScore,
       lane.type,
+      lane.highlight,
     ];
   });
   console.log('INVERTED', temp);
@@ -40,7 +44,9 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   );
   const [board, setBoard] = useState(new Board());
   const [playerTurn, setPlayerTurn] = useState(true);
+  const [receivedTargetId, setReceivedTargetId] = useState(-1);
   const gameId = useRef('');
+  const host = useRef({});
 
   const joinGame = useCallback(async (name: string) => {
     connection.current = new HubConnectionBuilder()
@@ -57,6 +63,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       connection.current.on(
         'GameSetup',
         async (isHost: boolean, opponentName: string) => {
+          host.current = isHost;
           if (isHost) {
             const board = new Board();
             await connection.current.invoke(
@@ -77,11 +84,21 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         setBoard(invertBoardState(temp));
       });
 
-      connection.current.on('OpponentTurn', (board: ServerBoard) => {
-        const temp = makeBoardInstance(board);
-        setBoard(invertBoardState(temp));
-        setPlayerTurn(true);
-      });
+      connection.current.on(
+        'OpponentTurn',
+        (board: ServerBoard, targetId: number) => {
+          let temp = invertBoardState(makeBoardInstance(board));
+          setBoard(temp);
+          setPlayerTurn(declareTurn(temp));
+          setReceivedTargetId(targetId);
+          console.log(
+            'opponentTurn received',
+            board.player.hand.length,
+            board.opponent.hand.length,
+            board
+          );
+        }
+      );
 
       await connection.current.start();
     } catch (e) {
@@ -89,10 +106,21 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     }
   }, []);
 
-  const turn = async (board: Board) => {
+  const turn = async (board: Board, targetId?: number) => {
     try {
-      await connection.current.invoke('Turn', gameId.current, board);
-      setPlayerTurn(false);
+      await connection.current.invoke(
+        'Turn',
+        gameId.current,
+        board,
+        targetId ?? -1
+      );
+      setPlayerTurn(declareTurn(board));
+      console.log(
+        'turn called',
+        board.player.hand.length,
+        board.opponent.hand.length,
+        board
+      );
     } catch (e) {
       console.error(e);
     }
@@ -110,6 +138,16 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     setBoard(board);
   };
 
+  const declareTurn = (board: Board) => {
+    let playersTurn!: boolean;
+    if (host.current) {
+      playersTurn = board.player.hand.length === board.opponent.hand.length;
+    } else {
+      playersTurn = board.player.hand.length > board.opponent.hand.length;
+    }
+    return playersTurn;
+  };
+
   return (
     <WebSocketProv
       value={{
@@ -119,6 +157,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         board,
         updateBoardState,
         playerTurn,
+        receivedTargetId,
       }}
     >
       {children}

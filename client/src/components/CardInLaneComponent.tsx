@@ -4,6 +4,8 @@ import { Card } from '../models/Cards/Card';
 import { CardEffect } from '../models/Cards/CardEffect';
 import { LaneType } from '../models/LaneType';
 import { Board } from '../models/Board';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css'; // optional
 
 const getCardIcon = (cardEffect: CardEffect) => {
   switch (cardEffect) {
@@ -139,11 +141,13 @@ export const CardInLaneComponent = ({
       }`}
       style={{ right: right, zIndex: zIndex }}
     >
+      {/* <Tippy content={<LeftSide />}> */}
       <img
         src='/images/face-down.png'
         alt='face down card'
         className='h-23vh'
       ></img>
+      {/* </Tippy> */}
     </div>
   );
 

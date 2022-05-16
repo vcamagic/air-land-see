@@ -23,7 +23,7 @@ namespace ALS.Services.Hub
             }
         }
 
-        public async void Turn(Guid id, Board board)
+        public async void Turn(Guid id, Board board, int targetId)
         {
             Game g = GameRepository.Games.FirstOrDefault(x => x.Id == id);
             if (g != null)
@@ -38,7 +38,7 @@ namespace ALS.Services.Hub
                     {
                         g.CurrentPlayer = g.PlayerOne;
                     }
-                    await Clients.Client(g.CurrentPlayer.ConnectionId).OpponentTurn(board);
+                    await Clients.Client(g.CurrentPlayer.ConnectionId).OpponentTurn(board, targetId);
                 }
             }
         }

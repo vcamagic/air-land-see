@@ -1,4 +1,5 @@
 import { Board } from '../../Board';
+import { Lane } from '../../Lane';
 import { LaneType } from '../../LaneType';
 import { Card } from '../Card';
 import { CardEffect } from '../CardEffect';
@@ -32,7 +33,7 @@ export class Transport extends Card {
   executeEffect(
     board: Board,
     targetId?: number,
-    selectedLane?: LaneType
+    selectedLane?: Lane
   ): void {}
 
   selectTargets(board: Board): void {}

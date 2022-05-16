@@ -21,6 +21,7 @@ export class Ambush extends Card {
   flip(board: Board): void {
     this.faceUp = !this.faceUp;
     if (this.isFaceUp()) {
+      board.targeting = true;
       this.selectTargets(board);
     }
   }
@@ -49,14 +50,14 @@ export class Ambush extends Card {
   executeEffect(
     board: Board,
     targetId?: number,
-    selectedLane?: LaneType
+    selectedLane?: Lane
   ): Board {
+    board.clearHighlights();
+    board.targeting = false;
     let temp = board.getCardById(targetId as number);
     if (temp !== null) {
       temp.card.flip(board);
     }
-    board.clearHighlights();
-    board.targeting = false;
     return cloneDeep(board);
   }
 }

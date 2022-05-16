@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Board } from '../../Board';
 import { Lane } from '../../Lane';
 import { LaneType } from '../../LaneType';
@@ -22,6 +23,7 @@ export class Reinforce extends Card {
     if (this.isFaceUp()) {
       let temp = board.getCardById(this.id);
       if (temp !== null) {
+        board.targeting = true;
         this.selectTargets(board, temp.lane);
       }
     }
@@ -29,25 +31,29 @@ export class Reinforce extends Card {
 
   deploy(board: Board, selectedLane: LaneType): Board {
     board = super.deploy(board, selectedLane);
-    this.selectTargets(board, selectedLane);
-    return board;
+    return cloneDeep(board);
   }
 
   executeEffect(
     board: Board,
     targetId?: number,
-    selectedLane?: LaneType
-  ): void {
-    board
-      .getLane(selectedLane as LaneType)
-      .addPlayerCard(board.deck[board.deck.length - 1]);
-    board.deck.splice(board.deck.length - 1, 1);
+    selectedLane?: Lane
+  ): Board {
+    let topDeck = board.deck[board.deck.length - 1];
+    topDeck.faceUp = false;
+    if(board.survivesBlockade((selectedLane as Lane).type)){
+      (selectedLane as Lane).addPlayerCard(topDeck);
+    }
+    board.deck.splice(board.deck.length - 1, 1);   
+    board.targeting = false; 
     board.clearHighlights();
+    return cloneDeep(board);
   }
 
-  selectTargets(board: Board, selectedLane: LaneType) {
+  selectTargets(board: Board, selectedLane: LaneType): Board {
     board.getAdjacentLanes(selectedLane).forEach((lane: Lane) => {
       lane.highlight = true;
     });
+    return cloneDeep(board);
   }
 }

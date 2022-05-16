@@ -1,4 +1,5 @@
 import { Board } from '../../Board';
+import { Lane } from '../../Lane';
 import { LaneType } from '../../LaneType';
 import { Card } from '../Card';
 import { CardEffect } from '../CardEffect';
@@ -32,7 +33,7 @@ export class Redeploy extends Card {
   executeEffect(
     board: Board,
     targetId?: number,
-    selectedLane?: LaneType
+    selectedLane?: Lane
   ): Board {
     let temp = board.getCardById(targetId as number);
     if (temp !== null && temp.playerOwned && temp.card.isFaceUp()!) {

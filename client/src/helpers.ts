@@ -21,6 +21,7 @@ import { ServerCard } from './models/ServerCard';
 export const makeBoardInstance = (board: ServerBoard): Board => {
   console.log('SERVER BOARD', board);
   let tempBoard = new Board();
+  tempBoard.targeting = board.targeting;
   let tempLanes = board.lanes.map((lane) => {
     let ret = new Lane(lane.type);
     ret.highlight = lane.highlight;
@@ -88,6 +89,7 @@ const makeCardInstance = (card: ServerCard): Card => {
   } else {
     returnCard = new Blockade();
   }
+  returnCard.highlight = card.highlight;
   returnCard.faceUp = card.faceUp;
   return returnCard;
 };

@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { Board } from '../models/Board';
 import { Aerodrome } from '../models/Cards/Air/Aerodrome';
 import { AirDrop } from '../models/Cards/Air/AirDrop';
 import { Containment } from '../models/Cards/Air/Containment';
@@ -20,9 +21,10 @@ import { HandComponent } from './HandComponent';
 import { LaneComponent } from './LaneComponent';
 
 export const BoardComponent = () => {
-  const { board, updateBoardState, playerTurn, turn } =
+  const { board, updateBoardState, playerTurn, turn, receivedTargetId } =
     useContext(WebSocketContext);
   const [clickedCard, setClickedCard] = useState({});
+  const [targetedCard, setTargetedCard] = useState({});
   const [clickedLane, setClickedLane] = useState({});
 
   const updateClickedCard = (card: Card) => {
@@ -31,12 +33,36 @@ export const BoardComponent = () => {
     }
   };
   const updateClickedLane = (lane: Lane, deploy?: boolean) => {
+    console.log(lane, deploy);
+    if (receivedTargetId !== -1) {
+      setTargetedCard(board.getCardById(receivedTargetId)?.card as Card);
+    }
+    console.log(targetedCard);
     setClickedLane(lane);
     if (deploy === true) {
       checkCardTypeAndDeploy(clickedCard as Card, lane);
     }
     if (deploy === false) {
       improvise(clickedCard as Card, lane);
+    }
+    if (
+      deploy === undefined &&
+      lane.highlight &&
+      (clickedCard instanceof Reinforce || targetedCard instanceof Reinforce)
+    ) {
+      let tempBoard;
+      if (clickedCard instanceof Reinforce) {
+        tempBoard = clickedCard.executeEffect(board, undefined, lane);
+      } else {
+        tempBoard = (targetedCard as Reinforce).executeEffect(
+          board,
+          undefined,
+          lane
+        );
+      }
+      console.log('reinforce after lane selection board', tempBoard);
+      updateBoardState(tempBoard);
+      turn(tempBoard);
     }
   };
 
@@ -47,22 +73,20 @@ export const BoardComponent = () => {
   };
 
   const updateTargetedCard = (card: Card) => {
+    setTargetedCard(card);
     checkCardTypeExecute(clickedCard as Card, card);
   };
 
   const checkCardTypeExecute = (card: Card, target: Card) => {
-    // if (card instanceof Reinforce) {
-    //   updateBoardState((card as Reinforce).executeEffect(board, lane.type));
-    // }
+    if (receivedTargetId !== -1) {
+      setClickedCard(board.getCardById(receivedTargetId)?.card as Card);
+    }
+    let tempBoard: Board = board;
     if (card instanceof Ambush) {
-      let tempBoard = (card as Ambush).executeEffect(board, target.id);
-      updateBoardState(tempBoard);
-      turn(tempBoard);
+      tempBoard = (card as Ambush).executeEffect(board, target.id);
     }
     if (card instanceof Maneuver) {
-      let tempBoard = (card as Maneuver).executeEffect(board, target.id);
-      updateBoardState(tempBoard);
-      turn(tempBoard);
+      tempBoard = (card as Maneuver).executeEffect(board, target.id);
     }
     // if (card instanceof Disrupt) {
     //   updateBoardState((card as Disrupt).deploy(board, lane.type));
@@ -71,14 +95,28 @@ export const BoardComponent = () => {
     //   updateBoardState((card as Transport).deploy(board, lane.type)); //mora da se bira prvo karta koja se pomera pa lejn... crap
     // }
     if (card instanceof Redeploy) {
-      updateBoardState((card as Redeploy).executeEffect(board, target.id));
+      tempBoard = (card as Redeploy).executeEffect(board, target.id);
     }
-    console.log(board);
+    const tempTarget = board.getCardById(target.id);
+    if (
+      !tempBoard.targeting ||
+      (!tempTarget !== null && !tempTarget?.playerOwned)
+    ) {
+      turn(tempBoard, target.id);
+    }
+    updateBoardState(tempBoard);
+    console.log(tempBoard);
   };
 
   const checkCardTypeAndDeploy = (card: Card, lane: Lane) => {
+    let boardTemp!: Board;
     if (card instanceof Reinforce) {
-      updateBoardState((card as Reinforce).deploy(board, lane.type));
+      boardTemp = (card as Reinforce).deploy(board, lane.type);
+      const temp = boardTemp.getCardById(card.id);
+      if (temp !== null && temp.card.isFaceUp()) {
+        boardTemp = card.selectTargets(boardTemp, lane.type);
+      }
+      updateBoardState(boardTemp);
     }
     if (card instanceof Ambush) {
       let boardTemp = (card as Ambush).deploy(board, lane.type);
@@ -88,7 +126,7 @@ export const BoardComponent = () => {
       updateBoardState(boardTemp);
     }
     if (card instanceof Maneuver) {
-      let boardTemp = (card as Maneuver).deploy(board, lane.type);
+      boardTemp = (card as Maneuver).deploy(board, lane.type);
       const temp = boardTemp.getCardById(card.id);
       if (temp !== null && temp.card.isFaceUp()) {
         if (!card.selectTargets(boardTemp, lane.type).targeting) {
@@ -107,7 +145,8 @@ export const BoardComponent = () => {
     if (card instanceof Heavy) {
       const tempBoard = (card as Heavy).deploy(board, lane.type);
       updateBoardState(tempBoard);
-      turn(tempBoard);
+      console.log('tempBoard posle igranja heavy', tempBoard);
+      turn(tempBoard); //play posle flip fieste se desi samo lokalno, da li se uopste posalje, i sta
     }
     if (card instanceof Support) {
       updateBoardState((card as Support).deploy(board, lane.type));
@@ -116,7 +155,9 @@ export const BoardComponent = () => {
       updateBoardState((card as AirDrop).deploy(board, lane.type));
     }
     if (card instanceof Aerodrome) {
-      updateBoardState((card as Aerodrome).deploy(board, lane.type));
+      const tempBoard = (card as Aerodrome).deploy(board, lane.type);
+      updateBoardState(tempBoard);
+      turn(tempBoard);
     }
     if (card instanceof Containment) {
       updateBoardState((card as Containment).deploy(board, lane.type));

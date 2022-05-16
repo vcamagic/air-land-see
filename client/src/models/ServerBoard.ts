@@ -8,4 +8,5 @@ export class ServerBoard {
   opponent!: Player;
   deck!: Card[];
   playerTurn!: boolean;
+  targeting!: boolean;
 }
