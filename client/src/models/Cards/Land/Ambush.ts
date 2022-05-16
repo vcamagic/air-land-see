@@ -31,6 +31,8 @@ export class Ambush extends Card {
     const temp = board.getCardById(this.id);
     if(temp !== null && temp.card.isFaceUp()){
       this.selectTargets(board);
+    } else {
+      board.targeting = false;
     }
     return board;
   }

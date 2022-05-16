@@ -128,47 +128,58 @@ export const BoardComponent = () => {
         if (!card.selectTargets(boardTemp, lane.type).targeting) {
           turn(boardTemp);
         }
+      } else {
+        turn(boardTemp);
       }
       updateBoardState(boardTemp);
     }
     if (card instanceof CoverFire) {
-      updateBoardState((card as CoverFire).deploy(board, lane.type));
+      boardTemp = (card as CoverFire).deploy(board, lane.type);
+      updateBoardState(boardTemp);
+      turn(boardTemp);
     }
     if (card instanceof Disrupt) {
       updateBoardState((card as Disrupt).deploy(board, lane.type));
       turn((card as Disrupt).deploy(board, lane.type));
     }
     if (card instanceof Heavy) {
-      const tempBoard = (card as Heavy).deploy(board, lane.type);
-      updateBoardState(tempBoard);
-      console.log('tempBoard posle igranja heavy', tempBoard);
-      turn(tempBoard); //play posle flip fieste se desi samo lokalno, da li se uopste posalje, i sta
+      boardTemp = (card as Heavy).deploy(board, lane.type);
+      updateBoardState(boardTemp);
+      turn(boardTemp); //play posle flip fieste se desi samo lokalno, da li se uopste posalje, i sta
     }
     if (card instanceof Support) {
-      updateBoardState((card as Support).deploy(board, lane.type));
+      boardTemp = (card as Support).deploy(board, lane.type);
+      updateBoardState(boardTemp);
+      turn(boardTemp);
     }
     if (card instanceof AirDrop) {
       updateBoardState((card as AirDrop).deploy(board, lane.type));
     }
     if (card instanceof Aerodrome) {
-      const tempBoard = (card as Aerodrome).deploy(board, lane.type);
-      updateBoardState(tempBoard);
-      turn(tempBoard);
+      boardTemp = (card as Aerodrome).deploy(board, lane.type);
+      updateBoardState(boardTemp);
+      turn(boardTemp);
     }
     if (card instanceof Containment) {
-      updateBoardState((card as Containment).deploy(board, lane.type));
+      boardTemp = (card as Containment).deploy(board, lane.type);
+      updateBoardState(boardTemp);
+      turn(boardTemp);
     }
     if (card instanceof Transport) {
       updateBoardState((card as Transport).deploy(board, lane.type));
     }
     if (card instanceof Escalation) {
-      updateBoardState((card as Escalation).deploy(board, lane.type));
+      boardTemp = (card as Escalation).deploy(board, lane.type);
+      updateBoardState(boardTemp);
+      turn(boardTemp);
     }
     if (card instanceof Redeploy) {
       updateBoardState((card as Redeploy).deploy(board, lane.type));
     }
     if (card instanceof Blockade) {
-      updateBoardState((card as Blockade).deploy(board, lane.type));
+      boardTemp = (card as Blockade).deploy(board, lane.type);
+      updateBoardState(boardTemp);
+      turn(boardTemp);
     }
   };
 
