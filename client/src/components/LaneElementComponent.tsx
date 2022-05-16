@@ -44,7 +44,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
             card={card}
             left={true}
             right={
-              props.lane.playerCards.findIndex((c) => c.id === card.id) * 200
+              props.lane.playerCards.findIndex((c) => c.id === card.id) * 180
             }
             zIndex={
               props.lane.playerCards.findIndex((c) => c.id === card.id) * 10

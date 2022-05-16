@@ -60,7 +60,9 @@ export const CardInLaneComponent = ({
       }`}
       style={{ left: right, zIndex: zIndex }}
     >
-      <div className={`${getBannerColor(card.type)} w-200 border-r-2 border-white`}>
+      <div
+        className={`${getBannerColor(card.type)} w-180 border-r-2 border-white`}
+      >
         <div className={`flex justify-center p-1`}>
           <h1 className='text-white text-2xl'>{card.power}</h1>
         </div>
@@ -83,10 +85,10 @@ export const CardInLaneComponent = ({
               : 'text-center p-3'
           }
         >
-          <p>{card.description}</p>
+          <p className='text-xs'>{card.description}</p>
         </div>
       </div>
-      <img src={card.img} alt='card' className='w-247' />
+      <img src={card.img} alt='card' className='w-200' />
     </div>
   );
 
@@ -98,9 +100,9 @@ export const CardInLaneComponent = ({
       }`}
       style={{ right: right, zIndex: zIndex }}
     >
-      <img src={card.img} alt='card' className=' w-247' />
+      <img src={card.img} alt='card' className=' w-200' />
       <div
-        className={`${getBannerColor(card.type)} w-200 border-l-2 border-white`}
+        className={`${getBannerColor(card.type)} w-180 border-l-2 border-white`}
       >
         <div className={`flex justify-center pb-1`}>
           <h1 className='text-white text-2xl'>{card.power}</h1>
@@ -127,7 +129,7 @@ export const CardInLaneComponent = ({
             ${card.name.toLowerCase() !== 'blockade' ? 'p-3' : 'p-3 text-sm'}
           `}
         >
-          <p>{card.description}</p>
+          <p className='text-xs'>{card.description}</p>
         </div>
       </div>
     </div>
@@ -145,7 +147,7 @@ export const CardInLaneComponent = ({
       <img
         src='/images/face-down.png'
         alt='face down card'
-        className='h-23vh'
+        className='h-23vh w-380'
       ></img>
       {/* </Tippy> */}
     </div>
@@ -162,7 +164,7 @@ export const CardInLaneComponent = ({
       <img
         src='/images/face-down-right.png'
         alt='face down card'
-        className='h-23vh'
+        className='h-23vh w-380'
       ></img>
     </div>
   );

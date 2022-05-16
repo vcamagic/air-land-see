@@ -1,4 +1,3 @@
-import { Board } from '../../Board';
 import { LaneType } from '../../LaneType';
 import { Card } from '../Card';
 import { CardEffect } from '../CardEffect';
