@@ -9,6 +9,7 @@ interface WebSocketContextProps {
   updateBoardState: (board: Board) => void;
   playerTurn: boolean;
   receivedTargetId: number;
+  resetTargetId: () => void; 
 }
 const WebSocketContext = React.createContext<WebSocketContextProps>({
   joinGame: (user: any) => new Promise((resolve) => resolve()),
@@ -18,7 +19,8 @@ const WebSocketContext = React.createContext<WebSocketContextProps>({
   updateBoardState: (board: Board) => {},
   board: new Board(),
   playerTurn: true,
-  receivedTargetId: -1
+  receivedTargetId: -1,
+  resetTargetId: () => {},
 });
 export const WebSocketConsumer = WebSocketContext.Consumer;
 export const WebSocketProv = WebSocketContext.Provider;

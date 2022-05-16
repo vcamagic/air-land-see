@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { Board } from '../models/Board';
 import { Aerodrome } from '../models/Cards/Air/Aerodrome';
 import { AirDrop } from '../models/Cards/Air/AirDrop';
@@ -21,11 +21,18 @@ import { HandComponent } from './HandComponent';
 import { LaneComponent } from './LaneComponent';
 
 export const BoardComponent = () => {
-  const { board, updateBoardState, playerTurn, turn, receivedTargetId } =
-    useContext(WebSocketContext);
+  const {
+    board,
+    updateBoardState,
+    playerTurn,
+    turn,
+    receivedTargetId,
+    resetTargetId,
+  } = useContext(WebSocketContext);
   const [clickedCard, setClickedCard] = useState({});
   const [targetedCard, setTargetedCard] = useState({});
   const [clickedLane, setClickedLane] = useState({});
+  const transportActive = useRef(false);
 
   const updateClickedCard = (card: Card) => {
     if (!board.targeting) {
@@ -34,11 +41,9 @@ export const BoardComponent = () => {
   };
 
   const updateClickedLane = (lane: Lane, deploy?: boolean) => {
-    console.log(lane, deploy);
     if (receivedTargetId !== -1) {
       setTargetedCard(board.getCardById(receivedTargetId)?.card as Card);
     }
-    console.log(targetedCard);
     setClickedLane(lane);
     if (deploy === true) {
       checkCardTypeAndDeploy(clickedCard as Card, lane);
@@ -46,24 +51,34 @@ export const BoardComponent = () => {
     if (deploy === false) {
       improvise(clickedCard as Card, lane);
     }
-    if (
-      deploy === undefined &&
-      lane.highlight &&
-      (clickedCard instanceof Reinforce || targetedCard instanceof Reinforce)
-    ) {
-      let tempBoard;
-      if (clickedCard instanceof Reinforce) {
-        tempBoard = clickedCard.executeEffect(board, undefined, lane);
-      } else {
-        tempBoard = (targetedCard as Reinforce).executeEffect(
+    if (deploy === undefined && lane.highlight) {
+      let tempBoard = new Board();
+      if (
+        clickedCard instanceof Reinforce ||
+        targetedCard instanceof Reinforce
+      ) {
+        if (clickedCard instanceof Reinforce) {
+          tempBoard = clickedCard.executeEffect(board, undefined, lane);
+        } else {
+          tempBoard = (targetedCard as Reinforce).executeEffect(
+            board,
+            undefined,
+            lane
+          );
+        }
+      }
+      if (transportActive.current === true) {
+        const transport = board.getCardById(13)?.card as Transport;
+        tempBoard = transport.executeEffect(
           board,
-          undefined,
+          (targetedCard as Card).id,
           lane
         );
+        transportActive.current = false;
       }
-      console.log('reinforce after lane selection board', tempBoard);
       tempBoard.calculateScores();
       updateBoardState(tempBoard);
+      resetTargetId();
       turn(tempBoard);
     }
   };
@@ -77,26 +92,30 @@ export const BoardComponent = () => {
 
   const updateTargetedCard = (card: Card) => {
     setTargetedCard(card);
-    checkCardTypeExecute(clickedCard as Card, card);
+    if (receivedTargetId !== -1) {
+      const tempTargetCard = board.getCardById(receivedTargetId)?.card as Card;
+      setClickedCard(tempTargetCard);
+      checkCardTypeExecute(tempTargetCard as Card, card);
+    } else {
+      checkCardTypeExecute(clickedCard as Card, card);
+    }
   };
 
   const checkCardTypeExecute = (card: Card, target: Card) => {
-    if (receivedTargetId !== -1) {
-      setClickedCard(board.getCardById(receivedTargetId)?.card as Card);
-    }
     let tempBoard: Board = board;
     if (card instanceof Ambush) {
-      tempBoard = (card as Ambush).executeEffect(board, target.id);
+      tempBoard = card.executeEffect(board, target.id);
     }
     if (card instanceof Maneuver) {
-      tempBoard = (card as Maneuver).executeEffect(board, target.id);
+      tempBoard = card.executeEffect(board, target.id);
     }
     // if (card instanceof Disrupt) {
     //   updateBoardState((card as Disrupt).deploy(board, lane.type));
     // }
-    // if (card instanceof Transport) {
-    //   updateBoardState((card as Transport).deploy(board, lane.type)); //mora da se bira prvo karta koja se pomera pa lejn... crap
-    // }
+    if (card instanceof Transport) {
+      transportActive.current = true;
+      tempBoard = card.selectLane(board);
+    }
     if (card instanceof Redeploy) {
       tempBoard = (card as Redeploy).executeEffect(board, target.id);
       tempBoard.calculateScores();
@@ -108,11 +127,12 @@ export const BoardComponent = () => {
     }
     if (
       !tempBoard.targeting ||
-      (!tempTarget !== null && !tempTarget?.playerOwned)
+      (!tempTarget !== null && !tempTarget?.playerOwned) // mozda se select targets desi pre invertovanja i onda daje kao mete oponent cards
     ) {
       tempBoard.calculateScores();
       turn(tempBoard, target.id);
     }
+    resetTargetId();
     tempBoard.calculateScores();
     updateBoardState(tempBoard);
     console.log(tempBoard);
@@ -195,9 +215,13 @@ export const BoardComponent = () => {
       turn(boardTemp);
     }
     if (card instanceof Transport) {
-      const tempBoard = (card as Transport).deploy(board, lane.type);
-      tempBoard.calculateScores();
-      updateBoardState(tempBoard);
+      boardTemp = (card as Transport).deploy(board, lane.type);
+      const temp = boardTemp.getCardById(card.id);
+      if (temp === null || !temp.card.isFaceUp()) {
+        turn(boardTemp);
+      }
+      boardTemp.calculateScores();
+      updateBoardState(boardTemp);
     }
     if (card instanceof Escalation) {
       boardTemp = (card as Escalation).deploy(board, lane.type);

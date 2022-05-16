@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Board } from '../../Board';
 import { Lane } from '../../Lane';
 import { LaneType } from '../../LaneType';
@@ -20,13 +21,18 @@ export class Transport extends Card {
   flip(board: Board): void {
     this.faceUp = !this.faceUp;
     if (this.isFaceUp()) {
-      this.selectTargets(board);
+      board = this.selectTargets(board);
     }
   }
 
   deploy(board: Board, selectedLane: LaneType): Board {
     board = super.deploy(board, selectedLane);
-    this.selectTargets(board);
+    const temp = board.getCardById(this.id);
+    if(temp !== null && temp.card.isFaceUp()){
+      this.selectTargets(board);
+    } else {
+      board.targeting = false;
+    }
     return board;
   }
 
@@ -34,7 +40,43 @@ export class Transport extends Card {
     board: Board,
     targetId?: number,
     selectedLane?: Lane
-  ): void {}
+  ): Board {
+    let temp = board.getCardById(targetId as number);
+    if(temp!==null) {
+      const originalLane = board.getLane(temp.lane);
+      const index = originalLane.playerCards.findIndex(x=>x === temp?.card);
+      originalLane.playerCards.splice(index,1);
+      console.log(temp);
+      const  targetedLane = board.getLane((selectedLane as Lane).type);
+      targetedLane.playerCards = [...targetedLane.playerCards, temp.card];
+    }
+    board.clearHighlights();
+    board.targeting = false;
+    return cloneDeep(board);
+  }
 
-  selectTargets(board: Board): void {}
+  selectTargets(board: Board): Board {
+    const playerOwned = board.getCardById(this.id)?.playerOwned;
+    board.lanes.forEach((lane:Lane) => {
+      if(playerOwned) {
+        lane.playerCards.forEach((card:Card) => {
+          card.highlight = true;
+        });
+      } else {
+        lane.opponentCards.forEach((card:Card) => {
+          card.highlight = true;
+        });
+      }
+    });
+    board.targeting = true;
+    return cloneDeep(board);
+  }
+
+  selectLane(board: Board): Board {
+    board.clearHighlights();
+    board.lanes.forEach((lane:Lane) => {
+      lane.highlight = true;
+    });
+    return cloneDeep(board);
+  }
 }
