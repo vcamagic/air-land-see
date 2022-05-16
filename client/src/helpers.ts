@@ -19,7 +19,6 @@ import { ServerBoard } from './models/ServerBoard';
 import { ServerCard } from './models/ServerCard';
 
 export const makeBoardInstance = (board: ServerBoard): Board => {
-  console.log('SERVER BOARD', board);
   let tempBoard = new Board();
   tempBoard.targeting = board.targeting;
   let tempLanes = board.lanes.map((lane) => {
@@ -50,7 +49,6 @@ export const makeBoardInstance = (board: ServerBoard): Board => {
     makeCardInstance(card)
   );
   tempBoard.deck = tempDeck;
-  console.log('INSTANCE BOARD', tempBoard);
   return tempBoard;
 };
 

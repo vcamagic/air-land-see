@@ -36,7 +36,6 @@ interface LaneElementComponentInterface {
 }
 
 export const LaneElementComponent = (props: LaneElementComponentInterface) => {
-  console.log(props.lane);
   const PlayerCardStack = () => (
     <div className='flex flex-row-reverse relative'>
       {props.lane.playerCards.map((card) => (

@@ -28,7 +28,6 @@ const invertBoardState = (board: Board): Board => {
       lane.highlight,
     ];
   });
-  console.log('INVERTED', temp);
   return temp;
 };
 
@@ -91,13 +90,8 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
           temp.calculateScores();
           setBoard(temp);
           setPlayerTurn(declareTurn(temp));
+          console.log('primljen target id iz oponent turn metode', targetId);
           setReceivedTargetId(targetId);
-          console.log(
-            'opponentTurn received',
-            board.player.hand.length,
-            board.opponent.hand.length,
-            board
-          );
         }
       );
 
@@ -116,12 +110,6 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         targetId ?? -1
       );
       setPlayerTurn(declareTurn(board));
-      console.log(
-        'turn called',
-        board.player.hand.length,
-        board.opponent.hand.length,
-        board
-      );
     } catch (e) {
       console.error(e);
     }
@@ -149,6 +137,10 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     return playersTurn;
   };
 
+  const resetTargetId = () => {
+    setReceivedTargetId(-1);
+  };
+
   return (
     <WebSocketProv
       value={{
@@ -159,6 +151,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         updateBoardState,
         playerTurn,
         receivedTargetId,
+        resetTargetId,
       }}
     >
       {children}
