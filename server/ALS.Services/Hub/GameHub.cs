@@ -25,6 +25,7 @@ namespace ALS.Services.Hub
 
         public async void Turn(Guid id, Board board, int targetId)
         {
+            System.Console.WriteLine(Context.ConnectionId);
             Game g = GameRepository.Games.FirstOrDefault(x => x.Id == id);
             if (g != null)
             {

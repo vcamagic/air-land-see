@@ -1,3 +1,4 @@
+import { faL } from '@fortawesome/free-solid-svg-icons';
 import { Aerodrome } from './Cards/Air/Aerodrome';
 import { AirDrop } from './Cards/Air/AirDrop';
 import { Containment } from './Cards/Air/Containment';
@@ -93,7 +94,7 @@ export class Board {
   getCardById(
     targetId: number
   ): { card: Card; lane: LaneType; playerOwned: boolean } | null {
-    for(let i=0; i<this.lanes.length; i++) {
+    for (let i = 0; i < this.lanes.length; i++) {
       let temp = this.lanes[i].playerCards.find((x) => x.id === targetId);
       if (temp !== undefined) {
         return { card: temp, lane: this.lanes[i].type, playerOwned: true };
@@ -188,7 +189,9 @@ export class Board {
   removeCardFromLane(cardId?: number): void {
     if (cardId !== undefined) {
       this.lanes.forEach((lane) => {
-        lane.playerCards.filter((card) => card.id === cardId);
+        lane.playerCards = lane.playerCards.filter(
+          (card) => card.id !== cardId
+        );
       });
     }
   }
@@ -197,6 +200,8 @@ export class Board {
     if (cardId !== undefined) {
       let card = this.getCardById(cardId);
       if (card !== null) {
+        card.card.faceUp = true;
+        card.card.highlight = false;
         this.player.hand = [...this.player.hand, card.card];
       }
     }
@@ -221,11 +226,15 @@ export class Board {
 
   survivesBlockade(selectedLane: LaneType): boolean {
     let temp = this.getCardById(17);
-    if(temp!==null && temp.card.isFaceUp()) {
-      let tempLane = this.getAdjacentLanes(temp.lane).find(x=>x.type === selectedLane)
-      if(tempLane!==undefined) {
-        const count = (tempLane.playerCards ? tempLane.playerCards.length : 0) + (tempLane.opponentCards ? tempLane.opponentCards.length : 0);
-        if(count >= 3) {
+    if (temp !== null && temp.card.isFaceUp()) {
+      let tempLane = this.getAdjacentLanes(temp.lane).find(
+        (x) => x.type === selectedLane
+      );
+      if (tempLane !== undefined) {
+        const count =
+          (tempLane.playerCards ? tempLane.playerCards.length : 0) +
+          (tempLane.opponentCards ? tempLane.opponentCards.length : 0);
+        if (count >= 3) {
           return false;
         }
       }
@@ -235,6 +244,6 @@ export class Board {
 
   survivesContainment(): boolean {
     let temp = this.getCardById(5);
-    return temp!==null && temp.card.isFaceUp() ? false : true;
+    return temp !== null && temp.card.isFaceUp() ? false : true;
   }
 }

@@ -32,6 +32,7 @@ export const BoardComponent = () => {
       setClickedCard(card);
     }
   };
+
   const updateClickedLane = (lane: Lane, deploy?: boolean) => {
     console.log(lane, deploy);
     if (receivedTargetId !== -1) {
@@ -98,8 +99,13 @@ export const BoardComponent = () => {
     // }
     if (card instanceof Redeploy) {
       tempBoard = (card as Redeploy).executeEffect(board, target.id);
+      tempBoard.calculateScores();
+      updateBoardState(tempBoard);
     }
     const tempTarget = board.getCardById(target.id);
+    if (tempBoard.targeting) {
+      setClickedCard(tempTarget?.card as Card);
+    }
     if (
       !tempBoard.targeting ||
       (!tempTarget !== null && !tempTarget?.playerOwned)

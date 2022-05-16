@@ -92,12 +92,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
           setBoard(temp);
           setPlayerTurn(declareTurn(temp));
           setReceivedTargetId(targetId);
-          console.log(
-            'opponentTurn received',
-            board.player.hand.length,
-            board.opponent.hand.length,
-            board
-          );
+          console.log('opponentTurn received', temp);
         }
       );
 

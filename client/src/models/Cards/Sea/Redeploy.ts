@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Board } from '../../Board';
 import { Lane } from '../../Lane';
 import { LaneType } from '../../LaneType';
@@ -20,38 +21,43 @@ export class Redeploy extends Card {
   flip(board: Board): void {
     this.faceUp = !this.faceUp;
     if (this.isFaceUp()) {
+      board.targeting = true;
       this.selectTargets(board);
     }
   }
 
   deploy(board: Board, selectedLane: LaneType): Board {
     board = super.deploy(board, selectedLane);
-    this.selectTargets(board);
+    const temp = board.getCardById(this.id);
+    if(temp !== null && temp.card.isFaceUp()){
+      this.selectTargets(board);
+    } else {
+      board.targeting = false;
+    }
     return board;
   }
 
-  executeEffect(
-    board: Board,
-    targetId?: number,
-    selectedLane?: Lane
-  ): Board {
+  executeEffect(board: Board, targetId?: number, selectedLane?: Lane): Board {
     let temp = board.getCardById(targetId as number);
-    if (temp !== null && temp.playerOwned && temp.card.isFaceUp()!) {
-      board.removeCardFromLane(targetId);
+    if (temp !== null && temp.playerOwned && !temp.card.isFaceUp()) {
       board.addCardToPlayerHand(targetId);
+      board.removeCardFromLane(targetId);
     }
     board.clearHighlights();
     board.targeting = false;
-    return board;
+    console.log('REDEPLOY', board);
+    return cloneDeep(board);
   }
 
-  selectTargets(board: Board): void {
+  selectTargets(board: Board): Board {
     board.lanes.forEach((lane) => {
       lane.playerCards.forEach((card) => {
-        if (card.isFaceUp()!) {
+        if (!card.isFaceUp()) {
           card.highlight = true;
+          board.targeting = true;
         }
       });
     });
+    return cloneDeep(board);
   }
 }
