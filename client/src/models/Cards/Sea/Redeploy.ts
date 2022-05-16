@@ -29,7 +29,7 @@ export class Redeploy extends Card {
   deploy(board: Board, selectedLane: LaneType): Board {
     board = super.deploy(board, selectedLane);
     const temp = board.getCardById(this.id);
-    if(temp !== null && temp.card.isFaceUp()){
+    if(temp !== null && temp.card.isFaceUp()) {
       this.selectTargets(board);
     } else {
       board.targeting = false;
@@ -50,13 +50,23 @@ export class Redeploy extends Card {
   }
 
   selectTargets(board: Board): Board {
+    const playerOwned = board.getCardById(this.id)?.playerOwned;
     board.lanes.forEach((lane) => {
-      lane.playerCards.forEach((card) => {
-        if (!card.isFaceUp()) {
-          card.highlight = true;
-          board.targeting = true;
-        }
-      });
+      if (playerOwned) {
+        lane.playerCards.forEach((card) => {
+          if (!card.isFaceUp()) {
+            card.highlight = true;
+            board.targeting = true;
+          }
+        });
+      } else {
+        lane.opponentCards.forEach((card) => {
+          if (!card.isFaceUp()) {
+            card.highlight = true;
+            board.targeting = true;
+          }
+        });
+      }
     });
     return cloneDeep(board);
   }
