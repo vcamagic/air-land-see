@@ -60,7 +60,7 @@ export const CardInLaneComponent = ({
       }`}
       style={{ left: right, zIndex: zIndex }}
     >
-      <div className={`${getBannerColor(card.type)} w-200`}>
+      <div className={`${getBannerColor(card.type)} w-200 border-r-2 border-white`}>
         <div className={`flex justify-center p-1`}>
           <h1 className='text-white text-2xl'>{card.power}</h1>
         </div>

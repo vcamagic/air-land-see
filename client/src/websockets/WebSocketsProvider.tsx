@@ -88,6 +88,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         'OpponentTurn',
         (board: ServerBoard, targetId: number) => {
           let temp = invertBoardState(makeBoardInstance(board));
+          temp.calculateScores();
           setBoard(temp);
           setPlayerTurn(declareTurn(temp));
           setReceivedTargetId(targetId);

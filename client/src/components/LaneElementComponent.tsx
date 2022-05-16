@@ -36,6 +36,7 @@ interface LaneElementComponentInterface {
 }
 
 export const LaneElementComponent = (props: LaneElementComponentInterface) => {
+  console.log(props.lane);
   const PlayerCardStack = () => (
     <div className='flex flex-row-reverse relative'>
       {props.lane.playerCards.map((card) => (
@@ -90,7 +91,9 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
             props.lane.type
           )}  w-full`}
         >
-          <h1>{`- ${getLaneName(props.lane.type)} -`}</h1>
+          <h1>{`${props.lane.playerScore} - ${getLaneName(props.lane.type)} - ${
+            props.lane.opponentScore
+          }`}</h1>
         </div>
         <img
           src={`/images/${getLaneName(props.lane.type).toLowerCase()}.jpg`}
