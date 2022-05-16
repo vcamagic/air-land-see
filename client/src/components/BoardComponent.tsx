@@ -61,6 +61,7 @@ export const BoardComponent = () => {
         );
       }
       console.log('reinforce after lane selection board', tempBoard);
+      tempBoard.calculateScores();
       updateBoardState(tempBoard);
       turn(tempBoard);
     }
@@ -68,6 +69,7 @@ export const BoardComponent = () => {
 
   const improvise = (card: Card, lane: Lane) => {
     const tempBoard = card.improvise(board, lane.type);
+    tempBoard.calculateScores();
     updateBoardState(tempBoard);
     turn(tempBoard);
   };
@@ -102,8 +104,10 @@ export const BoardComponent = () => {
       !tempBoard.targeting ||
       (!tempTarget !== null && !tempTarget?.playerOwned)
     ) {
+      tempBoard.calculateScores();
       turn(tempBoard, target.id);
     }
+    tempBoard.calculateScores();
     updateBoardState(tempBoard);
     console.log(tempBoard);
   };
@@ -126,6 +130,7 @@ export const BoardComponent = () => {
       if (temp === null || !temp.card.isFaceUp()) {
         turn(boardTemp);
       }
+      boardTemp.calculateScores();
       updateBoardState(boardTemp);
     }
     if (card instanceof Maneuver) {
@@ -133,6 +138,7 @@ export const BoardComponent = () => {
       const temp = boardTemp.getCardById(card.id);
       if (temp !== null && temp.card.isFaceUp()) {
         if (!card.selectTargets(boardTemp, lane.type).targeting) {
+          boardTemp.calculateScores();
           turn(boardTemp);
         }
       } else {
@@ -142,49 +148,64 @@ export const BoardComponent = () => {
     }
     if (card instanceof CoverFire) {
       boardTemp = (card as CoverFire).deploy(board, lane.type);
+      boardTemp.calculateScores();
       updateBoardState(boardTemp);
       turn(boardTemp);
     }
     if (card instanceof Disrupt) {
-      updateBoardState((card as Disrupt).deploy(board, lane.type));
+      boardTemp = (card as Disrupt).deploy(board, lane.type);
+      boardTemp.calculateScores();
+      updateBoardState(boardTemp);
       turn((card as Disrupt).deploy(board, lane.type));
     }
     if (card instanceof Heavy) {
       boardTemp = (card as Heavy).deploy(board, lane.type);
+      boardTemp.calculateScores();
       updateBoardState(boardTemp);
       turn(boardTemp); //play posle flip fieste se desi samo lokalno, da li se uopste posalje, i sta
     }
     if (card instanceof Support) {
       boardTemp = (card as Support).deploy(board, lane.type);
+      boardTemp.calculateScores();
       updateBoardState(boardTemp);
       turn(boardTemp);
     }
     if (card instanceof AirDrop) {
-      updateBoardState((card as AirDrop).deploy(board, lane.type));
+      boardTemp = (card as AirDrop).deploy(board, lane.type);
+      boardTemp.calculateScores();
+      updateBoardState(boardTemp);
     }
     if (card instanceof Aerodrome) {
       boardTemp = (card as Aerodrome).deploy(board, lane.type);
+      boardTemp.calculateScores();
       updateBoardState(boardTemp);
       turn(boardTemp);
     }
     if (card instanceof Containment) {
       boardTemp = (card as Containment).deploy(board, lane.type);
+      boardTemp.calculateScores();
       updateBoardState(boardTemp);
       turn(boardTemp);
     }
     if (card instanceof Transport) {
-      updateBoardState((card as Transport).deploy(board, lane.type));
+      const tempBoard = (card as Transport).deploy(board, lane.type);
+      tempBoard.calculateScores();
+      updateBoardState(tempBoard);
     }
     if (card instanceof Escalation) {
       boardTemp = (card as Escalation).deploy(board, lane.type);
+      boardTemp.calculateScores();
       updateBoardState(boardTemp);
       turn(boardTemp);
     }
     if (card instanceof Redeploy) {
-      updateBoardState((card as Redeploy).deploy(board, lane.type));
+      const tempBoard = (card as Redeploy).deploy(board, lane.type);
+      tempBoard.calculateScores();
+      updateBoardState(tempBoard);
     }
     if (card instanceof Blockade) {
       boardTemp = (card as Blockade).deploy(board, lane.type);
+      boardTemp.calculateScores();
       updateBoardState(boardTemp);
       turn(boardTemp);
     }

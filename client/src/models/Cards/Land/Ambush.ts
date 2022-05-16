@@ -37,17 +37,20 @@ export class Ambush extends Card {
     return board;
   }
 
-  selectTargets(board: Board) {
+  selectTargets(board: Board): Board {
     board.lanes.forEach((lane: Lane) => {
       let temp = lane.getLastPlayerCard();
       if (temp !== null) {
         temp.highlight = true;
+        board.targeting = true;
       }
       temp = lane.getLastOpponentCard();
       if (temp !== null) {
         temp.highlight = true;
+        board.targeting = true;
       }
     });
+    return cloneDeep(board);
   }
 
   executeEffect(
