@@ -119,15 +119,18 @@ export const BoardComponent = () => {
       const temp = boardTemp.getCardById(card.id);
       if (temp !== null && temp.card.isFaceUp()) {
         boardTemp = card.selectTargets(boardTemp, lane.type);
+      } else {
+        turn(boardTemp);
       }
       updateBoardState(boardTemp);
     }
     if (card instanceof Ambush) {
-      let boardTemp = (card as Ambush).deploy(board, lane.type);
-      if (!card.selectTargets(boardTemp).targeting) {
-        boardTemp.calculateScores();
+      boardTemp = (card as Ambush).deploy(board, lane.type);
+      const temp = boardTemp.getCardById(card.id);
+      if (temp === null || !temp.card.isFaceUp()) {
         turn(boardTemp);
       }
+      boardTemp.calculateScores();
       updateBoardState(boardTemp);
     }
     if (card instanceof Maneuver) {
@@ -157,7 +160,7 @@ export const BoardComponent = () => {
     }
     if (card instanceof Heavy) {
       boardTemp = (card as Heavy).deploy(board, lane.type);
-      boardTemp.calculateScores()
+      boardTemp.calculateScores();
       updateBoardState(boardTemp);
       turn(boardTemp); //play posle flip fieste se desi samo lokalno, da li se uopste posalje, i sta
     }
