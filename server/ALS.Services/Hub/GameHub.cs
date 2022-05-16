@@ -28,18 +28,17 @@ namespace ALS.Services.Hub
             Game g = GameRepository.Games.FirstOrDefault(x => x.Id == id);
             if (g != null)
             {
-                if (Context.ConnectionId == g.CurrentPlayer.ConnectionId)
+
+                if (g.PlayerOne.ConnectionId != Context.ConnectionId)
                 {
-                    if (g.CurrentPlayer == g.PlayerOne)
-                    {
-                        g.CurrentPlayer = g.PlayerTwo;
-                    }
-                    else
-                    {
-                        g.CurrentPlayer = g.PlayerOne;
-                    }
-                    await Clients.Client(g.CurrentPlayer.ConnectionId).OpponentTurn(board, targetId);
+                    await Clients.Client(g.PlayerOne.ConnectionId).OpponentTurn(board, targetId);
                 }
+                else
+                {
+                    await Clients.Client(g.PlayerTwo.ConnectionId).OpponentTurn(board, targetId);
+                }
+
+
             }
         }
 
@@ -99,7 +98,7 @@ namespace ALS.Services.Hub
                 if (g.PlayerOne != null && g.PlayerTwo == null)
                 {
                     g.PlayerTwo = new Player() { Color = "black", ConnectionId = Context.ConnectionId };
-                    g.CurrentPlayer = g.PlayerOne;
+                    //g.CurrentPlayer = g.PlayerOne;
                     gameFound = true;
                     await Clients.Client(g.PlayerOne.ConnectionId).GameFound(g.Id);
                     await Clients.Client(g.PlayerTwo.ConnectionId).GameFound(g.Id);
@@ -129,7 +128,7 @@ namespace ALS.Services.Hub
                 {
                     g.PlayerOne.Color = g.PlayerOne.Color == "white" ? "black" : "white";
                     g.PlayerTwo.Color = g.PlayerTwo.Color == "white" ? "black" : "white";
-                    g.CurrentPlayer = g.PlayerOne.Color == "white" ? g.PlayerOne : g.PlayerTwo;
+                    //g.CurrentPlayer = g.PlayerOne.Color == "white" ? g.PlayerOne : g.PlayerTwo;
                     g.RematchConfirmOne = false;
                     g.RematchConfirmTwo = false;
                     await Clients.Client(g.PlayerOne.ConnectionId).GameFound(g.Id);
@@ -166,7 +165,7 @@ namespace ALS.Services.Hub
                 if (g.PlayerOne != null && g.PlayerTwo == null)
                 {
                     g.PlayerTwo = new Player() { Color = "black", ConnectionId = Context.ConnectionId };
-                    g.CurrentPlayer = g.PlayerOne;
+                    //g.CurrentPlayer = g.PlayerOne;
                     gameFound = true;
                     await Clients.Client(g.PlayerOne.ConnectionId).GameFound(g.Id);
                     await Clients.Client(g.PlayerTwo.ConnectionId).GameFound(g.Id);

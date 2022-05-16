@@ -174,6 +174,7 @@ export const BoardComponent = () => {
       boardTemp = (card as AirDrop).deploy(board, lane.type);
       boardTemp.calculateScores();
       updateBoardState(boardTemp);
+      turn(boardTemp);
     }
     if (card instanceof Aerodrome) {
       boardTemp = (card as Aerodrome).deploy(board, lane.type);

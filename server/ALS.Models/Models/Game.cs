@@ -5,7 +5,7 @@ namespace ALS.Models.Models
         public Guid Id { get; set; }
         public Player PlayerOne { get; set; }
         public Player PlayerTwo { get; set; }
-        public Player CurrentPlayer { get; set; }
+       // public Player CurrentPlayer { get; set; }
         public bool RematchConfirmOne { get; set; }
         public bool RematchConfirmTwo { get; set; }
 
@@ -14,7 +14,7 @@ namespace ALS.Models.Models
             Id = Guid.NewGuid();
             PlayerOne = null;
             PlayerTwo = null;
-            CurrentPlayer = null;
+            //CurrentPlayer = null;
             RematchConfirmOne = false;
             RematchConfirmTwo = false;
         }
