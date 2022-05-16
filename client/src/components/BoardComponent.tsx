@@ -135,12 +135,12 @@ export const BoardComponent = () => {
       const temp = boardTemp.getCardById(card.id);
       if (temp !== null && temp.card.isFaceUp()) {
         if (!card.selectTargets(boardTemp, lane.type).targeting) {
-          boardTemp.calculateScores();
           turn(boardTemp);
         }
       } else {
         turn(boardTemp);
       }
+      boardTemp.calculateScores();
       updateBoardState(boardTemp);
     }
     if (card instanceof CoverFire) {
