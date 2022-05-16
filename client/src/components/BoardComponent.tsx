@@ -115,11 +115,18 @@ export const BoardComponent = () => {
       const temp = boardTemp.getCardById(card.id);
       if (temp !== null && temp.card.isFaceUp()) {
         boardTemp = card.selectTargets(boardTemp, lane.type);
+      } else {
+        turn(boardTemp);
       }
       updateBoardState(boardTemp);
     }
     if (card instanceof Ambush) {
-      updateBoardState((card as Ambush).deploy(board, lane.type));
+      boardTemp = (card as Ambush).deploy(board, lane.type);
+      const temp = boardTemp.getCardById(card.id);
+      if (temp === null || !temp.card.isFaceUp()) {
+        turn(boardTemp);
+      }
+      updateBoardState(boardTemp);
     }
     if (card instanceof Maneuver) {
       boardTemp = (card as Maneuver).deploy(board, lane.type);
