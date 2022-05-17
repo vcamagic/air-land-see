@@ -21,7 +21,6 @@ export class Redeploy extends Card {
   flip(board: Board): void {
     this.faceUp = !this.faceUp;
     if (this.isFaceUp()) {
-      board.targeting = true;
       this.selectTargets(board);
     }
   }
@@ -45,6 +44,7 @@ export class Redeploy extends Card {
 
   selectTargets(board: Board): Board {
     const playerOwned = board.getCardById(this.id)?.playerOwned;
+    board.targeting = false;
     board.lanes.forEach((lane) => {
       if (playerOwned) {
         lane.playerCards.forEach((card) => {

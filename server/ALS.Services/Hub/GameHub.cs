@@ -23,20 +23,19 @@ namespace ALS.Services.Hub
             }
         }
 
-        public async void Turn(Guid id, Board board, int targetId)
+        public async void Turn(Guid id, Board board, int targetId, bool overwriteTurn)
         {
-            System.Console.WriteLine(Context.ConnectionId);
             Game g = GameRepository.Games.FirstOrDefault(x => x.Id == id);
             if (g != null)
             {
 
                 if (g.PlayerOne.ConnectionId != Context.ConnectionId)
                 {
-                    await Clients.Client(g.PlayerOne.ConnectionId).OpponentTurn(board, targetId);
+                    await Clients.Client(g.PlayerOne.ConnectionId).OpponentTurn(board, targetId, overwriteTurn);
                 }
                 else
                 {
-                    await Clients.Client(g.PlayerTwo.ConnectionId).OpponentTurn(board, targetId);
+                    await Clients.Client(g.PlayerTwo.ConnectionId).OpponentTurn(board, targetId, overwriteTurn);
                 }
 
 

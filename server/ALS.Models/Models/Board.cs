@@ -8,4 +8,5 @@ public class Board
     public bool PlayerTurn { get; set; }
     public List<Card> Deck { get; set; }
     public bool Targeting { get; set; }
+    public int DisruptSteps { get; set; }
 }

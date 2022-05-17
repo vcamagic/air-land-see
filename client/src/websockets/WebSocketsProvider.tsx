@@ -9,6 +9,7 @@ import { WebSocketProv } from './WebSocketContext';
 const invertBoardState = (board: Board): Board => {
   let temp: Board = new Board();
   temp.targeting = board.targeting;
+  temp.disruptSteps = board.disruptSteps;
   temp.deck = board.deck;
   [temp.player, temp.opponent] = [board.opponent, board.player];
   board.lanes.forEach((lane: Lane, index: number) => {
@@ -85,13 +86,18 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
 
       connection.current.on(
         'OpponentTurn',
-        (board: ServerBoard, targetId: number) => {
+        (board: ServerBoard, targetId: number, overwriteTurn: boolean) => {
           let temp = invertBoardState(makeBoardInstance(board));
           temp.calculateScores();
           setBoard(temp);
-          setPlayerTurn(declareTurn(temp));
+          if (overwriteTurn) {
+            setPlayerTurn(true);
+          } else {
+            setPlayerTurn(declareTurn(temp));
+          }
           console.log('primljen target id iz oponent turn metode', targetId);
           setReceivedTargetId(targetId);
+          console.log('OPPONENT TURN', temp);
         }
       );
 
@@ -101,14 +107,20 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     }
   }, []);
 
-  const turn = async (board: Board, targetId?: number) => {
+  const turn = async (
+    board: Board,
+    targetId?: number,
+    overwriteTurn?: boolean
+  ) => {
     try {
       await connection.current.invoke(
         'Turn',
         gameId.current,
         board,
-        targetId ?? -1
+        targetId ?? -1,
+        overwriteTurn ?? false
       );
+      console.log('SENT TURN: ', board);
       setPlayerTurn(declareTurn(board));
     } catch (e) {
       console.error(e);

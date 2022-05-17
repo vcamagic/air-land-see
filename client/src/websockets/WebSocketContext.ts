@@ -4,7 +4,7 @@ import { Board } from '../models/Board';
 interface WebSocketContextProps {
   joinGame: (user: any) => Promise<void>;
   closeConnection: () => Promise<void>;
-  turn: (board: Board, targetId?:number) => Promise<void>;
+  turn: (board: Board, targetId?:number, overwriteTurn?: boolean) => Promise<void>;
   board: Board;
   updateBoardState: (board: Board) => void;
   playerTurn: boolean;
@@ -14,7 +14,7 @@ interface WebSocketContextProps {
 const WebSocketContext = React.createContext<WebSocketContextProps>({
   joinGame: (user: any) => new Promise((resolve) => resolve()),
   closeConnection: () => new Promise((resolve) => resolve()),
-  turn: (board: Board, targetId?: number) =>
+  turn: (board: Board, targetId?: number, overwriteTurn?: boolean) =>
     new Promise((resolve) => resolve()),
   updateBoardState: (board: Board) => {},
   board: new Board(),

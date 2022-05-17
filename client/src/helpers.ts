@@ -21,6 +21,7 @@ import { ServerCard } from './models/ServerCard';
 export const makeBoardInstance = (board: ServerBoard): Board => {
   let tempBoard = new Board();
   tempBoard.targeting = board.targeting;
+  tempBoard.disruptSteps = board.disruptSteps;
   let tempLanes = board.lanes.map((lane) => {
     let ret = new Lane(lane.type);
     ret.highlight = lane.highlight;

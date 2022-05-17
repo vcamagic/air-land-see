@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Board } from '../../Board';
 import { Lane } from '../../Lane';
 import { LaneType } from '../../LaneType';
@@ -22,22 +23,70 @@ export class Disrupt extends Card {
     if (this.isFaceUp()) {
       let temp = board.getCardById(this.id);
       if (temp !== null) {
-        this.selectTargets(board, temp.lane);
+        board.disruptSteps = 0;
+        this.selectTargets(board);
       }
     }
   }
 
   deploy(board: Board, selectedLane: LaneType): Board {
     board = super.deploy(board, selectedLane);
-    this.selectTargets(board, selectedLane);
-    return board;
+    const temp = board.getCardById(this.id);
+      if (temp !== null && temp.card.isFaceUp()) {
+        board.disruptSteps = 0;
+      }
+    return cloneDeep(board);
   }
 
   executeEffect(
     board: Board,
     targetId?: number,
     selectedLane?: Lane
-  ): void {}
+  ): Board {
+    board.clearHighlights();
+    board.targeting = false;
+    let temp = board.getCardById(targetId as number);
+    if (temp !== null) {
+      temp.card.flip(board);
+    }
+    console.log('executed disrupt effect')
+    return cloneDeep(board);
+  }
 
-  selectTargets(board: Board, selectedLane: LaneType) {}
+  selectTargets(board: Board): Board {
+    board.targeting = false;
+    const disrupt = board.getCardById(this.id);    
+    let temp;
+    board.lanes.forEach((lane: Lane) => {
+      
+      if(disrupt!==null && disrupt.playerOwned) {
+        temp = lane.getLastOpponentCard();
+      } else {
+        temp = lane.getLastPlayerCard();
+      }
+      if (temp !== null) {
+        temp.highlight = true;
+        board.targeting = true;
+      }
+    });
+    return cloneDeep(board);
+  }
+
+  selectTargetsNext(board: Board): Board {
+    board.clearHighlights();
+    const disrupt = board.getCardById(this.id);   
+    let temp;
+    board.lanes.forEach((lane: Lane) => {
+      if(disrupt!==null && disrupt.playerOwned){
+        temp = lane.getLastPlayerCard();
+      } else {
+        temp = lane.getLastOpponentCard();
+      }
+      if (temp !== null) {
+        temp.highlight = true;
+        board.targeting = true;
+      }
+    });
+    return cloneDeep(board);
+  }
 }

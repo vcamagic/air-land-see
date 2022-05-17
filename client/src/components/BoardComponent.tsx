@@ -74,6 +74,24 @@ export const BoardComponent = () => {
         );
         transportActive.current = false;
       }
+
+      if (!tempBoard.targeting && tempBoard.disruptSteps === 1) {
+        console.log('usao u select targets next deo');
+        const disrupt = tempBoard.getCardById(11);
+        if (disrupt !== null && disrupt.card.faceUp) {
+          setClickedCard(disrupt.card);
+          (disrupt.card as Disrupt).selectTargetsNext(tempBoard);
+          console.log('next: isPlayerOwned', disrupt.playerOwned);
+          if (!disrupt.playerOwned) {
+            turn(tempBoard, disrupt.card.id, true);
+          }
+        }
+        tempBoard.calculateScores();
+        resetTargetId();
+        updateBoardState(tempBoard);
+        return;
+      }
+
       tempBoard.calculateScores();
       updateBoardState(tempBoard);
       resetTargetId();
@@ -107,9 +125,15 @@ export const BoardComponent = () => {
     if (card instanceof Maneuver) {
       tempBoard = card.executeEffect(board, target.id);
     }
-    // if (card instanceof Disrupt) {
-    //   updateBoardState((card as Disrupt).deploy(board, lane.type));
-    // }
+    if (card instanceof Disrupt) {
+      const temp = board.getCardById(11);
+      if (temp !== null && temp.card.faceUp) {
+        tempBoard = card.executeEffect(board, target.id);
+        console.log('old step ', tempBoard.disruptSteps);
+        tempBoard.disruptSteps = (tempBoard.disruptSteps + 1) % 2;
+        console.log('new step ', tempBoard.disruptSteps);
+      }
+    }
     if (card instanceof Transport) {
       transportActive.current = true;
       tempBoard = card.selectLane(board);
@@ -117,21 +141,60 @@ export const BoardComponent = () => {
     if (card instanceof Redeploy) {
       tempBoard = (card as Redeploy).executeEffect(board, target.id);
     }
+
     const tempTarget = board.getCardById(target.id);
+
+    //ako je disrupt bio target nekog flip efekta, hendla kome da passuje priority
+    if (
+      tempTarget?.card.name === 'Disrupt' &&
+      tempTarget.card.faceUp &&
+      (card.name === 'Maneuver' || card.name === 'Ambush')
+    ) {
+      console.log('usao u fliped disrupt deo');
+      tempBoard.calculateScores();
+      resetTargetId();
+      setClickedCard(tempTarget.card as Card);
+      tempBoard.disruptSteps = 0;
+      updateBoardState(tempBoard);
+      if (tempTarget.playerOwned) {
+        turn(tempBoard, target.id);
+      }
+      return;
+    }
+
+    if (!tempBoard.targeting && tempBoard.disruptSteps === 1) {
+      console.log('usao u select targets next deo');
+      const disrupt = tempBoard.getCardById(11);
+      if (disrupt !== null && disrupt.card.faceUp) {
+        setClickedCard(disrupt.card);
+        (disrupt.card as Disrupt).selectTargetsNext(tempBoard);
+        console.log('next: isPlayerOwned', disrupt.playerOwned);
+        if (!disrupt.playerOwned) {
+          turn(tempBoard, disrupt.card.id, true);
+        }
+      }
+      tempBoard.calculateScores();
+      resetTargetId();
+      updateBoardState(tempBoard);
+      return;
+    }
+
     if (tempBoard.targeting) {
+      //azuriraj clicked card jer clicked card handler ne reaguje ako je targeting active
       setClickedCard(tempTarget?.card as Card);
     }
+
     if (
       !tempBoard.targeting ||
-      (!tempTarget !== null && !tempTarget?.playerOwned) // mozda se select targets desi pre invertovanja i onda daje kao mete oponent cards
+      (!tempTarget !== null && !tempTarget?.playerOwned)
     ) {
+      //ili je gotov potez jer targetinga vise nema, ili je potreban input od oponenta jer je targetovana karta njegova ***ovo se salje i ako karta nema efekat??***
       tempBoard.calculateScores();
       turn(tempBoard, target.id);
     }
     resetTargetId();
     tempBoard.calculateScores();
     updateBoardState(tempBoard);
-    console.log(tempBoard);
   };
 
   const checkCardTypeAndDeploy = (card: Card, lane: Lane) => {
@@ -176,9 +239,22 @@ export const BoardComponent = () => {
     }
     if (card instanceof Disrupt) {
       boardTemp = (card as Disrupt).deploy(board, lane.type);
+      const temp = boardTemp.getCardById(card.id);
+      if (temp !== null && temp.card.isFaceUp()) {
+        if (card.selectTargets(boardTemp).targeting) {
+          // found target on opposing side, calling turn method
+          boardTemp.disruptSteps = 0;
+          turn(boardTemp, card.id);
+        } else {
+          // no targets found on opponent side, call selectTargetNext
+          boardTemp.disruptSteps = 1;
+          card.selectTargetsNext(boardTemp);
+        }
+      } else {
+        turn(boardTemp);
+      }
       boardTemp.calculateScores();
       updateBoardState(boardTemp);
-      turn((card as Disrupt).deploy(board, lane.type));
     }
     if (card instanceof Heavy) {
       boardTemp = (card as Heavy).deploy(board, lane.type);
@@ -228,12 +304,11 @@ export const BoardComponent = () => {
     if (card instanceof Redeploy) {
       boardTemp = (card as Redeploy).deploy(board, lane.type);
       const temp = boardTemp.getCardById(card.id);
-      if(temp!== null && temp.card.isFaceUp()){
-        if(!card.selectTargets(boardTemp).targeting){
+      if (temp !== null && temp.card.isFaceUp()) {
+        if (!card.selectTargets(boardTemp).targeting) {
           turn(boardTemp);
         }
-      }
-      else{
+      } else {
         turn(boardTemp);
       }
       boardTemp.calculateScores();

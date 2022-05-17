@@ -9,4 +9,5 @@ export class ServerBoard {
   deck!: Card[];
   playerTurn!: boolean;
   targeting!: boolean;
+  disruptSteps!: number; 
 }
