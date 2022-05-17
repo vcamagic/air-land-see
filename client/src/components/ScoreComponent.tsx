@@ -79,7 +79,7 @@ export const ScoreComponent = ({
     const tempBoard = setBoardForNewRound();
 
     updateBoardState(tempBoard);
-    turn(tempBoard, undefined, true);
+    turn(tempBoard, undefined, undefined,true);
   };
 
   useEffect(() => {
