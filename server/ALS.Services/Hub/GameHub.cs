@@ -8,12 +8,6 @@ namespace ALS.Services.Hub
     public class GameHub : Hub<IGameClient>
     {
 
-        public GameHub()
-        {
-
-        }
-
-
         public async void PrepareGame(Board board, Guid gameId)
         {
             var game = GameRepository.Games.FirstOrDefault(game => game.Id == gameId);
@@ -23,24 +17,33 @@ namespace ALS.Services.Hub
             }
         }
 
-        public async void Turn(Guid id, Board board, int targetId)
+        public async void Turn(Guid id, Board board, int targetId, bool isForfeit)
         {
-            System.Console.WriteLine(Context.ConnectionId);
             Game g = GameRepository.Games.FirstOrDefault(x => x.Id == id);
             if (g != null)
             {
 
                 if (g.PlayerOne.ConnectionId != Context.ConnectionId)
                 {
-                    await Clients.Client(g.PlayerOne.ConnectionId).OpponentTurn(board, targetId);
+                    await Clients.Client(g.PlayerOne.ConnectionId).OpponentTurn(board, targetId, isForfeit);
                 }
                 else
                 {
-                    await Clients.Client(g.PlayerTwo.ConnectionId).OpponentTurn(board, targetId);
+                    await Clients.Client(g.PlayerTwo.ConnectionId).OpponentTurn(board, targetId, isForfeit);
                 }
 
 
             }
+        }
+
+        public async void EndGame(Guid id)
+        {
+            Game g = GameRepository.Games.FirstOrDefault(x => x.Id == id);
+            
+            await Clients.Client(g.PlayerOne.ConnectionId).GameEnded();
+            await Clients.Client(g.PlayerTwo.ConnectionId).GameEnded();
+
+            GameRepository.Games.Remove(g);
         }
 
         // public async void Undo(Guid id, AffectedField[] fields)

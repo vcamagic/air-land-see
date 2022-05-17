@@ -1,4 +1,3 @@
-import { faL } from '@fortawesome/free-solid-svg-icons';
 import { Aerodrome } from './Cards/Air/Aerodrome';
 import { AirDrop } from './Cards/Air/AirDrop';
 import { Containment } from './Cards/Air/Containment';
