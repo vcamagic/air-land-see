@@ -9,6 +9,7 @@ import { WebSocketProv } from './WebSocketContext';
 const invertBoardState = (board: Board): Board => {
   let temp: Board = new Board();
   temp.targeting = board.targeting;
+  temp.disruptSteps = board.disruptSteps;
   temp.deck = board.deck;
   [temp.player, temp.opponent] = [board.opponent, board.player];
   board.lanes.forEach((lane: Lane, index: number) => {
@@ -86,19 +87,25 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
 
       connection.current.on(
         'OpponentTurn',
-        (board: ServerBoard, targetId: number, isForfeit) => {
+        (board: ServerBoard, targetId: number, overwriteTurn: boolean,isForfeit: boolean) => {
           let temp = invertBoardState(makeBoardInstance(board));
           temp.calculateScores();
           setBoard(temp);
+          if (overwriteTurn) {
+            setPlayerTurn(true);
+          } else {
+            setPlayerTurn(declareTurn(temp));
+          }
+          
           if (isForfeit) {
             host.current = !host.current;
             setPlayerTurn(host.current);
           } else {
             setPlayerTurn(declareTurn(temp));
           }
-
           console.log('primljen target id iz oponent turn metode', targetId);
           setReceivedTargetId(targetId);
+          console.log('OPPONENT TURN', temp);
         }
       );
 
@@ -112,16 +119,21 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     }
   }, []);
 
-  const turn = async (board: Board, targetId?: number, isForfeit?: boolean) => {
+  const turn = async (
+    board: Board,
+    targetId?: number,
+    overwriteTurn?: boolean,
+    isForfeit?: boolean
+  ) => {
     try {
       await connection.current.invoke(
         'Turn',
         gameId.current,
         board,
         targetId ?? -1,
+        overwriteTurn ?? false,
         isForfeit ?? false
       );
-
       if (isForfeit) {
         host.current = !host.current;
         setPlayerTurn(host.current);

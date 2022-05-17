@@ -17,7 +17,7 @@ namespace ALS.Services.Hub
             }
         }
 
-        public async void Turn(Guid id, Board board, int targetId, bool isForfeit)
+        public async void Turn(Guid id, Board board, int targetId, bool overwriteTurn, bool isForfeit)
         {
             Game g = GameRepository.Games.FirstOrDefault(x => x.Id == id);
             if (g != null)
@@ -25,11 +25,11 @@ namespace ALS.Services.Hub
 
                 if (g.PlayerOne.ConnectionId != Context.ConnectionId)
                 {
-                    await Clients.Client(g.PlayerOne.ConnectionId).OpponentTurn(board, targetId, isForfeit);
+                    await Clients.Client(g.PlayerOne.ConnectionId).OpponentTurn(board, targetId, overwriteTurn,isForfeit);
                 }
                 else
                 {
-                    await Clients.Client(g.PlayerTwo.ConnectionId).OpponentTurn(board, targetId, isForfeit);
+                    await Clients.Client(g.PlayerTwo.ConnectionId).OpponentTurn(board, targetId, overwriteTurn,isForfeit);
                 }
 
 

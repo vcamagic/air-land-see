@@ -24,6 +24,7 @@ export class Board {
   opponent!: Player;
   deck!: Card[];
   targeting!: boolean;
+  disruptSteps!: number;
 
   constructor() {
     const firstLane = Math.floor(Math.random() * 3);
@@ -36,6 +37,7 @@ export class Board {
 
     this.player = new Player('Player');
     this.opponent = new Player('Opponent');
+    this.disruptSteps = 0;
     this.targeting = false;
     this.deck = [
       new Support(),
