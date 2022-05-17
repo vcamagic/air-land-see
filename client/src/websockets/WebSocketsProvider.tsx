@@ -87,7 +87,12 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
 
       connection.current.on(
         'OpponentTurn',
-        (board: ServerBoard, targetId: number, overwriteTurn: boolean,isForfeit: boolean) => {
+        (
+          board: ServerBoard,
+          targetId: number,
+          overwriteTurn: boolean,
+          isForfeit: boolean
+        ) => {
           let temp = invertBoardState(makeBoardInstance(board));
           temp.calculateScores();
           setBoard(temp);
@@ -96,12 +101,10 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
           } else {
             setPlayerTurn(declareTurn(temp));
           }
-          
+
           if (isForfeit) {
             host.current = !host.current;
             setPlayerTurn(host.current);
-          } else {
-            setPlayerTurn(declareTurn(temp));
           }
           console.log('primljen target id iz oponent turn metode', targetId);
           setReceivedTargetId(targetId);
@@ -196,7 +199,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         resetTargetId,
         getIsHost,
         endGame,
-        gameEnded
+        gameEnded,
       }}
     >
       {children}
