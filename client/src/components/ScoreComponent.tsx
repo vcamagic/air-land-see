@@ -83,9 +83,8 @@ export const ScoreComponent = ({
   };
 
   useEffect(() => {
-    if (board.player.hand.length === 0 && board.opponent.hand.length === 0) {
+    if (board.player.hand.length === 0 && board.opponent.hand.length === 0 && !board.targeting) {
       if (!getIsHost()) {
-        console.log('ENDGAME');
         let tempBoard = new Board();
         const playerHand = cloneDeep(tempBoard.player.hand);
         const opponentHand = cloneDeep(tempBoard.opponent.hand);
@@ -100,7 +99,6 @@ export const ScoreComponent = ({
 
         tempBoard.player.hand = playerHand;
         tempBoard.opponent.hand = opponentHand;
-        console.log('ENDGAME BOARD', tempBoard);
 
         if (tempBoard.player.score >= 12 || tempBoard.opponent.score >= 12) {
           deleteName();
