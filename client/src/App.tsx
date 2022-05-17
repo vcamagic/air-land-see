@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './App.css';
 import { BoardComponent } from './components/BoardComponent';
 import { NameInputForm } from './components/NameInputForm';
+import WebSocketContext from './websockets/WebSocketContext';
 import { WebSocketsProvider } from './websockets/WebSocketsProvider';
 function App() {
   const [nameInserted, setNameInserted] = useState(false);
@@ -10,10 +11,14 @@ function App() {
     setNameInserted(true);
   };
 
+  const deleteName = () => {
+    setNameInserted(false);
+  };
+
   return (
     <WebSocketsProvider>
       {nameInserted ? (
-        <BoardComponent />
+        <BoardComponent deleteName={deleteName} />
       ) : (
         <NameInputForm insertName={insertName} />
       )}

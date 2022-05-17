@@ -46,7 +46,8 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const [playerTurn, setPlayerTurn] = useState(true);
   const [receivedTargetId, setReceivedTargetId] = useState(-1);
   const gameId = useRef('');
-  const host = useRef({});
+  const host = useRef(true);
+  const [gameEnded, setGameEnded] = useState(false);
 
   const joinGame = useCallback(async (name: string) => {
     connection.current = new HubConnectionBuilder()
@@ -86,7 +87,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
 
       connection.current.on(
         'OpponentTurn',
-        (board: ServerBoard, targetId: number, overwriteTurn: boolean) => {
+        (board: ServerBoard, targetId: number, overwriteTurn: boolean,isForfeit: boolean) => {
           let temp = invertBoardState(makeBoardInstance(board));
           temp.calculateScores();
           setBoard(temp);
@@ -95,11 +96,22 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
           } else {
             setPlayerTurn(declareTurn(temp));
           }
+          
+          if (isForfeit) {
+            host.current = !host.current;
+            setPlayerTurn(host.current);
+          } else {
+            setPlayerTurn(declareTurn(temp));
+          }
           console.log('primljen target id iz oponent turn metode', targetId);
           setReceivedTargetId(targetId);
           console.log('OPPONENT TURN', temp);
         }
       );
+
+      connection.current.on('GameEnded', () => {
+        setGameEnded(true);
+      });
 
       await connection.current.start();
     } catch (e) {
@@ -110,7 +122,8 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const turn = async (
     board: Board,
     targetId?: number,
-    overwriteTurn?: boolean
+    overwriteTurn?: boolean,
+    isForfeit?: boolean
   ) => {
     try {
       await connection.current.invoke(
@@ -118,10 +131,15 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         gameId.current,
         board,
         targetId ?? -1,
-        overwriteTurn ?? false
+        overwriteTurn ?? false,
+        isForfeit ?? false
       );
-      console.log('SENT TURN: ', board);
-      setPlayerTurn(declareTurn(board));
+      if (isForfeit) {
+        host.current = !host.current;
+        setPlayerTurn(host.current);
+      } else {
+        setPlayerTurn(declareTurn(board));
+      }
     } catch (e) {
       console.error(e);
     }
@@ -153,6 +171,18 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     setReceivedTargetId(-1);
   };
 
+  const getIsHost = (): boolean => {
+    return host.current;
+  };
+
+  const endGame = async () => {
+    try {
+      await connection.current.invoke('EndGame', gameId.current);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <WebSocketProv
       value={{
@@ -164,6 +194,9 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         playerTurn,
         receivedTargetId,
         resetTargetId,
+        getIsHost,
+        endGame,
+        gameEnded
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Board } from '../models/Board';
 import { Aerodrome } from '../models/Cards/Air/Aerodrome';
 import { AirDrop } from '../models/Cards/Air/AirDrop';
@@ -19,8 +19,13 @@ import { Lane } from '../models/Lane';
 import WebSocketContext from '../websockets/WebSocketContext';
 import { HandComponent } from './HandComponent';
 import { LaneComponent } from './LaneComponent';
+import { ScoreComponent } from './ScoreComponent';
 
-export const BoardComponent = () => {
+interface BoardComponentProps {
+  deleteName: () => void;
+}
+
+export const BoardComponent = ({ deleteName }: BoardComponentProps) => {
   const {
     board,
     updateBoardState,
@@ -28,6 +33,7 @@ export const BoardComponent = () => {
     turn,
     receivedTargetId,
     resetTargetId,
+    gameEnded,
   } = useContext(WebSocketContext);
   const [clickedCard, setClickedCard] = useState({});
   const [targetedCard, setTargetedCard] = useState({});
@@ -322,6 +328,11 @@ export const BoardComponent = () => {
     }
   };
 
+  useEffect(() => {
+    if (gameEnded) deleteName();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameEnded]);
+
   return (
     <div style={{ pointerEvents: `${playerTurn ? 'auto' : 'none'}` }}>
       <div className='flex justify-center h-69'>
@@ -331,11 +342,18 @@ export const BoardComponent = () => {
           updateTargetedCard={updateTargetedCard}
         />
       </div>
-      <div className='h-31'>
+      <div className='h-31 flex'>
         <HandComponent
           cards={board.player.hand}
           updateClickedCard={updateClickedCard}
         />
+        <div className='flex-none'>
+          <ScoreComponent
+            deleteName={deleteName}
+            playerScore={board.player.score}
+            opponentScore={board.opponent.score}
+          />
+        </div>
       </div>
     </div>
   );
