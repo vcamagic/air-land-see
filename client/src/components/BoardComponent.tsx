@@ -147,13 +147,6 @@ export const BoardComponent = ({ deleteName }: BoardComponentProps) => {
     }
     if (card instanceof Redeploy) {
       tempBoard = (card as Redeploy).executeEffect(board, target.id);
-      if (tempBoard.disruptSteps === 1) {
-        resetTargetId();
-        tempBoard.calculateScores();
-        updateBoardState(tempBoard);
-        turn(tempBoard, undefined, true);
-        return;
-      }
     }
 
     const tempTarget = board.getCardById(target.id);
@@ -204,7 +197,11 @@ export const BoardComponent = ({ deleteName }: BoardComponentProps) => {
     ) {
       //ili je gotov potez jer targetinga vise nema, ili je potreban input od oponenta jer je targetovana karta njegova ***ovo se salje i ako karta nema efekat??***
       tempBoard.calculateScores();
-      turn(tempBoard, target.id);
+      if (card instanceof Redeploy && tempBoard.disruptSteps === 1) {
+        turn(tempBoard, undefined, true);
+      } else {
+        turn(tempBoard, target.id);
+      }
     }
     resetTargetId();
     tempBoard.calculateScores();
@@ -366,7 +363,9 @@ export const BoardComponent = ({ deleteName }: BoardComponentProps) => {
         </div>
       </div>
     ) : (
-      <div className='p-3 text-7xl text-white grid place-items-center h-screen'>Looking for opponent...</div>
+      <div className='p-3 text-7xl text-white grid place-items-center h-screen'>
+        Looking for opponent...
+      </div>
     );
 
   return <Bbbboard />;
