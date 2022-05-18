@@ -35,6 +35,7 @@ export const BoardComponent = ({ deleteName }: BoardComponentProps) => {
     resetTargetId,
     gameEnded,
     gameStarted,
+    getIsHost,
   } = useContext(WebSocketContext);
   const [clickedCard, setClickedCard] = useState({});
   const [targetedCard, setTargetedCard] = useState({});
@@ -136,9 +137,17 @@ export const BoardComponent = ({ deleteName }: BoardComponentProps) => {
       const temp = board.getCardById(11);
       if (temp !== null && temp.card.faceUp) {
         tempBoard = card.executeEffect(board, target.id);
-        console.log('old step ', tempBoard.disruptSteps);
+        if (tempBoard.disruptSteps === 1 && !getIsHost()) {
+          if (tempBoard.player.hand.length < tempBoard.opponent.hand.length) {
+            resetTargetId();
+            tempBoard.disruptSteps = (tempBoard.disruptSteps + 1) % 2;
+            tempBoard.calculateScores();
+            updateBoardState(tempBoard);
+            turn(tempBoard, target.id, true);
+            return;
+          }
+        }
         tempBoard.disruptSteps = (tempBoard.disruptSteps + 1) % 2;
-        console.log('new step ', tempBoard.disruptSteps);
       }
     }
     if (card instanceof Transport) {
