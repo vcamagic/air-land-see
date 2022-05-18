@@ -31,8 +31,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 app.MapHub<GameHub>("/game");
 
 app.UseCors(AllowSpecificOrigins);
