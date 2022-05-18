@@ -55,7 +55,7 @@ export const ScoreComponent = ({
   opponentScore,
   deleteName,
 }: ScoreComponentProps) => {
-  const { board, getIsHost, turn, updateBoardState, endGame } =
+  const { board, getIsHost, turn, updateBoardState, endGame, playerTurn } =
     useContext(WebSocketContext);
 
   const setBoardForNewRound = (): Board => {
@@ -79,11 +79,15 @@ export const ScoreComponent = ({
     const tempBoard = setBoardForNewRound();
 
     updateBoardState(tempBoard);
-    turn(tempBoard, undefined, undefined,true);
+    turn(tempBoard, undefined, undefined, true);
   };
 
   useEffect(() => {
-    if (board.player.hand.length === 0 && board.opponent.hand.length === 0 && !board.targeting) {
+    if (
+      board.player.hand.length === 0 &&
+      board.opponent.hand.length === 0 &&
+      !board.targeting
+    ) {
       if (!getIsHost()) {
         let tempBoard = new Board();
         const playerHand = cloneDeep(tempBoard.player.hand);
@@ -113,11 +117,28 @@ export const ScoreComponent = ({
   }, [board]);
 
   return (
-    <div className='p-3 flex flex-col items-center'>
-      <h1>{`${playerScore} - ${opponentScore}`}</h1>
-      <button onClick={handleForfeitClick} className='p-2 border-2 rounded-xl'>
+    <div className='p-3 flex flex-col items-center h-full'>
+      <div className='text-white text-2xl flex flex-col items-center'>
+        <h1>SCORE</h1>
+        <h1>{`${playerScore} - ${opponentScore}`}</h1>
+      </div>
+      <button
+        onClick={handleForfeitClick}
+        className='p-2 rounded-xl mt-3 bg-gray-400 text-white hover:cursor-pointer'
+      >
         Forfeit round
       </button>
+      <div className='mt-auto'>
+        {playerTurn ? (
+          <div className='bg-green-500 text-white'>
+            <h1 className='p-2'>YOUR MOVE</h1>
+          </div>
+        ) : (
+          <div className='bg-red-500 text-white'>
+            <h1 className='p-2'>OPPONENT MOVE</h1>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

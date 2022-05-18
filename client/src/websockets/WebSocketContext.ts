@@ -13,6 +13,7 @@ interface WebSocketContextProps {
   getIsHost: () => boolean;
   endGame: () => void;
   gameEnded: boolean;
+  gameStarted: boolean;
 }
 const WebSocketContext = React.createContext<WebSocketContextProps>({
   joinGame: (user: any) => new Promise((resolve) => resolve()),
@@ -27,6 +28,7 @@ const WebSocketContext = React.createContext<WebSocketContextProps>({
   getIsHost: () => true,
   endGame: () => {},
   gameEnded: false,
+  gameStarted: false,
 });
 export const WebSocketConsumer = WebSocketContext.Consumer;
 export const WebSocketProv = WebSocketContext.Provider;

@@ -34,6 +34,7 @@ export const BoardComponent = ({ deleteName }: BoardComponentProps) => {
     receivedTargetId,
     resetTargetId,
     gameEnded,
+    gameStarted,
   } = useContext(WebSocketContext);
   const [clickedCard, setClickedCard] = useState({});
   const [targetedCard, setTargetedCard] = useState({});
@@ -333,28 +334,33 @@ export const BoardComponent = ({ deleteName }: BoardComponentProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameEnded]);
 
-  return (
-    <div style={{ pointerEvents: `${playerTurn ? 'auto' : 'none'}` }}>
-      <div className='flex justify-center h-69'>
-        <LaneComponent
-          board={board}
-          updateClickedLane={updateClickedLane}
-          updateTargetedCard={updateTargetedCard}
-        />
-      </div>
-      <div className='h-31 flex'>
-        <HandComponent
-          cards={board.player.hand}
-          updateClickedCard={updateClickedCard}
-        />
-        <div className='flex-none'>
-          <ScoreComponent
-            deleteName={deleteName}
-            playerScore={board.player.score}
-            opponentScore={board.opponent.score}
+  const Bbbboard = () =>
+    gameStarted ? (
+      <div style={{ pointerEvents: `${playerTurn ? 'auto' : 'none'}` }}>
+        <div className='flex justify-center h-69'>
+          <LaneComponent
+            board={board}
+            updateClickedLane={updateClickedLane}
+            updateTargetedCard={updateTargetedCard}
           />
         </div>
+        <div className='h-31 flex'>
+          <HandComponent
+            cards={board.player.hand}
+            updateClickedCard={updateClickedCard}
+          />
+          <div className='flex-none'>
+            <ScoreComponent
+              deleteName={deleteName}
+              playerScore={board.player.score}
+              opponentScore={board.opponent.score}
+            />
+          </div>
+        </div>
       </div>
-    </div>
-  );
+    ) : (
+      <div className='p-3 text-7xl text-white grid place-items-center h-screen'>Looking for opponent...</div>
+    );
+
+  return <Bbbboard />;
 };

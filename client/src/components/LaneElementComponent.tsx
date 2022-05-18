@@ -80,7 +80,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   const DefaultTemplate = () => (
     <div
       className={`w-full ${
-        props.lane.highlight ? 'border-4 border-red-400' : ''
+        props.lane.highlight ? 'border-4 border-red-400 hover:cursor-pointer' : ''
       }`}
       onClick={handleLaneSelection}
     >
@@ -124,21 +124,23 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   const CanDeploy = () => (
     <div className='text-white w-full'>
       <div
-        className={`flex justify-center h-3 text-white text-xl ${getBannerColor(
+        className={`flex justify-center h-3vh text-white text-xl ${getBannerColor(
           props.lane.type
         )} relative w-full`}
       >
-        <h1>{`- ${getLaneName(props.lane.type)} -`}</h1>
+        <h1>{`${props.lane.playerScore} - ${getLaneName(props.lane.type)} - ${
+            props.lane.opponentScore
+          }`}</h1>
       </div>
-      <div className='flex flex-row h-20 w-full'>
+      <div className='flex flex-row h-20 w-full hover:cursor-pointer'>
         <div
-          className='flex flex-1 bg-green-600 grid place-items-center'
+          className='flex flex-1 bg-green-600 grid place-items-center text-sm'
           onClick={handleDeployClick}
         >
           <h1>DEPLOY</h1>
         </div>
         <div
-          className='flex flex-1 bg-gray-700 grid place-items-center'
+          className='flex flex-1 bg-gray-700 grid place-items-center hover:cursor-pointer text-sm'
           onClick={handleImproviseClick}
         >
           IMPROVISE
@@ -148,17 +150,19 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   );
 
   const OnlyImprovise = () => (
-    <div className='text-white w-full'>
+    <div className='hover:cursor-pointer text-white w-full'>
       <div
-        className={`flex justify-center h-3 text-white text-xl ${getBannerColor(
+        className={`flex justify-center h-3vh text-white text-xl ${getBannerColor(
           props.lane.type
         )} relative w-full`}
       >
-        <h1>{`- ${getLaneName(props.lane.type)} -`}</h1>
+        <h1>{`${props.lane.playerScore} - ${getLaneName(props.lane.type)} - ${
+            props.lane.opponentScore
+          }`}</h1>
       </div>
       <div className='flex flex-row h-20 w-full'>
         <div
-          className='flex flex-1 bg-gray-700 grid place-items-center'
+          className='flex flex-1 bg-gray-700 grid place-items-center text-sm'
           onClick={handleImproviseClick}
         >
           IMPROVISE

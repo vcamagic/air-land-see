@@ -48,6 +48,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const gameId = useRef('');
   const host = useRef(true);
   const [gameEnded, setGameEnded] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
 
   const joinGame = useCallback(async (name: string) => {
     connection.current = new HubConnectionBuilder()
@@ -77,6 +78,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
           } else {
             setPlayerTurn(false);
           }
+          setGameStarted(true);
         }
       );
 
@@ -200,6 +202,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         getIsHost,
         endGame,
         gameEnded,
+        gameStarted,
       }}
     >
       {children}
