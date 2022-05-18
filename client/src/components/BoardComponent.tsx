@@ -146,6 +146,13 @@ export const BoardComponent = ({ deleteName }: BoardComponentProps) => {
     }
     if (card instanceof Redeploy) {
       tempBoard = (card as Redeploy).executeEffect(board, target.id);
+      if (tempBoard.disruptSteps === 1) {
+        resetTargetId();
+        tempBoard.calculateScores();
+        updateBoardState(tempBoard);
+        turn(tempBoard, undefined, true);
+        return;
+      }
     }
 
     const tempTarget = board.getCardById(target.id);
