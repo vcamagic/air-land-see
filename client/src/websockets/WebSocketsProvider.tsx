@@ -139,11 +139,14 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         overwriteTurn ?? false,
         isForfeit ?? false
       );
+      if (overwriteTurn) {
+        setPlayerTurn(false);
+      } else {
+        setPlayerTurn(declareTurn(board));
+      }
       if (isForfeit) {
         host.current = !host.current;
         setPlayerTurn(host.current);
-      } else {
-        setPlayerTurn(declareTurn(board));
       }
     } catch (e) {
       console.error(e);
