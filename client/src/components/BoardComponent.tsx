@@ -22,7 +22,8 @@ import { LaneComponent } from './LaneComponent';
 import { ScoreComponent } from './ScoreComponent';
 
 export const BoardComponent = () => {
-  let audio = new Audio("/DROPDABOMBMAN.mp3");
+  let audio = new Audio('/DROPDABOMBMAN.mp3');
+  audio.volume = 0.1;
   const {
     board,
     updateBoardState,
