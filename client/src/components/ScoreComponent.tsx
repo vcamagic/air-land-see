@@ -120,9 +120,10 @@ export const ScoreComponent = ({
           deleteName();
           endGame();
         }
-
-        updateBoardState(tempBoard);
-        turn(tempBoard, undefined, true);
+        setTimeout(() => {
+          updateBoardState(tempBoard);
+          turn(tempBoard, undefined, true);
+        }, 2500);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

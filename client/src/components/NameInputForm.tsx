@@ -43,13 +43,12 @@ export const NameInputForm = (props: NameInputFormProps) => {
             name='name'
             className='border border-gray-300 text-sm rounded-lg focus:ring-white focus:border-white block w-full p-3'
             onChange={handleNameChange}
-            required
             maxLength={10}
           />
         </div>
         <button
           type='submit'
-          className='text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+          className='text-white bg-green-500 hover:bg-green-600 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center'
         >
           Submit
         </button>
