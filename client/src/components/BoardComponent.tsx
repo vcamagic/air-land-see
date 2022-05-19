@@ -22,6 +22,7 @@ import { LaneComponent } from './LaneComponent';
 import { ScoreComponent } from './ScoreComponent';
 
 export const BoardComponent = () => {
+  let audio = new Audio("/DROPDABOMBMAN.mp3");
   const {
     board,
     updateBoardState,
@@ -275,12 +276,14 @@ export const BoardComponent = () => {
     }
     if (card instanceof Support) {
       boardTemp = (card as Support).deploy(board, lane.type);
+      audio.play();
       boardTemp.calculateScores();
       updateBoardState(boardTemp);
       turn(boardTemp);
     }
     if (card instanceof AirDrop) {
       boardTemp = (card as AirDrop).deploy(board, lane.type);
+      audio.play();
       boardTemp.calculateScores();
       updateBoardState(boardTemp);
       turn(boardTemp);

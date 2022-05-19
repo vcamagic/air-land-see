@@ -42,10 +42,7 @@ export const CardComponent = (props: CardComponentProps) => {
     props.updateClickedCard(props.card);
   };
 
-  useEffect(()=>{
-    
-  },[])
-
+  
   const FaceUpCard = () => (
     <div
       className={`w-247 hover:cursor-pointer ${
