@@ -38,7 +38,7 @@ interface WebSocketProviderProps {
 export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const connection = useRef(
     new HubConnectionBuilder()
-      .withUrl(''https://air-land-sea.herokuapp.com/game'')
+      .withUrl('https://air-land-sea.herokuapp.com/game')
       .configureLogging(LogLevel.Information)
       .build()
   );
@@ -187,7 +187,6 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     return host.current;
   };
 
-
   const getPlayerName = (): string => {
     return playerName.current;
   };
@@ -220,7 +219,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         gameEnded,
         gameStarted,
         getPlayerName,
-        getOpponentName
+        getOpponentName,
       }}
     >
       {children}
