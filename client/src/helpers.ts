@@ -37,14 +37,12 @@ export const makeBoardInstance = (board: ServerBoard): Board => {
   tempBoard.lanes = tempLanes;
   tempBoard.player.aerodrome = board.player.aerodrome;
   tempBoard.player.airdrop = board.player.airdrop;
-  tempBoard.player.name = board.player.name;
   tempBoard.player.score = board.player.score;
   tempBoard.player.hand = board.player.hand.map((card) =>
     makeCardInstance(card)
   );
   tempBoard.opponent.aerodrome = board.opponent.aerodrome;
   tempBoard.opponent.airdrop = board.opponent.airdrop;
-  tempBoard.opponent.name = board.opponent.name;
   tempBoard.opponent.score = board.opponent.score;
   tempBoard.opponent.hand = board.opponent.hand.map((card) =>
     makeCardInstance(card)

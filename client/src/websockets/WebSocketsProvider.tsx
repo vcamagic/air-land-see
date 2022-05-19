@@ -49,6 +49,8 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const host = useRef(true);
   const [gameEnded, setGameEnded] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  let playerName = useRef('');
+  let opponentName = useRef('');
 
   const joinGame = useCallback(async (name: string) => {
     connection.current = new HubConnectionBuilder()
@@ -59,13 +61,15 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     try {
       connection.current.on('GameFound', async (id: string) => {
         gameId.current = id;
+        playerName.current = name;
         await connection.current.invoke('SubmitName', id, name);
       });
 
       connection.current.on(
         'GameSetup',
-        async (isHost: boolean, opponentName: string) => {
+        async (isHost: boolean, opponentNick: string) => {
           host.current = isHost;
+          opponentName.current = opponentNick;
           if (isHost) {
             const board = new Board();
             await connection.current.invoke(
@@ -182,6 +186,15 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     return host.current;
   };
 
+
+  const getPlayerName = (): string => {
+    return playerName.current;
+  };
+
+  const getOpponentName = (): string => {
+    return opponentName.current;
+  };
+
   const endGame = async () => {
     try {
       await connection.current.invoke('EndGame', gameId.current);
@@ -205,6 +218,8 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         endGame,
         gameEnded,
         gameStarted,
+        getPlayerName,
+        getOpponentName
       }}
     >
       {children}
