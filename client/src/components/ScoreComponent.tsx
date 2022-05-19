@@ -144,13 +144,13 @@ export const ScoreComponent = ({
       >
         Forfeit round
       </button>
-      <div className='mt-auto'>
+      <div className='mt-auto w-full text-center'>
         {playerTurn ? (
-          <div className='bg-green-500 text-white'>
+          <div className='bg-green-500 text-white animate-bounce rounded-xl w-full'>
             <h1 className='p-2'>YOUR MOVE</h1>
           </div>
         ) : (
-          <div className='bg-red-500 text-white'>
+          <div className='bg-red-500 text-white rounded-xl w-full'>
             <h1 className='p-2'>OPPONENT MOVE</h1>
           </div>
         )}

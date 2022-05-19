@@ -30,11 +30,11 @@ export class Ambush extends Card {
     board = super.deploy(board, selectedLane);
     const temp = board.getCardById(this.id);
     if(temp !== null && temp.card.isFaceUp()){
-      this.selectTargets(board);
+      board = this.selectTargets(board);
     } else {
       board.targeting = false;
     }
-    return board;
+    return cloneDeep(board);
   }
 
   selectTargets(board: Board): Board {
