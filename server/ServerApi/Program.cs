@@ -10,7 +10,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: AllowSpecificOrigins, builder =>
     {
-        builder.AllowAnyHeader().AllowCredentials().AllowAnyHeader().WithOrigins("https://chama-leska.herokuapp.com", "http://localhost:3000");
+        builder.AllowAnyHeader().AllowCredentials().AllowAnyHeader().WithOrigins("https://leska-chama.herokuapp.com", "http://localhost:3000");
     });
 });
 // Add services to the container.
