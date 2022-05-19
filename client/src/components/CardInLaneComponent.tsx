@@ -1,5 +1,6 @@
 import { faBolt, faInfinity } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useRef, useState } from 'react';
 import 'tippy.js/dist/tippy.css'; // optional
 import { Board } from '../models/Board';
 import { Card } from '../models/Cards/Card';
@@ -45,10 +46,25 @@ export const CardInLaneComponent = ({
   right,
   zIndex,
 }: CardInLaneComponentProps) => {
+  const [mouseOver, setMouseOver] = useState(false);
+  const mouseIn = useRef(false);
+
   const cardInLaneClick = () => {
     if (board.targeting && card.highlight) {
       updateTargetedCard(card);
     }
+  };
+
+  const handleOnMouseOver = () => {
+    mouseIn.current = true;
+    setTimeout(() => {
+      if (mouseIn.current) setMouseOver(true);
+    }, 750);
+  };
+
+  const handleOnMouseOut = () => {
+    mouseIn.current = false;
+    setMouseOver(false);
   };
 
   const RightSide = () => (
@@ -134,23 +150,30 @@ export const CardInLaneComponent = ({
     </div>
   );
 
-  const FaceDownLeft = () => (
-    <div
-      onClick={cardInLaneClick}
-      className={`absolute flex h-23vh ${
-        card.highlight ? 'border-4 border-red-400 hover:cursor-pointer' : ''
-      }`}
-      style={{ right: right, zIndex: zIndex }}
-    >
-      {/* <Tippy content={<LeftSide />}> */}
-      <img
-        src='/images/face-down.png'
-        alt='face down card'
-        className='h-23vh w-380'
-      ></img>
-      {/* </Tippy> */}
-    </div>
-  );
+  const FaceDownLeft = () =>
+    mouseOver ? (
+      <div onMouseLeave={handleOnMouseOut}>
+        <LeftSide />
+      </div>
+    ) : (
+      <div
+        onMouseOver={handleOnMouseOver}
+        onMouseLeave={handleOnMouseOut}
+        onClick={cardInLaneClick}
+        className={`absolute flex h-23vh ${
+          card.highlight ? 'border-4 border-red-400 hover:cursor-pointer' : ''
+        }`}
+        style={{ right: right, zIndex: zIndex }}
+      >
+        {/* <Tippy content={<LeftSide />}> */}
+        <img
+          src='/images/face-down.png'
+          alt='face down card'
+          className='h-23vh w-380'
+        ></img>
+        {/* </Tippy> */}
+      </div>
+    );
 
   const FaceDownRight = () => (
     <div
@@ -167,7 +190,6 @@ export const CardInLaneComponent = ({
       ></img>
     </div>
   );
-
   if (card.isFaceUp()) {
     if (left) {
       return <LeftSide />;

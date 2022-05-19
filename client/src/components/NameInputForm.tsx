@@ -5,8 +5,13 @@ interface NameInputFormProps {
   insertName: () => void;
 }
 
+function isEmptyOrSpaces(str: string) {
+  return str === null || str.match(/^ *$/) !== null;
+}
+
 export const NameInputForm = (props: NameInputFormProps) => {
   const [name, setName] = useState('');
+  const [errorMessage, setErrorMessage] = useState(false);
   const { joinGame } = useContext(WebSocketContext);
   const handleNameChange = (event: React.FormEvent<HTMLInputElement>) => {
     setName(event.currentTarget.value);
@@ -14,7 +19,10 @@ export const NameInputForm = (props: NameInputFormProps) => {
 
   const handleNameSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    if (name === '') return;
+    if (name === '' || name.length > 10 || isEmptyOrSpaces(name)) {
+      setErrorMessage(true);
+      return;
+    }
     await joinGame(name);
     props.insertName();
   };
@@ -36,6 +44,7 @@ export const NameInputForm = (props: NameInputFormProps) => {
             className='border border-gray-300 text-sm rounded-lg focus:ring-white focus:border-white block w-full p-3'
             onChange={handleNameChange}
             required
+            maxLength={10}
           />
         </div>
         <button
@@ -44,6 +53,13 @@ export const NameInputForm = (props: NameInputFormProps) => {
         >
           Submit
         </button>
+        <div
+          className={`text-red-300 font-bold text-xl ${
+            errorMessage ? 'visible' : 'invisible'
+          }`}
+        >
+          Name is required and can't be longer than 10 chars.
+        </div>
       </form>
     </div>
   );
