@@ -38,7 +38,6 @@ export class Redeploy extends Card {
     }
     board.clearHighlights();
     board.targeting = false;
-    console.log('REDEPLOY', board);
     return cloneDeep(board);
   }
 

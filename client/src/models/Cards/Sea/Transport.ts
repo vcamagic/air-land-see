@@ -46,7 +46,6 @@ export class Transport extends Card {
       const originalLane = board.getLane(temp.lane);
       const index = originalLane.playerCards.findIndex(x=>x === temp?.card);
       originalLane.playerCards.splice(index,1);
-      console.log(temp);
       const  targetedLane = board.getLane((selectedLane as Lane).type);
       targetedLane.playerCards = [...targetedLane.playerCards, temp.card];
     }
@@ -74,6 +73,7 @@ export class Transport extends Card {
 
   selectLane(board: Board): Board {
     board.clearHighlights();
+    board.targeting = true;
     board.lanes.forEach((lane:Lane) => {
       lane.highlight = true;
     });

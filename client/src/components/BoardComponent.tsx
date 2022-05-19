@@ -84,12 +84,10 @@ export const BoardComponent = ({ deleteName }: BoardComponentProps) => {
       }
 
       if (!tempBoard.targeting && tempBoard.disruptSteps === 1) {
-        console.log('usao u select targets next deo');
         const disrupt = tempBoard.getCardById(11);
         if (disrupt !== null && disrupt.card.faceUp) {
           setClickedCard(disrupt.card);
           (disrupt.card as Disrupt).selectTargetsNext(tempBoard);
-          console.log('next: isPlayerOwned', disrupt.playerOwned);
           if (!disrupt.playerOwned) {
             turn(tempBoard, disrupt.card.id, true);
           }
@@ -166,7 +164,6 @@ export const BoardComponent = ({ deleteName }: BoardComponentProps) => {
       tempTarget.card.faceUp &&
       (card.name === 'Maneuver' || card.name === 'Ambush')
     ) {
-      console.log('usao u fliped disrupt deo');
       tempBoard.calculateScores();
       resetTargetId();
       setClickedCard(tempTarget.card as Card);
@@ -179,12 +176,10 @@ export const BoardComponent = ({ deleteName }: BoardComponentProps) => {
     }
 
     if (!tempBoard.targeting && tempBoard.disruptSteps === 1) {
-      console.log('usao u select targets next deo');
       const disrupt = tempBoard.getCardById(11);
       if (disrupt !== null && disrupt.card.faceUp) {
         setClickedCard(disrupt.card);
         (disrupt.card as Disrupt).selectTargetsNext(tempBoard);
-        console.log('next: isPlayerOwned', disrupt.playerOwned);
         if (!disrupt.playerOwned) {
           turn(tempBoard, disrupt.card.id, true);
         }
@@ -195,7 +190,7 @@ export const BoardComponent = ({ deleteName }: BoardComponentProps) => {
       return;
     }
 
-    if (tempBoard.targeting) {
+    if (tempBoard.targeting && !(card instanceof Transport)) {
       //azuriraj clicked card jer clicked card handler ne reaguje ako je targeting active
       setClickedCard(tempTarget?.card as Card);
     }

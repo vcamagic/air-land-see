@@ -53,12 +53,10 @@ export class Maneuver extends Card {
   ): Board {
     board.clearHighlights();
     board.targeting = false;
-    console.log('PRE MANEUVERA');
     let temp = board.getCardById(targetId as number);
     if (temp !== null) {
       temp.card.flip(board);
     }
-    console.log('POSLE MANEUVERA');
     return cloneDeep(board);
   }
 

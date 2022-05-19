@@ -49,7 +49,6 @@ export class Disrupt extends Card {
     if (temp !== null) {
       temp.card.flip(board);
     }
-    console.log('executed disrupt effect')
     return cloneDeep(board);
   }
 
