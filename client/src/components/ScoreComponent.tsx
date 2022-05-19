@@ -129,12 +129,12 @@ export const ScoreComponent = ({
   }, [board]);
 
   return (
-    <div className='p-3 flex flex-col items-center h-full'>
-      <div className='text-white text-2xl flex flex-col items-center'>
-        <div className='flex justify-end text-xs'>
-          <h1 className='mr-auto'>{`${getPlayerName()}`}</h1>
-          <h1 className='mx-2'>VS</h1>
-          <h1 className='ml-auto'>{`${getOpponentName()}`}</h1>
+    <div className='p-3 mx-3 flex flex-col items-center h-full w-64'>
+      <div className='text-white text-2xl flex flex-col items-center w-full'>
+        <div className='flex justify-end text-xl w-full'>
+          <h1 className='mr-auto w-5/12 text-left'>{`${getPlayerName()}`}</h1>
+          <h1 className='w-2/12 text-center'>VS</h1>
+          <h1 className='ml-auto w-5/12 text-right'>{`${getOpponentName()}`}</h1>
         </div>
         <h1>{`${playerScore} - ${opponentScore}`}</h1>
       </div>
