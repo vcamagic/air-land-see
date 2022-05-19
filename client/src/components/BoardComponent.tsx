@@ -339,7 +339,6 @@ export const BoardComponent = ({ deleteName }: BoardComponentProps) => {
 
   useEffect(() => {
     if (gameEnded) window.location.reload();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameEnded]);
 
   const Bbbboard = () =>
