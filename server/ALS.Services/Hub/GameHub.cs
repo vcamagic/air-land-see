@@ -22,24 +22,22 @@ namespace ALS.Services.Hub
             Game g = GameRepository.Games.FirstOrDefault(x => x.Id == id);
             if (g != null)
             {
-
+                g.LastActive = DateTime.Now;
                 if (g.PlayerOne.ConnectionId != Context.ConnectionId)
                 {
-                    await Clients.Client(g.PlayerOne.ConnectionId).OpponentTurn(board, targetId, overwriteTurn,isForfeit);
+                    await Clients.Client(g.PlayerOne.ConnectionId).OpponentTurn(board, targetId, overwriteTurn, isForfeit);
                 }
                 else
                 {
-                    await Clients.Client(g.PlayerTwo.ConnectionId).OpponentTurn(board, targetId, overwriteTurn,isForfeit);
+                    await Clients.Client(g.PlayerTwo.ConnectionId).OpponentTurn(board, targetId, overwriteTurn, isForfeit);
                 }
-
-
             }
         }
 
         public async void EndGame(Guid id)
         {
             Game g = GameRepository.Games.FirstOrDefault(x => x.Id == id);
-            
+
             await Clients.Client(g.PlayerOne.ConnectionId).GameEnded();
             await Clients.Client(g.PlayerTwo.ConnectionId).GameEnded();
 
