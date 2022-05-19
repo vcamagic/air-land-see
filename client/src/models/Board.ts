@@ -35,8 +35,8 @@ export class Board {
       new Lane(((firstLane + 2) % 3) + 1),
     ];
 
-    this.player = new Player('Player');
-    this.opponent = new Player('Opponent');
+    this.player = new Player();
+    this.opponent = new Player();
     this.disruptSteps = 0;
     this.targeting = false;
     this.deck = [

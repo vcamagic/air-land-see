@@ -55,15 +55,27 @@ export const ScoreComponent = ({
   opponentScore,
   deleteName,
 }: ScoreComponentProps) => {
-  const { board, getIsHost, turn, updateBoardState, endGame, playerTurn } =
-    useContext(WebSocketContext);
+  const {
+    board,
+    getIsHost,
+    turn,
+    updateBoardState,
+    endGame,
+    playerTurn,
+    getPlayerName,
+    getOpponentName,
+  } = useContext(WebSocketContext);
 
   const setBoardForNewRound = (): Board => {
     let tempBoard = new Board();
     const playerHand = cloneDeep(tempBoard.player.hand);
     const opponentHand = cloneDeep(tempBoard.opponent.hand);
     tempBoard.player = cloneDeep(board.player);
+    tempBoard.player.aerodrome = false;
+    tempBoard.player.airdrop = false;
     tempBoard.opponent = cloneDeep(board.opponent);
+    tempBoard.opponent.aerodrome = false;
+    tempBoard.opponent.airdrop = false;
     tempBoard.opponent.score += getIsHost()
       ? calculateHostScore(board.player.hand.length)
       : calculateScore(board.player.hand.length);
@@ -119,7 +131,11 @@ export const ScoreComponent = ({
   return (
     <div className='p-3 flex flex-col items-center h-full'>
       <div className='text-white text-2xl flex flex-col items-center'>
-        <h1>SCORE</h1>
+        <div className='flex justify-end text-xs'>
+          <h1 className='mr-auto'>{`${getPlayerName()}`}</h1>
+          <h1 className='mx-2'>VS</h1>
+          <h1 className='ml-auto'>{`${getOpponentName()}`}</h1>
+        </div>
         <h1>{`${playerScore} - ${opponentScore}`}</h1>
       </div>
       <button
