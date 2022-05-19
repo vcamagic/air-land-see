@@ -47,13 +47,11 @@ const declareWinner = (board: Board, isHost: boolean): boolean => {
 interface ScoreComponentProps {
   playerScore: number;
   opponentScore: number;
-  deleteName: () => void;
 }
 
 export const ScoreComponent = ({
   playerScore,
   opponentScore,
-  deleteName,
 }: ScoreComponentProps) => {
   const {
     board,
@@ -116,11 +114,10 @@ export const ScoreComponent = ({
         tempBoard.player.hand = playerHand;
         tempBoard.opponent.hand = opponentHand;
 
-        if (tempBoard.player.score >= 12 || tempBoard.opponent.score >= 12) {
-          deleteName();
-          endGame();
-        }
         setTimeout(() => {
+          if (tempBoard.player.score >= 12 || tempBoard.opponent.score >= 12) {
+            endGame();
+          }
           updateBoardState(tempBoard);
           turn(tempBoard, undefined, true);
         }, 2500);

@@ -23,8 +23,8 @@ export const NameInputForm = (props: NameInputFormProps) => {
       setErrorMessage(true);
       return;
     }
-    await joinGame(name);
     props.insertName();
+    await joinGame(name);
   };
 
   return (

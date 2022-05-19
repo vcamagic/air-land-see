@@ -21,11 +21,7 @@ import { HandComponent } from './HandComponent';
 import { LaneComponent } from './LaneComponent';
 import { ScoreComponent } from './ScoreComponent';
 
-interface BoardComponentProps {
-  deleteName: () => void;
-}
-
-export const BoardComponent = ({ deleteName }: BoardComponentProps) => {
+export const BoardComponent = () => {
   const {
     board,
     updateBoardState,
@@ -358,7 +354,6 @@ export const BoardComponent = ({ deleteName }: BoardComponentProps) => {
           />
           <div className='flex-none'>
             <ScoreComponent
-              deleteName={deleteName}
               playerScore={board.player.score}
               opponentScore={board.opponent.score}
             />

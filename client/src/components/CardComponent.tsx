@@ -1,6 +1,6 @@
 import { faBolt, faInfinity } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Card } from '../models/Cards/Card';
 import { CardEffect } from '../models/Cards/CardEffect';
 import { LaneType } from '../models/LaneType';
@@ -36,12 +36,15 @@ interface CardComponentProps {
 
 export const CardComponent = (props: CardComponentProps) => {
   const { updateBoardState, board } = useContext(WebSocketContext);
-  
+
   const handleOnClick = () => {
     updateBoardState(props.card.highlightAvailableLanes(board));
     props.updateClickedCard(props.card);
   };
 
+  useEffect(()=>{
+    
+  },[])
 
   const FaceUpCard = () => (
     <div

@@ -37,11 +37,14 @@ namespace ALS.Services.Hub
         public async void EndGame(Guid id)
         {
             Game g = GameRepository.Games.FirstOrDefault(x => x.Id == id);
+            if (g != null)
+            {
+                await Clients.Client(g.PlayerOne.ConnectionId).GameEnded();
+                await Clients.Client(g.PlayerTwo.ConnectionId).GameEnded();
 
-            await Clients.Client(g.PlayerOne.ConnectionId).GameEnded();
-            await Clients.Client(g.PlayerTwo.ConnectionId).GameEnded();
+                GameRepository.Games.Remove(g);
+            }
 
-            GameRepository.Games.Remove(g);
         }
 
         // public async void Undo(Guid id, AffectedField[] fields)

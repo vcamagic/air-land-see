@@ -10,14 +10,10 @@ function App() {
     setNameInserted(true);
   };
 
-  const deleteName = () => {
-    setNameInserted(false);
-  };
-
   return (
     <WebSocketsProvider>
       {nameInserted ? (
-        <BoardComponent deleteName={deleteName} />
+        <BoardComponent />
       ) : (
         <NameInputForm insertName={insertName} />
       )}
