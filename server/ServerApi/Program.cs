@@ -1,7 +1,7 @@
 using ALS.Services.Hub;
 using ALS.Services.Interfaces;
 using ALS.Services.Repository;
-
+using ALS.Services.Worker;
 
 var AllowSpecificOrigins = "AllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +10,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: AllowSpecificOrigins, builder =>
     {
-        builder.AllowAnyHeader().AllowCredentials().AllowAnyHeader().WithOrigins("http://localhost:3000");
+        builder.AllowAnyHeader().AllowCredentials().AllowAnyHeader().WithOrigins("https://chama-leska.herokuapp.com");
     });
 });
 // Add services to the container.
@@ -20,6 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHostedService<WorkerService>();
 builder.Services.AddSignalR();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 
