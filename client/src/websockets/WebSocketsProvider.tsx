@@ -112,7 +112,6 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
             host.current = !host.current;
             setPlayerTurn(host.current);
           }
-          console.log('primljen target id iz oponent turn metode', targetId);
           setReceivedTargetId(targetId);
           console.log('OPPONENT TURN', temp);
         }

@@ -157,7 +157,7 @@ export class Board {
         } else {
           if (lane.opponentCards[i].isFaceUp()) {
             total += lane.opponentCards[i].power;
-            if (lane.opponentCards[i].name === 'Covering Fire') {
+            if (lane.opponentCards[i].name === 'Cover Fire') {
               coveringFire = true;
             }
           } else {
