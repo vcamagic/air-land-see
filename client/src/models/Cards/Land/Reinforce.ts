@@ -41,7 +41,7 @@ export class Reinforce extends Card {
   ): Board {
     let topDeck = board.deck[board.deck.length - 1];
     topDeck.faceUp = false;
-    if(board.survivesBlockade((selectedLane as Lane).type)){
+    if(board.survivesBlockade((selectedLane as Lane).type) && board.survivesContainment()){
       (selectedLane as Lane).addPlayerCard(topDeck);
     }
     board.deck.splice(board.deck.length - 1, 1);   
