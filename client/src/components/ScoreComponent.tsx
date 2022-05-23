@@ -141,7 +141,10 @@ export const ScoreComponent = ({
       >
         Forfeit round
       </button>
-      <div className='mt-auto w-full text-center'>
+      <div className='mt-auto w-full text-center text-white'>
+        <div className='mb-4'>
+          Opponent's hand size: {`${board.opponent.hand.length}`}
+        </div>
         {playerTurn ? (
           <div className='bg-green-500 text-white animate-bounce rounded-xl w-full'>
             <h1 className='p-2'>YOUR MOVE</h1>
