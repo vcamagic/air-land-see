@@ -65,7 +65,7 @@ export const ScoreComponent = ({
   } = useContext(WebSocketContext);
 
   const setBoardForNewRound = (): Board => {
-    let tempBoard = new Board();
+    let tempBoard = new Board(board.lanes[2].type - 1);
     const playerHand = cloneDeep(tempBoard.player.hand);
     const opponentHand = cloneDeep(tempBoard.opponent.hand);
     tempBoard.player = cloneDeep(board.player);
@@ -99,7 +99,7 @@ export const ScoreComponent = ({
       !board.targeting
     ) {
       if (!getIsHost()) {
-        let tempBoard = new Board();
+        let tempBoard = new Board(board.lanes[2].type - 1);
         const playerHand = cloneDeep(tempBoard.player.hand);
         const opponentHand = cloneDeep(tempBoard.opponent.hand);
         tempBoard.player = cloneDeep(board.player);
@@ -113,7 +113,6 @@ export const ScoreComponent = ({
 
         tempBoard.player.hand = playerHand;
         tempBoard.opponent.hand = opponentHand;
-
         setTimeout(() => {
           if (tempBoard.player.score >= 12 || tempBoard.opponent.score >= 12) {
             endGame();

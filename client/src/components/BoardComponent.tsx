@@ -112,11 +112,9 @@ export const BoardComponent = () => {
   };
 
   const updateTargetedCard = (card: Card) => {
-    console.log('new target', card);
     setTargetedCard(card);
     if (receivedTargetId !== -1) {
       const tempTargetCard = board.getCardById(receivedTargetId)?.card as Card;
-      console.log('swapped to received card id', tempTargetCard);
       setClickedCard(tempTargetCard);
       checkCardTypeExecute(tempTargetCard as Card, card);
     } else {

@@ -26,14 +26,21 @@ export class Board {
   targeting!: boolean;
   disruptSteps!: number;
 
-  constructor() {
-    const firstLane = Math.floor(Math.random() * 3);
-
-    this.lanes = [
-      new Lane(firstLane + 1),
-      new Lane(((firstLane + 1) % 3) + 1),
-      new Lane(((firstLane + 2) % 3) + 1),
-    ];
+  constructor(lastLane?: LaneType) {
+    if(lastLane!==undefined) {
+      this.lanes = [
+        new Lane(lastLane + 1),
+        new Lane(((lastLane + 1) % 3) + 1),
+        new Lane(((lastLane + 2) % 3) + 1),
+      ];
+    } else {
+      const firstLane = Math.floor(Math.random() * 3);
+      this.lanes = [
+        new Lane(firstLane + 1),
+        new Lane(((firstLane + 1) % 3) + 1),
+        new Lane(((firstLane + 2) % 3) + 1),
+      ];
+    }
 
     this.player = new Player();
     this.opponent = new Player();
@@ -220,8 +227,8 @@ export class Board {
   };
 
   private dealCards = () => {
-    this.player.hand = [...this.deck.slice(0, 3), ...this.deck.slice(6, 9)];
-    this.opponent.hand = [...this.deck.slice(3, 6), ...this.deck.slice(9, 12)];
+    this.player.hand = [...this.deck.slice(0, 3)];
+    this.opponent.hand = [...this.deck.slice(3, 6)];
     this.deck = this.deck.slice(12);
   };
 
