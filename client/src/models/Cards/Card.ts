@@ -11,6 +11,7 @@ export class Card {
   type!: LaneType;
   faceUp!: boolean;
   highlight!: boolean;
+  highlightChange!: boolean;
   description!: string;
   img!: string;
   effect!: CardEffect;
@@ -30,6 +31,7 @@ export class Card {
     this.type = type;
     this.faceUp = true;
     this.highlight = false;
+    this.highlightChange = false;
     this.description = description;
     this.img = img;
     this.effect = effect;

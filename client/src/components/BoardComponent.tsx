@@ -41,6 +41,8 @@ export const BoardComponent = () => {
 
   const updateClickedCard = (card: Card) => {
     if (!board.targeting) {
+      board.clearRecentHighlights();
+      updateBoardState(board);
       resetTargetId();
       setClickedCard(card);
     }

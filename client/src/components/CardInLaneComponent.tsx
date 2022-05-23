@@ -71,7 +71,11 @@ export const CardInLaneComponent = ({
     <div
       onClick={cardInLaneClick}
       className={`flex absolute  h-23vh ${
-        card.highlight ? 'border-4 border-red-400 hover:cursor-pointer' : ''
+        card.highlight
+          ? 'border-4 border-red-400 hover:cursor-pointer'
+          : card.highlightChange
+          ? 'border-4 border-blue-400'
+          : ''
       }`}
       style={{ left: right, zIndex: zIndex }}
     >
@@ -111,7 +115,11 @@ export const CardInLaneComponent = ({
     <div
       onClick={cardInLaneClick}
       className={`absolute flex h-23vh ${
-        card.highlight ? 'border-4 border-red-400 hover:cursor-pointer' : ''
+        card.highlight
+          ? 'border-4 border-red-400 hover:cursor-pointer'
+          : card.highlightChange
+          ? 'border-4 border-blue-400'
+          : ''
       }`}
       style={{ right: right, zIndex: zIndex }}
     >
@@ -161,7 +169,11 @@ export const CardInLaneComponent = ({
         onMouseLeave={handleOnMouseOut}
         onClick={cardInLaneClick}
         className={`absolute flex h-23vh ${
-          card.highlight ? 'border-4 border-red-400 hover:cursor-pointer' : ''
+          card.highlight
+            ? 'border-4 border-red-400 hover:cursor-pointer'
+            : card.highlightChange
+            ? 'border-4 border-blue-400'
+            : ''
         }`}
         style={{ right: right, zIndex: zIndex }}
       >
@@ -179,7 +191,11 @@ export const CardInLaneComponent = ({
     <div
       onClick={cardInLaneClick}
       className={`absolute flex h-23vh ${
-        card.highlight ? 'border-4 border-red-400 hover:cursor-pointer' : ''
+        card.highlight
+          ? 'border-4 border-red-400 hover:cursor-pointer'
+          : card.highlightChange
+          ? 'border-4 border-blue-400'
+          : ''
       }`}
       style={{ left: right, zIndex: zIndex }}
     >

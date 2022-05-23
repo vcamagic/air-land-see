@@ -1,7 +1,9 @@
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { cloneDeep } from 'lodash';
 import React, { useCallback, useRef, useState } from 'react';
 import { makeBoardInstance } from '../helpers';
 import { Board } from '../models/Board';
+import { Card } from '../models/Cards/Card';
 import { Lane } from '../models/Lane';
 import { ServerBoard } from '../models/ServerBoard';
 import { WebSocketProv } from './WebSocketContext';
@@ -38,7 +40,7 @@ interface WebSocketProviderProps {
 export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const connection = useRef(
     new HubConnectionBuilder()
-      .withUrl('https://air-land-sea.herokuapp.com/game')
+      .withUrl('http://localhost:5237/game')
       .configureLogging(LogLevel.Information)
       .build()
   );
@@ -47,6 +49,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const [receivedTargetId, setReceivedTargetId] = useState(-1);
   const gameId = useRef('');
   const host = useRef(true);
+  const previousBoard = useRef(new Board());
   const [gameEnded, setGameEnded] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   let playerName = useRef('');
@@ -54,7 +57,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
 
   const joinGame = useCallback(async (name: string) => {
     connection.current = new HubConnectionBuilder()
-      .withUrl('https://air-land-sea.herokuapp.com/game')
+      .withUrl('http://localhost:5237/game')
       .configureLogging(LogLevel.Information)
       .build();
 
@@ -94,14 +97,14 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       connection.current.on(
         'OpponentTurn',
         (
-          board: ServerBoard,
+          serverBoard: ServerBoard,
           targetId: number,
           overwriteTurn: boolean,
           isForfeit: boolean
         ) => {
-          let temp = invertBoardState(makeBoardInstance(board));
+          let temp = invertBoardState(makeBoardInstance(serverBoard));
           temp.calculateScores();
-          setBoard(temp);
+          updateBoardState(highlightChanges(previousBoard.current, temp));
           if (overwriteTurn) {
             setPlayerTurn(true);
           } else {
@@ -165,6 +168,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   };
 
   const updateBoardState = (board: Board) => {
+    previousBoard.current = board;
     setBoard(board);
   };
 
@@ -200,6 +204,37 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const highlightChanges = (originalBoard: Board, newBoard: Board): Board => {
+    newBoard.lanes.forEach((lane: Lane, index: number) => {
+      lane.playerCards.forEach((card: Card, cardIndex: number) => {
+        const originalCard = originalBoard.lanes[index].playerCards[cardIndex];
+        if (
+          originalCard === undefined ||
+          (originalCard.isFaceUp() !== card.isFaceUp() &&
+            originalCard.id === card.id)
+        ) {
+          card.highlightChange = true;
+        } else {
+          card.highlightChange = false;
+        }
+      });
+      lane.opponentCards.forEach((card: Card, cardIndex: number) => {
+        const originalCard =
+          originalBoard.lanes[index].opponentCards[cardIndex];
+        if (
+          originalCard === undefined ||
+          (originalCard.isFaceUp() !== card.isFaceUp() &&
+            originalCard.id === card.id)
+        ) {
+          card.highlightChange = true;
+        } else {
+          card.highlightChange = false;
+        }
+      });
+    });
+    return cloneDeep(newBoard);
   };
 
   return (

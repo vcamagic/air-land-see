@@ -121,9 +121,22 @@ export class Board {
       lane.laneDeploymentStatus = LaneDeployment.DEFAULT;
       lane.playerCards.forEach((card: Card) => {
         card.highlight = false;
+        card.highlightChange = false;
       });
       lane.opponentCards.forEach((card: Card) => {
         card.highlight = false;
+        card.highlightChange = false;
+      });
+    });
+  }
+
+  clearRecentHighlights(): void {
+    this.lanes.forEach((lane: Lane) => {
+      lane.playerCards.forEach((card: Card) => {
+        card.highlightChange = false;
+      });
+      lane.opponentCards.forEach((card: Card) => {
+        card.highlightChange = false;
       });
     });
   }
