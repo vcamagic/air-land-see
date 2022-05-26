@@ -40,7 +40,7 @@ interface WebSocketProviderProps {
 export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const connection = useRef(
     new HubConnectionBuilder()
-      .withUrl('http://localhost:5237/game')
+      .withUrl('https://air-land-sea.herokuapp.com/game')
       .configureLogging(LogLevel.Information)
       .build()
   );
@@ -57,7 +57,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
 
   const joinGame = useCallback(async (name: string) => {
     connection.current = new HubConnectionBuilder()
-      .withUrl('http://localhost:5237/game')
+      .withUrl('https://air-land-sea.herokuapp.com/game')
       .configureLogging(LogLevel.Information)
       .build();
 

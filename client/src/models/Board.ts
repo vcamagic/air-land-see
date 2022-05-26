@@ -254,8 +254,8 @@ export class Board {
   };
 
   private dealCards() {
-    this.player.hand = [...this.deck.slice(0, 3)];
-    this.opponent.hand = [...this.deck.slice(3, 6)];
+    this.player.hand = [...this.deck.slice(0, 3), ...this.deck.slice(6,9)];
+    this.opponent.hand = [...this.deck.slice(3, 6), ...this.deck.slice(9,12)];
     this.deck = this.deck.slice(12);
   };
 
