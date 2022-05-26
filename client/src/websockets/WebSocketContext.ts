@@ -21,6 +21,7 @@ interface WebSocketContextProps {
   gameStarted: boolean;
   getPlayerName: () => string;
   getOpponentName: () => string;
+  won: () => boolean;
 }
 const WebSocketContext = React.createContext<WebSocketContextProps>({
   joinGame: (user: any) => new Promise((resolve) => resolve()),
@@ -42,6 +43,7 @@ const WebSocketContext = React.createContext<WebSocketContextProps>({
   gameStarted: false,
   getPlayerName: () => '',
   getOpponentName: () => '',
+  won: () => false,
 });
 export const WebSocketConsumer = WebSocketContext.Consumer;
 export const WebSocketProv = WebSocketContext.Provider;

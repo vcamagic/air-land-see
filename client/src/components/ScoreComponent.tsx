@@ -26,27 +26,6 @@ const calculateScore = (cardsLeft: number): number => {
     : 2;
 };
 
-const declareWinner = (board: Board, isHost: boolean): boolean => {
-  let playerWin = 0;
-  let opponentWin = 0;
-  board.lanes.forEach((lane) => {
-    if (lane.playerScore >= lane.opponentScore) {
-      if (lane.playerScore === lane.opponentScore) {
-        if (isHost) {
-          playerWin += 1;
-        } else {
-          opponentWin += 1;
-        }
-      } else {
-        playerWin += 1;
-      }
-    } else {
-      opponentWin += 1;
-    }
-  });
-  return playerWin > opponentWin;
-};
-
 interface ScoreComponentProps {
   playerScore: number;
   opponentScore: number;
@@ -65,7 +44,22 @@ export const ScoreComponent = ({
     playerTurn,
     getPlayerName,
     getOpponentName,
+    won,
   } = useContext(WebSocketContext);
+
+  const [open, setOpen] = React.useState(false);
+  useEffect(() => {
+    if (
+      board.player.hand.length === 0 &&
+      board.opponent.hand.length === 0 &&
+      !board.targeting
+    ) {
+      setOpen(true);
+      setTimeout(() => {
+        setOpen(false);
+      }, 4000);
+    }
+  }, [board]);
 
   const setBoardForNewRound = (): Board => {
     let tempBoard = new Board(board.lanes[2].type - 1);
@@ -94,52 +88,6 @@ export const ScoreComponent = ({
     turn(tempBoard, undefined, undefined, true);
   };
 
-  useEffect(() => {
-    if (
-      board.player.hand.length === 0 &&
-      board.opponent.hand.length === 0 &&
-      !board.targeting
-    ) {
-      handleOpen();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [board]);
-
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
-    if (!getIsHost()) {
-      let tempBoard = new Board(board.lanes[2].type - 1);
-      const playerHand = cloneDeep(tempBoard.player.hand);
-      const opponentHand = cloneDeep(tempBoard.opponent.hand);
-      tempBoard.player = cloneDeep(board.player);
-      tempBoard.opponent = cloneDeep(board.opponent);
-      tempBoard.player.aerodrome = false;
-      tempBoard.player.airdrop = false;
-      tempBoard.opponent.aerodrome = false;
-      tempBoard.opponent.airdrop = false;
-
-      if (declareWinner(board, getIsHost())) {
-        tempBoard.player.score += 6;
-      } else {
-        tempBoard.opponent.score += 6;
-      }
-
-      tempBoard.player.hand = playerHand;
-      tempBoard.opponent.hand = opponentHand;
-      setTimeout(() => {
-        if (tempBoard.player.score >= 12 || tempBoard.opponent.score >= 12) {
-          endGame();
-        }
-        updateBoardState(tempBoard);
-        turn(tempBoard, undefined, true);
-      }, 4000);
-    }
-    setOpen(true);
-    setTimeout(() => {
-      setOpen(false);
-    }, 4000);
-  };
-
   const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -157,9 +105,7 @@ export const ScoreComponent = ({
       <Modal open={open}>
         <Box sx={style}>
           <Typography sx={{ mt: 2, mb: 2, textAlign: 'center' }}>
-            {declareWinner(board, getIsHost())
-              ? 'You won the round!'
-              : 'Opponent won the round!'}
+            {won() ? 'You won the round!' : 'Opponent won the round!'}
           </Typography>
         </Box>
       </Modal>

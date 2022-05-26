@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Aerodrome } from './Cards/Air/Aerodrome';
 import { AirDrop } from './Cards/Air/AirDrop';
 import { Containment } from './Cards/Air/Containment';
@@ -46,7 +47,13 @@ export class Board {
     this.opponent = new Player();
     this.disruptSteps = 0;
     this.targeting = false;
-    this.deck = [
+    this.deck = this.createDeck();
+    this.shuffleDeck();
+    this.dealCards();
+  }
+
+  createDeck(): Card[] {
+    const deck = [
       new Support(),
       new AirDrop(),
       new Maneuver(LaneType.AIR),
@@ -66,17 +73,24 @@ export class Board {
       new Blockade(),
       new Heavy(LaneType.SEA),
     ];
-    this.shuffleDeck();
-    this.dealCards();
+    return cloneDeep(deck);
   }
 
-  nextRound(): void {
-    this.deck = [];
+
+  nextRound(): Board {
+    this.player = this.player.reset();
+    this.opponent = this.opponent.reset();
+    this.deck = this.createDeck();
+    this.shuffleDeck();
+    this.dealCards();
+    this.targeting = false;
+    this.disruptSteps = 0;
     this.lanes.forEach((lane: Lane) => {
-      lane.playerCards = [];
-      lane.opponentCards = [];
+      lane = lane.reset();
     });
     this.lanes = [this.lanes[2], this.lanes[0], this.lanes[1]];
+    console.log(this);
+    return cloneDeep(this);
   }
 
   getAdjacentLanes(lane: LaneType): Lane[] {
@@ -232,14 +246,14 @@ export class Board {
     this.player.hand = this.player.hand.filter((card) => card.id !== cardId);
   }
 
-  private shuffleDeck = () => {
+  private shuffleDeck() {
     for (let i = this.deck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [this.deck[i], this.deck[j]] = [this.deck[j], this.deck[i]];
     }
   };
 
-  private dealCards = () => {
+  private dealCards() {
     this.player.hand = [...this.deck.slice(0, 3)];
     this.opponent.hand = [...this.deck.slice(3, 6)];
     this.deck = this.deck.slice(12);

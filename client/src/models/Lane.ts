@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Card } from './Cards/Card';
 import { LaneDeployment } from './LaneDeployment';
 import { LaneType } from './LaneType';
@@ -19,6 +20,16 @@ export class Lane {
     this.laneDeploymentStatus = LaneDeployment.DEFAULT;
     this.playerScore = 0;
     this.opponentScore = 0;
+  }
+
+  reset(): Lane {
+    this.playerCards = [];
+    this.opponentCards = [];
+    this.highlight = false;
+    this.laneDeploymentStatus = LaneDeployment.DEFAULT;
+    this.playerScore = 0;
+    this.opponentScore = 0;
+    return cloneDeep(this);
   }
 
   getLastPlayerCard(): Card | null {

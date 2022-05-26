@@ -47,13 +47,13 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const [board, setBoard] = useState(new Board());
   const [playerTurn, setPlayerTurn] = useState(true);
   const [receivedTargetId, setReceivedTargetId] = useState(-1);
-  const gameId = useRef('');
-  const host = useRef(true);
-  const previousBoard = useRef(new Board());
   const [gameEnded, setGameEnded] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
-  let playerName = useRef('');
-  let opponentName = useRef('');
+  const gameId = useRef('');
+  const host = useRef(true);
+  const playerName = useRef('');
+  const opponentName = useRef('');
+  const previousBoard = useRef(new Board());
 
   const joinGame = useCallback(async (name: string) => {
     connection.current = new HubConnectionBuilder()
@@ -154,9 +154,63 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         host.current = !host.current;
         setPlayerTurn(host.current);
       }
+      if (
+        board.player.hand.length === 0 &&
+        board.opponent.hand.length === 0 &&
+        !board.targeting
+      ) {
+        showRoundEndModalAndRestartGame();
+      }
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const showRoundEndModalAndRestartGame = () => {
+    if (!getIsHost()) {
+      let playerWon = true;
+      if (!declareWinner(board, getIsHost())) {
+        playerWon = false;
+      }
+      let tempBoard = board.nextRound();
+      if (playerWon) {
+        tempBoard.player.score += 6;
+      } else {
+        tempBoard.opponent.score += 6;
+      }
+      setTimeout(() => {
+        if (tempBoard.player.score >= 12 || tempBoard.opponent.score >= 12) {
+          endGame();
+        }
+        updateBoardState(tempBoard);
+        turn(tempBoard, undefined, undefined, true);
+      }, 4000);
+    }
+  };
+
+  const declareWinner = (board: Board, isHost: boolean): boolean => {
+    let playerWin = 0;
+    let opponentWin = 0;
+    board.lanes.forEach((lane) => {
+      if (lane.playerScore >= lane.opponentScore) {
+        if (lane.playerScore === lane.opponentScore) {
+          if (isHost) {
+            playerWin += 1;
+          } else {
+            opponentWin += 1;
+          }
+        } else {
+          playerWin += 1;
+        }
+      } else {
+        opponentWin += 1;
+      }
+    });
+    return playerWin > opponentWin;
+  };
+
+  const won = (): boolean => {
+    return declareWinner(board, host.current);
   };
 
   const closeConnection = async () => {
@@ -254,6 +308,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         gameStarted,
         getPlayerName,
         getOpponentName,
+        won,
       }}
     >
       {children}

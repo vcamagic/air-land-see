@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Card } from './Cards/Card';
 
 export class Player {
@@ -12,5 +13,12 @@ export class Player {
     this.score = 0;
     this.aerodrome = false;
     this.airdrop = false;
+  }
+
+  reset(): Player {
+    this.hand = [];
+    this.aerodrome = false;
+    this.airdrop = false;
+    return cloneDeep(this);
   }
 }
