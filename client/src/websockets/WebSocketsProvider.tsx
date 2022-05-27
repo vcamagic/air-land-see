@@ -56,11 +56,6 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const previousBoard = useRef(new Board());
 
   const joinGame = useCallback(async (name: string) => {
-    connection.current = new HubConnectionBuilder()
-      .withUrl('https://air-land-sea.herokuapp.com/game')
-      .configureLogging(LogLevel.Information)
-      .build();
-
     try {
       connection.current.on('GameFound', async (id: string) => {
         gameId.current = id;
@@ -244,13 +239,13 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     return host.current;
   };
 
-  const getPlayerName = (): string => {
+  const getPlayerName = useCallback(() => {
     return playerName.current;
-  };
+  }, []);
 
-  const getOpponentName = (): string => {
+  const getOpponentName = useCallback(() => {
     return opponentName.current;
-  };
+  }, []);
 
   const endGame = async () => {
     try {
@@ -309,6 +304,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         getPlayerName,
         getOpponentName,
         won,
+        gameId: gameId.current,
       }}
     >
       {children}
