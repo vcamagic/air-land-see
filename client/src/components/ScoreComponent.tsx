@@ -118,7 +118,16 @@ export const ScoreComponent = ({
           <h1 className='w-2/12 text-center'>VS</h1>
           <h1 className='ml-auto w-5/12 text-right'>{`${getOpponentName()}`}</h1>
         </div>
-        <h1>{`${playerScore} - ${opponentScore}`}</h1>
+        <div className='flex'>
+          <div>
+            {board.player.aerodrome}
+            {board.player.airdrop}
+          </div>
+          <h1>{`${playerScore} - ${opponentScore}`}</h1>
+          <div>
+
+          </div>
+        </div>
       </div>
       <button
         onClick={handleForfeitClick}
@@ -126,10 +135,24 @@ export const ScoreComponent = ({
         className={`p-2 rounded-xl mt-3 bg-gray-400 text-white`}
       >
         Forfeit round
+        <div className='text-xs'>
+          Opponent gains{' '}
+          <span className='ml-1 mr-1'>
+            {getIsHost()
+              ? calculateHostScore(board.player.hand.length)
+              : calculateScore(board.player.hand.length)}
+          </span>
+          points
+        </div>
       </button>
       <div className='mt-auto w-full text-center text-white'>
-        <div className='mb-4'>
-          Opponent's hand size: {`${board.opponent.hand.length}`}
+        <div className='mb-4 flex items-center'>
+          <div>Opponent's cards: {`${board.opponent.hand.length}`}</div>
+          {getIsHost() ? (
+            <div className='rounded-full bg-green-400 p-2 ml-auto'>1st</div>
+          ) : (
+            <div className='rounded-full bg-orange-400 p-2 ml-auto'>2nd</div>
+          )}
         </div>
         {playerTurn ? (
           <div className='bg-green-500 text-white animate-bounce rounded-xl w-full'>
