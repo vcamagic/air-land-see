@@ -11,6 +11,10 @@ export const ChatComponent = () => {
   };
 
   const sendMsg = () => {
+    if (isEmptyOrSpaces(typedMsg)) {
+      setTypedMsg('');
+      return;
+    }
     sendMessage(typedMsg);
     setTypedMsg('');
   };
@@ -21,9 +25,16 @@ export const ChatComponent = () => {
     }
   };
 
+  const isEmptyOrSpaces = (str: string) => {
+    return str === null || str.match(/^ *$/) !== null;
+  };
+
   return (
-    <div className='flex-col flex w-64 mb-2 ml-2'>
-      <div className='flex-1 flex-col-reverse flex mb-2 bg-white opacity-80 overflow-y-auto overflow-x-hidden'>
+    <div className='flex-col flex w-64 h-full'>
+      <div
+        className='flex-1 flex-col-reverse flex p-2 mb-2 bg-white overflow-y-scroll overflow-x-hidden'
+        style={{ background: 'rgba(0, 0, 0, 0.6)' }}
+      >
         {messages.map((msg: Message, index) => (
           <div
             key={index}

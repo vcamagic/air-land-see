@@ -8,10 +8,10 @@ interface MessageComponentProps {
 export const MessageComponent = (props: MessageComponentProps) => {
   return (
     <div
-      className={`m-0.5 p-2 rounded-xl text-xs ${
+      className={`my-0.5 p-2 rounded-xl text-xs ${
         props.isReceived
-          ? 'bg-gray-200 text-black text-left'
-          : 'bg-orange-500 text-white text-right'
+          ? 'bg-gray-200 text-black ml-1'
+          : 'bg-orange-500 text-white mr-1'
       }`}
     >
       {props.messageText}
