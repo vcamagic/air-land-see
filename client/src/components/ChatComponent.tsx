@@ -6,6 +6,7 @@ import { MessageComponent } from './MessageComponent';
 export const ChatComponent = () => {
   const [typedMsg, setTypedMsg] = useState('');
   const { sendMessage, messages } = useContext(WebSocketContext);
+  const [focus, setToggleFocus] = useState(false);
 
   const htmlElRef = useRef<HTMLInputElement>(null);
   const setFocus = () => {
@@ -14,7 +15,7 @@ export const ChatComponent = () => {
 
   useEffect(() => {
     setFocus();
-  },[]);
+  }, [focus]);
 
   const handleTypedMsgChange = (e: any) => {
     setTypedMsg(e.currentTarget.value);
@@ -23,6 +24,7 @@ export const ChatComponent = () => {
   const sendMsg = () => {
     sendMessage(typedMsg);
     setTypedMsg('');
+    setToggleFocus(true);
     console.log(htmlElRef.current);
   };
 
@@ -30,16 +32,19 @@ export const ChatComponent = () => {
     if (e.key === 'Enter') {
       sendMsg();
       console.log(htmlElRef.current);
+      setToggleFocus(true);
     }
   };
 
   return (
     <div className='flex-col flex w-64 mb-2 ml-2'>
-      <div className='flex-1 w-full flex-col flex mb-2 bg-white opacity-80 overflow-y-auto'>
+      <div className='flex-1 flex-col-reverse flex mb-2 bg-white opacity-80 overflow-y-auto overflow-x-hidden'>
         {messages.map((msg: Message, index) => (
           <div
             key={index}
-            className={`${msg.isReceived ? 'items-start' : 'items-end'}`}
+            className={`flex-none ${
+              msg.isReceived ? 'self-start' : 'self-end'
+            }`}
           >
             <MessageComponent
               messageText={msg.messageText}
@@ -48,7 +53,7 @@ export const ChatComponent = () => {
           </div>
         ))}
       </div>
-      <div className='flex w-full'>
+      <div className='flex'>
         <input
           className='flex-1 rounded-xl p-2 mr-2'
           type='text'

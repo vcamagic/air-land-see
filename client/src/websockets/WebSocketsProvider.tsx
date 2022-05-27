@@ -119,7 +119,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
 
       connection.current.on('ReceiveMessage', async (message: string) => {
         const msg = new Message(message, true);
-        setMessages((prevState) => [...prevState, msg]);
+        setMessages((prevState) => [msg, ...prevState]);
       });
 
       connection.current.on('GameEnded', () => {
@@ -176,7 +176,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         message
       );
       const msg = new Message(message, false);
-      setMessages((prevState) => [...prevState, msg]);
+      setMessages((prevState) => [msg, ...prevState]);
     } catch (e) {
       console.log(e);
     }
