@@ -17,6 +17,7 @@ import { Redeploy } from '../models/Cards/Sea/Redeploy';
 import { Transport } from '../models/Cards/Sea/Transport';
 import { Lane } from '../models/Lane';
 import WebSocketContext from '../websockets/WebSocketContext';
+import { ChatComponent } from './ChatComponent';
 import { HandComponent } from './HandComponent';
 import { LaneComponent } from './LaneComponent';
 import { ScoreComponent } from './ScoreComponent';
@@ -358,6 +359,7 @@ export const BoardComponent = () => {
           />
         </div>
         <div className='h-31 flex'>
+          <ChatComponent></ChatComponent>
           <HandComponent
             cards={board.player.hand}
             updateClickedCard={updateClickedCard}

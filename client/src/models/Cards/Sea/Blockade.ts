@@ -10,7 +10,7 @@ export class Blockade extends Card {
       'Blockade',
       5,
       LaneType.SEA,
-      'If a card is played in an adjacent theater with 3 or more cards already in it (counting both players cards), DISCARD that card with no effect.',
+      'If a card is played in an adjacent theater with 3 or more cards already in it, DISCARD that card with no effect.',
       '/images/blockade.jpg',
       CardEffect.PERMANENT
     );
