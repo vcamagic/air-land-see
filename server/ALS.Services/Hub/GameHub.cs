@@ -44,7 +44,26 @@ namespace ALS.Services.Hub
 
                 GameRepository.Games.Remove(g);
             }
+        }
 
+        public async Task SendMessageAsync(Guid id, Message message)
+        {
+
+            Game game = GameRepository.Games.FirstOrDefault(game => game.Id == id);
+
+            if (game == null)
+            {
+                return;
+            }
+
+            if (Context.ConnectionId == game.PlayerOne.ConnectionId)
+            {
+                await Clients.Client(game.PlayerTwo.ConnectionId).ReceiveMessage(message.MessageContent);
+            }
+            else
+            {
+                await Clients.Client(game.PlayerOne.ConnectionId).ReceiveMessage(message.MessageContent);
+            }
         }
 
         // public async void Undo(Guid id, AffectedField[] fields)

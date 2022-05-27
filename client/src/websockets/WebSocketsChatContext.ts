@@ -1,9 +1,10 @@
 import React from 'react';
+import { Message } from '../models/Message';
 
 interface WebSocketChatContextProps {
   joinChat: () => Promise<void>;
   sendMessage: (message: string) => void;
-  messages: string[];
+  messages: Message[];
 }
 
 const WebSocketChatContext = React.createContext<WebSocketChatContextProps>({

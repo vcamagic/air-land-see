@@ -6,6 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { Message } from '../models/Message';
 import WebSocketContext from './WebSocketContext';
 import WebSocketChatContext, {
   WebSocketChatProvider,
@@ -18,20 +19,16 @@ interface WebSocketsChatProviderProps {
 export const WebSocketsChatProvider = ({
   children,
 }: WebSocketsChatProviderProps) => {
-  const { getOpponentName, getPlayerName, gameId } =
+  const { connection, getOpponentName, getPlayerName, gameId } =
     useContext(WebSocketContext);
-  const connection = useRef(
-    new HubConnectionBuilder()
-      .withUrl('http://localhost:5237/chat')
-      .configureLogging(LogLevel.Information)
-      .build()
-  );
-  const [messages, setMessages] = useState<string[]>([]);
+
+  const [messages, setMessages] = useState<Message[]>([]);
   const joinChat = useCallback(async () => {
     try {
-      connection.current.on('MessageReceived', async (message: string) => {
-        const msg = `${getOpponentName()}: ${message}`;
+      connection.on('MessageReceived', async (message: string) => {
+        const msg = new Message(message, true);
         setMessages((prevState) => [...prevState, msg]);
+        console.log(msg);
       });
     } catch (e) {
       console.error(e);
@@ -39,8 +36,8 @@ export const WebSocketsChatProvider = ({
   }, [getOpponentName, gameId, getPlayerName]);
 
   const sendMessage = (message: string) => {
-    connection.current.invoke('SendMessageAsync', gameId, message);
-    const msg = `${getPlayerName()}: ${message}`;
+    connection.invoke('SendMessageAsync', gameId, message);
+    const msg = new Message(message, false);
     setMessages((prevState) => [...prevState, msg]);
   };
 

@@ -12,5 +12,6 @@ namespace ALS.Services.Interfaces
         Task EnemyQuit();
         Task RematchRefused();
         Task ReceivePreparedGame(Board board);
+        Task ReceiveMessage(string message);
     }
 }
