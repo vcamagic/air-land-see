@@ -44,6 +44,7 @@ export const NameInputForm = (props: NameInputFormProps) => {
             className='border border-gray-300 text-sm rounded-lg focus:ring-white focus:border-white block w-full p-3'
             onChange={handleNameChange}
             maxLength={10}
+            autoFocus
           />
         </div>
         <button
