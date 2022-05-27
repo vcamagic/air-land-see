@@ -50,6 +50,9 @@ export const BoardComponent = () => {
   };
 
   const updateClickedLane = (lane: Lane, deploy?: boolean) => {
+    if (!playerTurn) {
+      return;
+    }
     if (receivedTargetId !== -1) {
       setTargetedCard(board.getCardById(receivedTargetId)?.card as Card);
     }
@@ -115,6 +118,9 @@ export const BoardComponent = () => {
   };
 
   const updateTargetedCard = (card: Card) => {
+    if (!playerTurn) {
+      return;
+    }
     setTargetedCard(card);
     if (receivedTargetId !== -1) {
       const tempTargetCard = board.getCardById(receivedTargetId)?.card as Card;
@@ -350,7 +356,7 @@ export const BoardComponent = () => {
 
   const Bbbboard = () =>
     gameStarted ? (
-      <div style={{ pointerEvents: `${playerTurn ? 'auto' : 'none'}` }}>
+      <div>
         <div className='flex justify-center h-69'>
           <LaneComponent
             board={board}

@@ -1,4 +1,3 @@
-import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import React from 'react';
 import { Board } from '../models/Board';
 import { Message } from '../models/Message';

@@ -83,6 +83,9 @@ export const ScoreComponent = ({
   };
 
   const handleForfeitClick = () => {
+    if (!playerTurn) {
+      return;
+    }
     const tempBoard = setBoardForNewRound();
     updateBoardState(tempBoard);
     turn(tempBoard, undefined, undefined, true);
@@ -119,7 +122,8 @@ export const ScoreComponent = ({
       </div>
       <button
         onClick={handleForfeitClick}
-        className='p-2 rounded-xl mt-3 bg-gray-400 text-white hover:cursor-pointer'
+        disabled={!playerTurn}
+        className={`p-2 rounded-xl mt-3 bg-gray-400 text-white`}
       >
         Forfeit round
       </button>

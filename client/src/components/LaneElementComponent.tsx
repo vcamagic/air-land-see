@@ -79,9 +79,11 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
 
   const DefaultTemplate = () => (
     <div
-      className={`w-full ${
-        props.lane.highlight ? 'border-4 border-red-400 hover:cursor-pointer' : ''
-      }`}
+      className={`w-full cursor-default ${
+        props.lane.highlight
+          ? 'border-4 border-red-400 hover:cursor-pointer'
+          : ''
+      } `}
       onClick={handleLaneSelection}
     >
       <div>
@@ -122,15 +124,15 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   };
 
   const CanDeploy = () => (
-    <div className='text-white w-full'>
+    <div className='text-white w-full cursor-default'>
       <div
         className={`flex justify-center h-3vh text-white text-xl ${getBannerColor(
-          props.lane.type
+          props.lane.type 
         )} relative w-full`}
       >
         <h1>{`${props.lane.playerScore} - ${getLaneName(props.lane.type)} - ${
-            props.lane.opponentScore
-          }`}</h1>
+          props.lane.opponentScore
+        }`}</h1>
       </div>
       <div className='flex flex-row h-20 w-full hover:cursor-pointer'>
         <div
@@ -150,19 +152,19 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   );
 
   const OnlyImprovise = () => (
-    <div className='hover:cursor-pointer text-white w-full'>
+    <div className='cursor-default text-white w-full'>
       <div
         className={`flex justify-center h-3vh text-white text-xl ${getBannerColor(
           props.lane.type
         )} relative w-full`}
       >
         <h1>{`${props.lane.playerScore} - ${getLaneName(props.lane.type)} - ${
-            props.lane.opponentScore
-          }`}</h1>
+          props.lane.opponentScore
+        }`}</h1>
       </div>
       <div className='flex flex-row h-20 w-full'>
         <div
-          className='flex flex-1 bg-gray-700 grid place-items-center text-sm'
+          className='flex flex-1 bg-gray-700 grid place-items-center text-sm hover:cursor-pointer'
           onClick={handleImproviseClick}
         >
           IMPROVISE

@@ -1,6 +1,6 @@
 import { faBolt, faInfinity } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { Card } from '../models/Cards/Card';
 import { CardEffect } from '../models/Cards/CardEffect';
 import { LaneType } from '../models/LaneType';
@@ -35,16 +35,19 @@ interface CardComponentProps {
 }
 
 export const CardComponent = (props: CardComponentProps) => {
-  const { updateBoardState, board } = useContext(WebSocketContext);
+  const { updateBoardState, board, playerTurn } = useContext(WebSocketContext);
 
   const handleOnClick = () => {
+    if (!playerTurn) {
+      return;
+    }
     updateBoardState(props.card.highlightAvailableLanes(board));
     props.updateClickedCard(props.card);
   };
 
   const FaceUpCard = () => (
     <div
-      className={`w-220 hover:cursor-pointer ${
+      className={`w-220 ${playerTurn ? 'hover:cursor-pointer' : 'hover:cursor-default'} ${
         props.card.highlight ? 'border-2 border-red-400 ' : ''
       }`}
       onClick={props.inHand ? handleOnClick : () => {}}
