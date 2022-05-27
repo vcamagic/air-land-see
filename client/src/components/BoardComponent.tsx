@@ -184,6 +184,9 @@ export const BoardComponent = () => {
         if (!disrupt.playerOwned) {
           turn(tempBoard, disrupt.card.id, true);
         }
+      } else {
+        // Ako je vreme da igrac koji je odigrao disrupt prevrne svoju kartu, a disrupt je face down, setuj steps na 0
+        tempBoard.disruptSteps = 0;
       }
       tempBoard.calculateScores();
       resetTargetId();
