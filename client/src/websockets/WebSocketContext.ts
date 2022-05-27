@@ -1,6 +1,7 @@
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import React from 'react';
 import { Board } from '../models/Board';
+import { Message } from '../models/Message';
 
 interface WebSocketContextProps {
   joinGame: (user: any) => Promise<void>;
@@ -23,8 +24,8 @@ interface WebSocketContextProps {
   getPlayerName: () => string;
   getOpponentName: () => string;
   won: () => boolean;
-  gameId: string;
-  connection: HubConnection;
+  sendMessage: (message: string) => void;
+  messages: Message[];
 }
 const WebSocketContext = React.createContext<WebSocketContextProps>({
   joinGame: (user: any) => new Promise((resolve) => resolve()),
@@ -47,10 +48,8 @@ const WebSocketContext = React.createContext<WebSocketContextProps>({
   getPlayerName: () => '',
   getOpponentName: () => '',
   won: () => false,
-  gameId: '',
-  connection: new HubConnectionBuilder()
-      .withUrl('https://air-land-sea.herokuapp.com/game')
-      .build()
+  sendMessage: (message: string) => {},
+  messages: [],
 });
 export const WebSocketConsumer = WebSocketContext.Consumer;
 export const WebSocketProv = WebSocketContext.Provider;

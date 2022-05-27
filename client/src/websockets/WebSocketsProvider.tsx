@@ -5,6 +5,7 @@ import { makeBoardInstance } from '../helpers';
 import { Board } from '../models/Board';
 import { Card } from '../models/Cards/Card';
 import { Lane } from '../models/Lane';
+import { Message } from '../models/Message';
 import { ServerBoard } from '../models/ServerBoard';
 import { WebSocketProv } from './WebSocketContext';
 
@@ -49,6 +50,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const [receivedTargetId, setReceivedTargetId] = useState(-1);
   const [gameEnded, setGameEnded] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
   const gameId = useRef('');
   const host = useRef(true);
   const playerName = useRef('');
@@ -115,6 +117,11 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         }
       );
 
+      connection.current.on('ReceiveMessage', async (message: string) => {
+        const msg = new Message(message, true);
+        setMessages((prevState) => [...prevState, msg]);
+      });
+
       connection.current.on('GameEnded', () => {
         setGameEnded(true);
       });
@@ -158,6 +165,20 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       }
     } catch (e) {
       console.error(e);
+    }
+  };
+
+  const sendMessage = async (message: string) => {
+    try {
+      await connection.current.invoke(
+        'SendMessageAsync',
+        gameId.current,
+        message
+      );
+      const msg = new Message(message, false);
+      setMessages((prevState) => [...prevState, msg]);
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -304,8 +325,8 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         getPlayerName,
         getOpponentName,
         won,
-        gameId: gameId.current,
-        connection: connection.current,
+        sendMessage,
+        messages,
       }}
     >
       {children}

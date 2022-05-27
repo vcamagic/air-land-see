@@ -1,18 +1,18 @@
 import React, { useContext, useState } from 'react';
 import { Message } from '../models/Message';
-import WebSocketsChatContext from '../websockets/WebSocketsChatContext';
+import WebSocketContext from '../websockets/WebSocketContext';
 import { MessageComponent } from './MessageComponent';
 
 export const ChatComponent = () => {
-  const { messages, sendMessage } = useContext(WebSocketsChatContext);
   const [typedMsg, setTypedMsg] = useState('');
-
+  const { sendMessage, messages } = useContext(WebSocketContext);
   const handleTypedMsgChange = (e: any) => {
     setTypedMsg(e.currentTarget.value);
   };
 
   const sendMsg = () => {
     sendMessage(typedMsg);
+    setTypedMsg('');
   };
 
   const checkForEnter = (e: any) => {
@@ -24,8 +24,11 @@ export const ChatComponent = () => {
   return (
     <div className='flex-col flex w-64 mb-2 ml-2'>
       <div className='flex-1 w-full flex-col flex mb-2 bg-white opacity-80 overflow-y-auto'>
-        {messages.map((msg: Message) => (
-          <div className={`${msg.isReceived ? 'items-start' : 'items-end'}`}>
+        {messages.map((msg: Message, index) => (
+          <div
+            key={index}
+            className={`${msg.isReceived ? 'items-start' : 'items-end'}`}
+          >
             <MessageComponent
               messageText={msg.messageText}
               isReceived={msg.isReceived}

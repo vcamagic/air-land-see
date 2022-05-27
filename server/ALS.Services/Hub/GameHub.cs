@@ -46,7 +46,7 @@ namespace ALS.Services.Hub
             }
         }
 
-        public async Task SendMessageAsync(Guid id, Message message)
+        public async void SendMessageAsync(Guid id, string message)
         {
 
             Game game = GameRepository.Games.FirstOrDefault(game => game.Id == id);
@@ -58,11 +58,11 @@ namespace ALS.Services.Hub
 
             if (Context.ConnectionId == game.PlayerOne.ConnectionId)
             {
-                await Clients.Client(game.PlayerTwo.ConnectionId).ReceiveMessage(message.MessageContent);
+                await Clients.Client(game.PlayerTwo.ConnectionId).ReceiveMessage(message);
             }
             else
             {
-                await Clients.Client(game.PlayerOne.ConnectionId).ReceiveMessage(message.MessageContent);
+                await Clients.Client(game.PlayerOne.ConnectionId).ReceiveMessage(message);
             }
         }
 
