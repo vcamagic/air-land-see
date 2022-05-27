@@ -359,16 +359,19 @@ export const BoardComponent = () => {
           />
         </div>
         <div className='h-31 flex'>
-          <ChatComponent></ChatComponent>
-          <HandComponent
-            cards={board.player.hand}
-            updateClickedCard={updateClickedCard}
-          />
           <div className='flex-none'>
             <ScoreComponent
               playerScore={board.player.score}
               opponentScore={board.opponent.score}
             />
+          </div>
+          <HandComponent
+            cards={board.player.hand}
+            updateClickedCard={updateClickedCard}
+          />
+
+          <div className='ml-4 mr-2 mb-2'>
+            <ChatComponent></ChatComponent>
           </div>
         </div>
       </div>

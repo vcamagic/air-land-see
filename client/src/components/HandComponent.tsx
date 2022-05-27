@@ -10,7 +10,7 @@ interface HandComponentProps {
 export const HandComponent = (props: HandComponentProps) => {
   return (
     <>
-      <div className='flex justify-between grow ml-4'>
+      <div className='flex justify-between grow'>
         {props.cards.map((card) => (
           <CardComponent
             key={card.id}
