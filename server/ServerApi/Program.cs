@@ -33,6 +33,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapHub<GameHub>("/game");
+app.MapHub<ChatHub>("/chat");
 
 app.UseCors(AllowSpecificOrigins);
 
