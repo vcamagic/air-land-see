@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Message } from '../models/Message';
 import WebSocketContext from '../websockets/WebSocketContext';
 import { MessageComponent } from './MessageComponent';
@@ -6,6 +6,16 @@ import { MessageComponent } from './MessageComponent';
 export const ChatComponent = () => {
   const [typedMsg, setTypedMsg] = useState('');
   const { sendMessage, messages } = useContext(WebSocketContext);
+
+  const htmlElRef = useRef<HTMLInputElement>(null);
+  const setFocus = () => {
+    htmlElRef.current && htmlElRef.current.focus();
+  };
+
+  useEffect(() => {
+    setFocus();
+  },[]);
+
   const handleTypedMsgChange = (e: any) => {
     setTypedMsg(e.currentTarget.value);
   };
@@ -13,11 +23,13 @@ export const ChatComponent = () => {
   const sendMsg = () => {
     sendMessage(typedMsg);
     setTypedMsg('');
+    console.log(htmlElRef.current);
   };
 
   const checkForEnter = (e: any) => {
     if (e.key === 'Enter') {
       sendMsg();
+      console.log(htmlElRef.current);
     }
   };
 
@@ -43,6 +55,7 @@ export const ChatComponent = () => {
           value={typedMsg}
           onChange={handleTypedMsgChange}
           onKeyUp={checkForEnter}
+          ref={htmlElRef}
         ></input>
         <button
           onClick={sendMsg}
