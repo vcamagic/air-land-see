@@ -233,7 +233,6 @@ export const BoardComponent = () => {
       } else {
         turn(boardTemp);
       }
-      updateBoardState(boardTemp);
     }
     if (card instanceof Ambush) {
       boardTemp = (card as Ambush).deploy(board, lane.type);
@@ -241,26 +240,21 @@ export const BoardComponent = () => {
       if (temp === null || !temp.card.isFaceUp()) {
         turn(boardTemp);
       }
-      boardTemp.calculateScores();
-      updateBoardState(boardTemp);
     }
     if (card instanceof Maneuver) {
       boardTemp = (card as Maneuver).deploy(board, lane.type);
       const temp = boardTemp.getCardById(card.id);
-      if (temp !== null && temp.card.isFaceUp()) {
-        if (!card.selectTargets(boardTemp, lane.type).targeting) {
-          turn(boardTemp);
-        }
-      } else {
+      if (
+        !(temp !== null && temp.card.isFaceUp()) ||
+        (temp !== null &&
+          temp.card.isFaceUp() &&
+          !card.selectTargets(boardTemp, lane.type).targeting)
+      ) {
         turn(boardTemp);
       }
-      boardTemp.calculateScores();
-      updateBoardState(boardTemp);
     }
     if (card instanceof CoverFire) {
       boardTemp = (card as CoverFire).deploy(board, lane.type);
-      boardTemp.calculateScores();
-      updateBoardState(boardTemp);
       turn(boardTemp);
     }
     if (card instanceof Disrupt) {
@@ -279,39 +273,27 @@ export const BoardComponent = () => {
       } else {
         turn(boardTemp);
       }
-      boardTemp.calculateScores();
-      updateBoardState(boardTemp);
     }
     if (card instanceof Heavy) {
       boardTemp = (card as Heavy).deploy(board, lane.type);
-      boardTemp.calculateScores();
-      updateBoardState(boardTemp);
-      turn(boardTemp); //play posle flip fieste se desi samo lokalno, da li se uopste posalje, i sta
+      turn(boardTemp);
     }
     if (card instanceof Support) {
       boardTemp = (card as Support).deploy(board, lane.type);
       audio.play();
-      boardTemp.calculateScores();
-      updateBoardState(boardTemp);
       turn(boardTemp);
     }
     if (card instanceof AirDrop) {
       boardTemp = (card as AirDrop).deploy(board, lane.type);
       audio.play();
-      boardTemp.calculateScores();
-      updateBoardState(boardTemp);
       turn(boardTemp);
     }
     if (card instanceof Aerodrome) {
       boardTemp = (card as Aerodrome).deploy(board, lane.type);
-      boardTemp.calculateScores();
-      updateBoardState(boardTemp);
       turn(boardTemp);
     }
     if (card instanceof Containment) {
       boardTemp = (card as Containment).deploy(board, lane.type);
-      boardTemp.calculateScores();
-      updateBoardState(boardTemp);
       turn(boardTemp);
     }
     if (card instanceof Transport) {
@@ -320,34 +302,29 @@ export const BoardComponent = () => {
       if (temp === null || !temp.card.isFaceUp()) {
         turn(boardTemp);
       }
-      boardTemp.calculateScores();
-      updateBoardState(boardTemp);
     }
     if (card instanceof Escalation) {
       boardTemp = (card as Escalation).deploy(board, lane.type);
-      boardTemp.calculateScores();
-      updateBoardState(boardTemp);
       turn(boardTemp);
     }
     if (card instanceof Redeploy) {
       boardTemp = (card as Redeploy).deploy(board, lane.type);
       const temp = boardTemp.getCardById(card.id);
-      if (temp !== null && temp.card.isFaceUp()) {
-        if (!card.selectTargets(boardTemp).targeting) {
-          turn(boardTemp);
-        }
-      } else {
+      if (
+        !(temp !== null && temp.card.isFaceUp()) ||
+        (temp !== null &&
+          temp.card.isFaceUp() &&
+          !card.selectTargets(boardTemp).targeting)
+      ) {
         turn(boardTemp);
       }
-      boardTemp.calculateScores();
-      updateBoardState(boardTemp);
     }
     if (card instanceof Blockade) {
       boardTemp = (card as Blockade).deploy(board, lane.type);
-      boardTemp.calculateScores();
-      updateBoardState(boardTemp);
       turn(boardTemp);
     }
+    boardTemp.calculateScores();
+    updateBoardState(boardTemp);
   };
 
   useEffect(() => {
