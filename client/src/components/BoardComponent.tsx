@@ -244,11 +244,10 @@ export const BoardComponent = () => {
     if (card instanceof Maneuver) {
       boardTemp = (card as Maneuver).deploy(board, lane.type);
       const temp = boardTemp.getCardById(card.id);
+      const isFaceUp = temp !== null && temp.card.isFaceUp();
       if (
-        !(temp !== null && temp.card.isFaceUp()) ||
-        (temp !== null &&
-          temp.card.isFaceUp() &&
-          !card.selectTargets(boardTemp, lane.type).targeting)
+        !isFaceUp ||
+        (isFaceUp && !card.selectTargets(boardTemp, lane.type).targeting)
       ) {
         turn(boardTemp);
       }
@@ -310,12 +309,8 @@ export const BoardComponent = () => {
     if (card instanceof Redeploy) {
       boardTemp = (card as Redeploy).deploy(board, lane.type);
       const temp = boardTemp.getCardById(card.id);
-      if (
-        !(temp !== null && temp.card.isFaceUp()) ||
-        (temp !== null &&
-          temp.card.isFaceUp() &&
-          !card.selectTargets(boardTemp).targeting)
-      ) {
+      const isFaceUp = temp !== null && temp.card.isFaceUp();
+      if (!isFaceUp || (isFaceUp && !card.selectTargets(boardTemp).targeting)) {
         turn(boardTemp);
       }
     }
