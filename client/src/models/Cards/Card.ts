@@ -78,6 +78,7 @@ export class Card {
     if(board.survivesContainment() && board.survivesBlockade(selectedLane)){
       board.getLane(selectedLane).addPlayerCard(this);
     }
+    board.player.airdrop = false;
     board.removeCardFromPlayerHand(this.id);
     return cloneDeep(board);
   }
