@@ -122,6 +122,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
           }
           setReceivedTargetId(targetId);
           console.log('OPPONENT TURN', temp);
+          msgReceivedAudio.play();
         }
       );
 
