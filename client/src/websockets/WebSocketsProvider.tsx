@@ -57,7 +57,9 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const opponentName = useRef('');
   const previousBoard = useRef(new Board());
   const msgReceivedAudio = new Audio('/MsgNotif.mp3');
+  const yourTurnAudio = new Audio('/yourturn.mp3');
   msgReceivedAudio.volume = 0.2;
+  yourTurnAudio.volume = 0.07;
 
   const savedUserInput = useRef('');
 
@@ -91,6 +93,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
             setPlayerTurn(false);
           }
           setGameStarted(true);
+          yourTurnAudio.play();
         }
       );
 
@@ -122,7 +125,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
           }
           setReceivedTargetId(targetId);
           console.log('OPPONENT TURN', temp);
-          msgReceivedAudio.play();
+          yourTurnAudio.play();
         }
       );
 
@@ -338,7 +341,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         sendMessage,
         messages,
         savedUserInput: savedUserInput.current,
-        changeUserInput
+        changeUserInput,
       }}
     >
       {children}

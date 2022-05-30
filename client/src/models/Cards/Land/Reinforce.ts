@@ -12,7 +12,7 @@ export class Reinforce extends Card {
       'Reinforce',
       1,
       LaneType.LAND,
-      'Look at the top card of the deck. You may play it facedown to an adjacent theater.',
+      'Place a facedown card from top of the deck in adjacent theater.',
       '/images/reinforcer.jpg',
       CardEffect.INSTANT
     );
