@@ -56,6 +56,8 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const playerName = useRef('');
   const opponentName = useRef('');
   const previousBoard = useRef(new Board());
+  const msgReceivedAudio = new Audio('/MsgNotif.mp3');
+  msgReceivedAudio.volume = 0.2;
 
   const joinGame = useCallback(async (name: string) => {
     try {
@@ -120,6 +122,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       connection.current.on('ReceiveMessage', async (message: string) => {
         const msg = new Message(message, true);
         setMessages((prevState) => [msg, ...prevState]);
+        msgReceivedAudio.play();
       });
 
       connection.current.on('GameEnded', () => {
