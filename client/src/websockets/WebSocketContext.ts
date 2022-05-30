@@ -25,6 +25,8 @@ interface WebSocketContextProps {
   won: () => boolean;
   sendMessage: (message: string) => void;
   messages: Message[];
+  savedUserInput: string;
+  changeUserInput: (newVal: string) => void;
 }
 const WebSocketContext = React.createContext<WebSocketContextProps>({
   joinGame: (user: any) => new Promise((resolve) => resolve()),
@@ -49,6 +51,8 @@ const WebSocketContext = React.createContext<WebSocketContextProps>({
   won: () => false,
   sendMessage: (message: string) => {},
   messages: [],
+  savedUserInput: '',
+  changeUserInput: (newVal: string) => {},
 });
 export const WebSocketConsumer = WebSocketContext.Consumer;
 export const WebSocketProv = WebSocketContext.Provider;

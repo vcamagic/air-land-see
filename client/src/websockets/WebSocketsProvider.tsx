@@ -59,6 +59,12 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const msgReceivedAudio = new Audio('/MsgNotif.mp3');
   msgReceivedAudio.volume = 0.2;
 
+  const savedUserInput = useRef('');
+
+  const changeUserInput = (newVal: string) => {
+    savedUserInput.current = newVal;
+  };
+
   const joinGame = useCallback(async (name: string) => {
     try {
       connection.current.on('GameFound', async (id: string) => {
@@ -330,6 +336,8 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         won,
         sendMessage,
         messages,
+        savedUserInput: savedUserInput.current,
+        changeUserInput
       }}
     >
       {children}

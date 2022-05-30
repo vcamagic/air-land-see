@@ -5,7 +5,8 @@ import { MessageComponent } from './MessageComponent';
 
 export const ChatComponent = () => {
   const [typedMsg, setTypedMsg] = useState('');
-  const { sendMessage, messages } = useContext(WebSocketContext);
+  const { sendMessage, messages, savedUserInput, changeUserInput } =
+    useContext(WebSocketContext);
   const [focus, setToggleFocus] = useState(false);
 
   const htmlElRef = useRef<HTMLInputElement>(null);
@@ -17,8 +18,13 @@ export const ChatComponent = () => {
     setFocus();
   }, [focus]);
 
+  useEffect(() => {
+    setTypedMsg(savedUserInput);
+  }, [messages, savedUserInput]);
+
   const handleTypedMsgChange = (e: any) => {
     setTypedMsg(e.currentTarget.value);
+    changeUserInput(e.currentTarget.value);
   };
 
   const sendMsg = () => {
@@ -29,7 +35,7 @@ export const ChatComponent = () => {
     sendMessage(typedMsg);
     setTypedMsg('');
     setToggleFocus(true);
-    console.log(htmlElRef.current);
+    changeUserInput('');
   };
 
   const checkForEnter = (e: any) => {
