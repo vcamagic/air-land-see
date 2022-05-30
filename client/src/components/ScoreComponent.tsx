@@ -160,7 +160,7 @@ export const ScoreComponent = ({
           </div>
         ) : (
           <div className='bg-red-500 text-white rounded-xl w-full'>
-            <h1 className='p-2'>OPPONENT MOVE</h1>
+            <h1 className='p-2'>OPPONENT'S MOVE</h1>
           </div>
         )}
       </div>
