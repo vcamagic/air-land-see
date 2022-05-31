@@ -92,7 +92,9 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
         <img
           src={`/images/${getLaneName(props.lane.type).toLowerCase()}.jpg`}
           alt='theater'
-          className='h-20 w-full'
+          className={`h-20 w-full object-cover ${
+            props.lane.type === LaneType.LAND ? 'object-bottom' : 'object-left'
+          }`}
         />
       </div>
     </div>

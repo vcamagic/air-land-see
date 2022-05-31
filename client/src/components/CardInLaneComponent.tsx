@@ -108,7 +108,7 @@ export const CardInLaneComponent = ({
         </div>
         <div className='text-center p-3 text-xs'>{card.description}</div>
       </div>
-      <img src={card.img} alt='card' className='w-180' />
+      <img src={card.img} alt='card' className='w-180 object-cover' />
     </div>
   );
 
@@ -126,7 +126,7 @@ export const CardInLaneComponent = ({
       }`}
       style={{ right: right, zIndex: zIndex }}
     >
-      <img src={card.img} alt='card' className=' w-180' />
+      <img src={card.img} alt='card' className='w-180 object-cover' />
       <div
         className={`${getBannerColor(
           card.type

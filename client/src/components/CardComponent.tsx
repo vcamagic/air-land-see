@@ -76,7 +76,11 @@ export const CardComponent = (props: CardComponentProps) => {
           </p>
         </div>
       </div>
-      <img src={props.card.img} alt='card' className='h-3/5 w-full' />
+      <img
+        src={props.card.img}
+        alt='card'
+        className='h-3/5 w-full object-cover'
+      />
     </div>
   );
 
