@@ -356,7 +356,10 @@ export const BoardComponent = () => {
         </div>
       </div>
     ) : (
-      <div className='p-3 text-7xl text-white grid place-items-center h-screen'>
+      <div
+        className='p-3 text-7xl text-white grid place-items-center h-screen'
+        style={{ background: 'rgba(0, 0, 0, 0.6)' }}
+      >
         Looking for opponent...
       </div>
     );

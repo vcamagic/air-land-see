@@ -28,7 +28,10 @@ export const NameInputForm = (props: NameInputFormProps) => {
   };
 
   return (
-    <div className='grid place-items-center h-screen'>
+    <div
+      className='grid place-items-center h-screen'
+      style={{ background: 'rgba(0, 0, 0, 0.6)' }}
+    >
       <form onSubmit={handleNameSubmit} className='w-247'>
         <div className='mb-3'>
           <label

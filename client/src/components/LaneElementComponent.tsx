@@ -127,7 +127,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
           props.lane.opponentScore
         }`}</h1>
       </div>
-      <div className='flex flex-row h-20 w-full hover:cursor-pointer'>
+      <div className='flex flex-col h-20 w-full hover:cursor-pointer'>
         <div
           className='flex flex-1 bg-green-600 grid place-items-center text-sm'
           onClick={handleDeployClick}
