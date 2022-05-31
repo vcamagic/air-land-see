@@ -22,11 +22,13 @@ interface WebSocketContextProps {
   gameStarted: boolean;
   getPlayerName: () => string;
   getOpponentName: () => string;
-  won: () => boolean;
+  getPopupText: () => string;
   sendMessage: (message: string) => void;
   messages: Message[];
   savedUserInput: string;
   changeUserInput: (newVal: string) => void;
+  concede: () => void;
+  open: boolean;
 }
 const WebSocketContext = React.createContext<WebSocketContextProps>({
   joinGame: (user: any) => new Promise((resolve) => resolve()),
@@ -48,11 +50,13 @@ const WebSocketContext = React.createContext<WebSocketContextProps>({
   gameStarted: false,
   getPlayerName: () => '',
   getOpponentName: () => '',
-  won: () => false,
+  getPopupText: () => '',
   sendMessage: (message: string) => {},
   messages: [],
   savedUserInput: '',
   changeUserInput: (newVal: string) => {},
+  concede: () => {},
+  open: false,
 });
 export const WebSocketConsumer = WebSocketContext.Consumer;
 export const WebSocketProv = WebSocketContext.Provider;

@@ -165,18 +165,18 @@ namespace ALS.Services.Hub
             }
         }
 
-        public async void Concede(Guid id)
+        public async void Concede(Guid id, Board board)
         {
             Game g = GameRepository.Games.FirstOrDefault(x => x.Id == id);
             if (g != null)
             {
                 if (g.PlayerOne != null && g.PlayerOne.ConnectionId != Context.ConnectionId)
                 {
-                    await Clients.Client(g.PlayerOne.ConnectionId).EnemyConcede();
+                    await Clients.Client(g.PlayerOne.ConnectionId).EnemyConcede(board);
                 }
                 if (g.PlayerTwo != null && g.PlayerTwo.ConnectionId != Context.ConnectionId)
                 {
-                    await Clients.Client(g.PlayerTwo.ConnectionId).EnemyConcede();
+                    await Clients.Client(g.PlayerTwo.ConnectionId).EnemyConcede(board);
                 }
             }
         }

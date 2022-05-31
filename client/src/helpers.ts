@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Board } from './models/Board';
 import { Aerodrome } from './models/Cards/Air/Aerodrome';
 import { AirDrop } from './models/Cards/Air/AirDrop';
@@ -90,3 +91,101 @@ const makeCardInstance = (card: ServerCard): Card => {
   returnCard.faceUp = card.faceUp;
   return returnCard;
 };
+
+export const calculateHostScore = (cardsLeft: number): number => {
+  return cardsLeft === 0
+    ? 6
+    : cardsLeft === 1
+    ? 4
+    : cardsLeft >= 2 && cardsLeft <= 3
+    ? 3
+    : 2;
+};
+
+export const calculateScore = (cardsLeft: number): number => {
+  return cardsLeft >= 0 && cardsLeft <= 1
+    ? 6
+    : cardsLeft === 2
+    ? 4
+    : cardsLeft >= 3 && cardsLeft <= 4
+    ? 3
+    : 2;
+};
+
+export const invertBoardState = (board: Board): Board => {
+  let temp: Board = new Board();
+  temp.targeting = board.targeting;
+  temp.disruptSteps = board.disruptSteps;
+  temp.deck = board.deck;
+  [temp.player, temp.opponent] = [board.opponent, board.player];
+  board.lanes.forEach((lane: Lane, index: number) => {
+    [
+      temp.lanes[index].playerCards,
+      temp.lanes[index].opponentCards,
+      temp.lanes[index].playerScore,
+      temp.lanes[index].opponentScore,
+      temp.lanes[index].type,
+      temp.lanes[index].highlight,
+    ] = [
+      lane.opponentCards,
+      lane.playerCards,
+      lane.opponentScore,
+      lane.playerScore,
+      lane.type,
+      lane.highlight,
+    ];
+  });
+  return temp;
+};
+
+export const highlightChanges = (originalBoard: Board, newBoard: Board): Board => {
+    newBoard.lanes.forEach((lane: Lane, index: number) => {
+      lane.playerCards.forEach((card: Card, cardIndex: number) => {
+        const originalCard = originalBoard.lanes[index].playerCards[cardIndex];
+        if (
+          originalCard === undefined ||
+          (originalCard.isFaceUp() !== card.isFaceUp() &&
+            originalCard.id === card.id)
+        ) {
+          card.highlightChange = true;
+        } else {
+          card.highlightChange = false;
+        }
+      });
+      lane.opponentCards.forEach((card: Card, cardIndex: number) => {
+        const originalCard =
+          originalBoard.lanes[index].opponentCards[cardIndex];
+        if (
+          originalCard === undefined ||
+          (originalCard.isFaceUp() !== card.isFaceUp() &&
+            originalCard.id === card.id)
+        ) {
+          card.highlightChange = true;
+        } else {
+          card.highlightChange = false;
+        }
+      });
+    });
+    return cloneDeep(newBoard);
+  };
+
+  export const declareWinner = (board: Board, isHost: boolean): boolean => {
+    let playerWin = 0;
+    let opponentWin = 0;
+    board.lanes.forEach((lane) => {
+      if (lane.playerScore >= lane.opponentScore) {
+        if (lane.playerScore === lane.opponentScore) {
+          if (isHost) {
+            playerWin += 1;
+          } else {
+            opponentWin += 1;
+          }
+        } else {
+          playerWin += 1;
+        }
+      } else {
+        opponentWin += 1;
+      }
+    });
+    return playerWin > opponentWin;
+  };

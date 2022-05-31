@@ -5,26 +5,7 @@ import WebSocketContext from '../websockets/WebSocketContext';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-
-const calculateHostScore = (cardsLeft: number): number => {
-  return cardsLeft === 0
-    ? 6
-    : cardsLeft === 1
-    ? 4
-    : cardsLeft >= 2 && cardsLeft <= 3
-    ? 3
-    : 2;
-};
-
-const calculateScore = (cardsLeft: number): number => {
-  return cardsLeft >= 0 && cardsLeft <= 1
-    ? 6
-    : cardsLeft === 2
-    ? 4
-    : cardsLeft >= 3 && cardsLeft <= 4
-    ? 3
-    : 2;
-};
+import { calculateHostScore, calculateScore } from '../helpers';
 
 interface ScoreComponentProps {
   playerScore: number;
@@ -38,57 +19,21 @@ export const ScoreComponent = ({
   const {
     board,
     getIsHost,
-    turn,
-    updateBoardState,
-    endGame,
     playerTurn,
     getPlayerName,
     getOpponentName,
-    won,
+    getPopupText,
+    concede,
+    open,
   } = useContext(WebSocketContext);
 
-  const [open, setOpen] = React.useState(false);
-  useEffect(() => {
-    if (
-      board.player.hand.length === 0 &&
-      board.opponent.hand.length === 0 &&
-      !board.targeting
-    ) {
-      setOpen(true);
-      setTimeout(() => {
-        setOpen(false);
-      }, 4000);
-    }
-  }, [board]);
-
-  const setBoardForNewRound = (): Board => {
-    let tempBoard = new Board(board.lanes[2].type - 1);
-    const playerHand = cloneDeep(tempBoard.player.hand);
-    const opponentHand = cloneDeep(tempBoard.opponent.hand);
-    tempBoard.player = cloneDeep(board.player);
-    tempBoard.player.aerodrome = false;
-    tempBoard.player.airdrop = false;
-    tempBoard.opponent = cloneDeep(board.opponent);
-    tempBoard.opponent.aerodrome = false;
-    tempBoard.opponent.airdrop = false;
-    tempBoard.opponent.score += getIsHost()
-      ? calculateHostScore(board.player.hand.length)
-      : calculateScore(board.player.hand.length);
-
-    if (tempBoard.opponent.score >= 12) endGame();
-    tempBoard.player.hand = playerHand;
-    tempBoard.opponent.hand = opponentHand;
-
-    return tempBoard;
-  };
+  useEffect(() => {}, [board]);
 
   const handleForfeitClick = () => {
     if (!playerTurn) {
       return;
     }
-    const tempBoard = setBoardForNewRound();
-    updateBoardState(tempBoard);
-    turn(tempBoard, undefined, undefined, true);
+    concede();
   };
 
   const style = {
@@ -108,7 +53,7 @@ export const ScoreComponent = ({
       <Modal open={open}>
         <Box sx={style}>
           <Typography sx={{ mt: 2, mb: 2, textAlign: 'center' }}>
-            {won() ? 'You won the round!' : 'Opponent won the round!'}
+            {getPopupText()}
           </Typography>
         </Box>
       </Modal>
@@ -124,9 +69,7 @@ export const ScoreComponent = ({
             {board.player.airdrop}
           </div>
           <h1>{`${playerScore} - ${opponentScore}`}</h1>
-          <div>
-
-          </div>
+          <div></div>
         </div>
       </div>
       <button

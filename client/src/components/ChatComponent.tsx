@@ -3,7 +3,7 @@ import { Message } from '../models/Message';
 import WebSocketContext from '../websockets/WebSocketContext';
 import { MessageComponent } from './MessageComponent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane  } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
 export const ChatComponent = () => {
   const [typedMsg, setTypedMsg] = useState('');
@@ -85,7 +85,7 @@ export const ChatComponent = () => {
           onClick={sendMsg}
           className='flex-initial w-14 rounded-xl bg-orange-500 text-white p-2'
         >
-          <FontAwesomeIcon icon={faPaperPlane}/>
+          <FontAwesomeIcon icon={faPaperPlane} />
         </button>
       </div>
     </div>

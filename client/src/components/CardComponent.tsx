@@ -47,9 +47,9 @@ export const CardComponent = (props: CardComponentProps) => {
 
   const FaceUpCard = () => (
     <div
-      className={`w-220 ${playerTurn ? 'hover:cursor-pointer' : 'hover:cursor-default'} ${
-        props.card.highlight ? 'border-2 border-red-400 ' : ''
-      }`}
+      className={`w-220 rounded ${
+        playerTurn ? 'hover:cursor-pointer' : 'hover:cursor-default'
+      } ${props.card.highlight ? 'border-2 border-red-400 ' : ''}`}
       onClick={props.inHand ? handleOnClick : () => {}}
     >
       <div className={`flex ${getBannerColor(props.card.type)} p-2 h-2/5`}>
