@@ -20,11 +20,11 @@ const getLaneName = (type: LaneType) => {
 const getBannerColor = (laneType: LaneType): string => {
   switch (laneType) {
     case LaneType.AIR:
-      return 'bg-cyan-300';
+      return 'bg-sky-300';
     case LaneType.LAND:
-      return 'bg-orange-500';
+      return 'bg-orange-300';
     case LaneType.SEA:
-      return 'bg-emerald-300';
+      return 'bg-teal-500';
   }
 };
 
@@ -78,14 +78,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   );
 
   const DefaultTemplate = () => (
-    <div
-      className={`w-full cursor-default ${
-        props.lane.highlight
-          ? 'border-4 border-red-400 hover:cursor-pointer'
-          : ''
-      } `}
-      onClick={handleLaneSelection}
-    >
+    <div className='w-full' onClick={handleLaneSelection}>
       <div>
         <div
           className={`flex justify-center h-3vh text-white text-xl ${getBannerColor(
@@ -127,7 +120,7 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
     <div className='text-white w-full cursor-default'>
       <div
         className={`flex justify-center h-3vh text-white text-xl ${getBannerColor(
-          props.lane.type 
+          props.lane.type
         )} relative w-full`}
       >
         <h1>{`${props.lane.playerScore} - ${getLaneName(props.lane.type)} - ${
@@ -187,11 +180,17 @@ export const LaneElementComponent = (props: LaneElementComponentInterface) => {
   }
 
   return (
-    <div className='flex w-full h-23'>
+    <div className='flex w-full h-21 my-0.5'>
       <div className='w-46%'>
         <PlayerCardStack />
       </div>
-      <div className='w-8%'>
+      <div
+        className={`w-8% mx-0.5 rounded overflow-hidden cursor-default ${
+          props.lane.highlight
+            ? 'outline outline-4 outline-red-600 hover:cursor-pointer'
+            : ''
+        } `}
+      >
         <Template />
       </div>
       <div className='w-46%'>

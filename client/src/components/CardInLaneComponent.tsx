@@ -21,11 +21,22 @@ const getCardIcon = (cardEffect: CardEffect) => {
 const getBannerColor = (laneType: LaneType): string => {
   switch (laneType) {
     case LaneType.AIR:
-      return 'bg-cyan-300';
+      return 'bg-sky-300';
     case LaneType.LAND:
-      return 'bg-orange-500';
+      return 'bg-orange-300';
     case LaneType.SEA:
-      return 'bg-emerald-300';
+      return 'bg-teal-500';
+  }
+};
+
+const getBorderColor = (laneType: LaneType): string => {
+  switch (laneType) {
+    case LaneType.AIR:
+      return 'bg-sky-200';
+    case LaneType.LAND:
+      return 'border-orange-200';
+    case LaneType.SEA:
+      return 'border-teal-400';
   }
 };
 
@@ -70,90 +81,67 @@ export const CardInLaneComponent = ({
   const RightSide = () => (
     <div
       onClick={cardInLaneClick}
-      className={`flex absolute  h-23vh ${
+      className={`flex absolute h-23vh rounded overflow-hidden border-4 ${getBannerColor(
+        card.type
+      )} ${
         card.highlight
-          ? 'border-4 border-red-400 hover:cursor-pointer'
+          ? 'border-red-600 hover:cursor-pointer'
           : card.highlightChange
-          ? 'border-4 border-blue-400'
-          : ''
+          ? 'border-indigo-600'
+          : getBorderColor(card.type)
       }`}
       style={{ left: right, zIndex: zIndex }}
     >
       <div
-        className={`${getBannerColor(card.type)} w-180 border-r-2 border-white`}
+        className={`${getBannerColor(
+          card.type
+        )} w-180 border-r-2 border-white text-white font-bold`}
       >
         <div className={`flex justify-center p-1`}>
-          <h1 className='text-white text-2xl'>{card.power}</h1>
+          <h1 className='text-white text-4xl mt-2'>{card.power}</h1>
         </div>
-        <div
-          className={
-            card.effect === CardEffect.PERMANENT
-              ? 'flex justify-center text-white'
-              : 'flex justify-center'
-          }
-        >
-          <h1 className='font-bold'>
+        <div className='flex justify-center'>
+          <h1 className='text-xl'>
             <span className='mr-2'>{getCardIcon(card.effect)}</span>
             {card.name}
           </h1>
         </div>
-        <div
-          className={
-            card.effect === CardEffect.PERMANENT
-              ? 'text-center p-3 text-white'
-              : 'text-center p-3'
-          }
-        >
-          <p className='text-xs'>{card.description}</p>
-        </div>
+        <div className='text-center p-3 text-xs'>{card.description}</div>
       </div>
-      <img src={card.img} alt='card' className='w-200' />
+      <img src={card.img} alt='card' className='w-180' />
     </div>
   );
 
   const LeftSide = () => (
     <div
       onClick={cardInLaneClick}
-      className={`absolute flex h-23vh ${
+      className={`absolute flex h-23vh rounded overflow-hidden border-4 ${getBannerColor(
+        card.type
+      )} ${
         card.highlight
-          ? 'border-4 border-red-400 hover:cursor-pointer'
+          ? 'border-red-600 hover:cursor-pointer'
           : card.highlightChange
-          ? 'border-4 border-blue-400'
-          : ''
+          ? 'border-indigo-600'
+          : getBorderColor(card.type)
       }`}
       style={{ right: right, zIndex: zIndex }}
     >
-      <img src={card.img} alt='card' className=' w-200' />
+      <img src={card.img} alt='card' className=' w-180' />
       <div
-        className={`${getBannerColor(card.type)} w-180 border-l-2 border-white`}
+        className={`${getBannerColor(
+          card.type
+        )} w-180 border-l-2 border-white text-white font-bold`}
       >
         <div className={`flex justify-center pb-1`}>
-          <h1 className='text-white text-2xl'>{card.power}</h1>
+          <h1 className='text-white text-4xl mt-2'>{card.power}</h1>
         </div>
-        <div
-          className={
-            card.effect === CardEffect.PERMANENT
-              ? 'flex justify-center text-white'
-              : 'flex justify-center'
-          }
-        >
-          <h1 className='font-bold'>
+        <div className='flex justify-center'>
+          <h1 className='text-xl'>
             <span className='mr-2'>{getCardIcon(card.effect)}</span>
             {card.name}
           </h1>
         </div>
-        <div
-          className={`
-            ${
-              card.effect === CardEffect.PERMANENT
-                ? 'text-center text-white'
-                : 'text-center'
-            }
-            ${card.name.toLowerCase() !== 'blockade' ? 'p-3' : 'p-3 text-sm'}
-          `}
-        >
-          <p className='text-xs'>{card.description}</p>
-        </div>
+        <div className='text-center p-3 text-xs'>{card.description}</div>
       </div>
     </div>
   );
@@ -168,12 +156,14 @@ export const CardInLaneComponent = ({
         onMouseOver={handleOnMouseOver}
         onMouseLeave={handleOnMouseOut}
         onClick={cardInLaneClick}
-        className={`absolute flex h-23vh ${
+        className={`absolute flex h-23vh rounded overflow-hidden border-4 ${getBannerColor(
+          card.type
+        )} ${
           card.highlight
-            ? 'border-4 border-red-400 hover:cursor-pointer'
+            ? 'border-red-600 hover:cursor-pointer'
             : card.highlightChange
-            ? 'border-4 border-blue-400'
-            : ''
+            ? 'border-indigo-600'
+            : 'border-emerald-300'
         }`}
         style={{ right: right, zIndex: zIndex }}
       >
@@ -181,7 +171,7 @@ export const CardInLaneComponent = ({
         <img
           src='/images/face-down.png'
           alt='face down card'
-          className='h-23vh w-380'
+          className='h-23vh w-360'
         ></img>
         {/* </Tippy> */}
       </div>
@@ -190,19 +180,21 @@ export const CardInLaneComponent = ({
   const FaceDownRight = () => (
     <div
       onClick={cardInLaneClick}
-      className={`absolute flex h-23vh ${
+      className={`absolute flex h-23vh rounded overflow-hidden border-4 ${getBannerColor(
+        card.type
+      )} ${
         card.highlight
-          ? 'border-4 border-red-400 hover:cursor-pointer'
+          ? 'border-red-600 hover:cursor-pointer'
           : card.highlightChange
-          ? 'border-4 border-blue-400'
-          : ''
+          ? 'border-indigo-600'
+          : 'border-emerald-300'
       }`}
       style={{ left: right, zIndex: zIndex }}
     >
       <img
         src='/images/face-down-right.png'
         alt='face down card'
-        className='h-23vh w-380'
+        className='h-23vh w-360'
       ></img>
     </div>
   );

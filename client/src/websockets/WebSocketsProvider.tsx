@@ -272,7 +272,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     if (gameConceded) {
       return gameConcededByPlayer
         ? 'Round Forfeit.'
-        : 'Opponent Forfeit the Round.';
+        : 'Opponent Forfeited the Round.';
     }
     return declareWinner(board, !host.current) ? 'Round Won.' : 'Round Lost.';
   };

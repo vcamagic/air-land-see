@@ -330,7 +330,7 @@ export const BoardComponent = () => {
 
   const Bbbboard = () =>
     gameStarted ? (
-      <div>
+      <div className='h-full' style={{ background: 'rgba(0, 0, 0, 0.6)' }}>
         <div className='flex justify-center h-69'>
           <LaneComponent
             board={board}
@@ -338,7 +338,7 @@ export const BoardComponent = () => {
             updateTargetedCard={updateTargetedCard}
           />
         </div>
-        <div className='h-31 flex'>
+        <div className='h-30vh flex mt-2'>
           <div className='flex-none'>
             <ScoreComponent
               playerScore={board.player.score}

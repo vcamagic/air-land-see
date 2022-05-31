@@ -41,7 +41,7 @@ export const ScoreComponent = ({
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 300,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -52,7 +52,7 @@ export const ScoreComponent = ({
     <div className='p-3 mx-3 flex flex-col items-center h-full w-64'>
       <Modal open={open}>
         <Box sx={style}>
-          <Typography sx={{ mt: 2, mb: 2, textAlign: 'center' }}>
+          <Typography sx={{ mt: 1, mb: 1, textAlign: 'center' }}>
             {getPopupText()}
           </Typography>
         </Box>
@@ -60,7 +60,7 @@ export const ScoreComponent = ({
       <div className='text-white text-2xl flex flex-col items-center w-full'>
         <div className='flex justify-end text-xl w-full'>
           <h1 className='mr-auto w-5/12 text-left'>{`${getPlayerName()}`}</h1>
-          <h1 className='w-2/12 text-center'>VS</h1>
+          <h1 className='w-2/12 text-center italic'>VS</h1>
           <h1 className='ml-auto w-5/12 text-right'>{`${getOpponentName()}`}</h1>
         </div>
         <div className='flex'>
@@ -68,7 +68,7 @@ export const ScoreComponent = ({
             {board.player.aerodrome}
             {board.player.airdrop}
           </div>
-          <h1>{`${playerScore} - ${opponentScore}`}</h1>
+          <h1 className='italic'>{`${playerScore} - ${opponentScore}`}</h1>
           <div></div>
         </div>
       </div>
@@ -78,7 +78,7 @@ export const ScoreComponent = ({
         className={`p-2 rounded-xl mt-3 bg-gray-400 text-white`}
       >
         Forfeit round
-        <div className='text-xs'>
+        <div className='text-xs italic'>
           Opponent gains{' '}
           <span className='ml-1 mr-1'>
             {getIsHost()
@@ -92,9 +92,13 @@ export const ScoreComponent = ({
         <div className='mb-4 flex items-center'>
           <div>Opponent's cards: {`${board.opponent.hand.length}`}</div>
           {getIsHost() ? (
-            <div className='rounded-full bg-green-400 p-2 ml-auto'>1st</div>
+            <div className='rounded-full bg-green-400 p-2 ml-auto italic'>
+              1st
+            </div>
           ) : (
-            <div className='rounded-full bg-orange-400 p-2 ml-auto'>2nd</div>
+            <div className='rounded-full bg-orange-300 p-2 ml-auto italic'>
+              2nd
+            </div>
           )}
         </div>
         {playerTurn ? (

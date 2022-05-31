@@ -20,11 +20,11 @@ const getCardIcon = (cardEffect: CardEffect) => {
 const getBannerColor = (laneType: LaneType): string => {
   switch (laneType) {
     case LaneType.AIR:
-      return 'bg-cyan-300';
+      return 'bg-sky-300';
     case LaneType.LAND:
-      return 'bg-orange-500';
+      return 'bg-orange-300';
     case LaneType.SEA:
-      return 'bg-emerald-300';
+      return 'bg-teal-500';
   }
 };
 
@@ -47,20 +47,18 @@ export const CardComponent = (props: CardComponentProps) => {
 
   const FaceUpCard = () => (
     <div
-      className={`w-220 rounded ${
+      className={`w-220 rounded overflow-hidden ${
         playerTurn ? 'hover:cursor-pointer' : 'hover:cursor-default'
-      } ${props.card.highlight ? 'border-2 border-red-400 ' : ''}`}
+      } ${props.card.highlight ? 'border-2 border-red-600 ' : ''}`}
       onClick={props.inHand ? handleOnClick : () => {}}
     >
-      <div className={`flex ${getBannerColor(props.card.type)} p-2 h-2/5`}>
-        <h1 className='text-5xl font-bold text-white mr-3'>
-          {props.card.power}
-        </h1>
-        <div
-          className={`flex-1 ${
-            props.card.effect === CardEffect.PERMANENT ? 'text-white' : ''
-          }`}
-        >
+      <div
+        className={`flex ${getBannerColor(
+          props.card.type
+        )} p-2 h-2/5 text-white`}
+      >
+        <h1 className='text-5xl font-bold mr-3'>{props.card.power}</h1>
+        <div className='flex-1'>
           <div className='flex justify-end'>
             <h1 className='text-xl font-bold text-right'>
               <span className='p-2'>{getCardIcon(props.card.effect)}</span>
