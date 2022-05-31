@@ -101,28 +101,14 @@ namespace ALS.Services.Hub
             }
         }
 
-        public async void ReQueue(Guid id)//ako uradis rematch a drugi te ispali sa reque ili dc mora da ti nekako napise to i baci u obican q
+        public async void ReQueue()
         {
-            Game game = GameRepository.Games.FirstOrDefault(x => x.Id == id);
-            if (game != null)
-            {
-                if (game.PlayerOne.ConnectionId == Context.ConnectionId && game.RematchConfirmTwo)
-                {
-                    await Clients.Client(game.PlayerTwo.ConnectionId).RematchRefused();
-                }
-                if (game.PlayerTwo.ConnectionId == Context.ConnectionId && game.RematchConfirmOne)
-                {
-                    await Clients.Client(game.PlayerOne.ConnectionId).RematchRefused();
-                }
-                GameRepository.Games.Remove(game);
-            }
             bool gameFound = false;
             foreach (Game g in GameRepository.Games)
             {
                 if (g.PlayerOne != null && g.PlayerTwo == null)
                 {
                     g.PlayerTwo = new Player() { Color = "black", ConnectionId = Context.ConnectionId };
-                    //g.CurrentPlayer = g.PlayerOne;
                     gameFound = true;
                     await Clients.Client(g.PlayerOne.ConnectionId).GameFound(g.Id);
                     await Clients.Client(g.PlayerTwo.ConnectionId).GameFound(g.Id);
@@ -189,7 +175,6 @@ namespace ALS.Services.Hub
                 if (g.PlayerOne != null && g.PlayerTwo == null)
                 {
                     g.PlayerTwo = new Player() { Color = "black", ConnectionId = Context.ConnectionId };
-                    //g.CurrentPlayer = g.PlayerOne;
                     gameFound = true;
                     await Clients.Client(g.PlayerOne.ConnectionId).GameFound(g.Id);
                     await Clients.Client(g.PlayerTwo.ConnectionId).GameFound(g.Id);
@@ -203,45 +188,31 @@ namespace ALS.Services.Hub
             await base.OnConnectedAsync();
         }
 
-        // public override async Task OnDisconnectedAsync(Exception exception)
-        // {
-        //     for (int i = 0; i < GameRepository.Games.Count; i++)
-        //     {
-        //         if (GameRepository.Games[i].PlayerOne != null && GameRepository.Games[i].PlayerOne.ConnectionId == Context.ConnectionId)
-        //         {
-        //             if (GameRepository.Games[i].PlayerTwo != null)
-        //             {
-        //                 if (GameRepository.Games[i].RematchConfirmTwo)
-        //                 {
-        //                     await Clients.Client(GameRepository.Games[i].PlayerTwo.ConnectionId).RematchRefused();
-        //                 }
-        //                 else
-        //                 {
-        //                     await Clients.Client(GameRepository.Games[i].PlayerTwo.ConnectionId).EnemyQuit();
-        //                 }
-        //             }
-        //             GameRepository.Games.Remove(GameRepository.Games[i]);
-        //             break;
+        public override async Task OnDisconnectedAsync(Exception exception)
+        {
+            for (int i = 0; i < GameRepository.Games.Count; i++)
+            {
+                if (GameRepository.Games[i].PlayerOne != null && GameRepository.Games[i].PlayerOne.ConnectionId == Context.ConnectionId)
+                {
+                    if (GameRepository.Games[i].PlayerTwo != null)
+                    {
+                        await Clients.Client(GameRepository.Games[i].PlayerTwo.ConnectionId).EnemyQuit();
+                    }
+                    GameRepository.Games.Remove(GameRepository.Games[i]);
+                    break;
 
-        //         }
-        //         if (GameRepository.Games[i].PlayerTwo != null && GameRepository.Games[i].PlayerTwo.ConnectionId == Context.ConnectionId)
-        //         {
-        //             if (GameRepository.Games[i].PlayerOne != null)
-        //             {
-        //                 if (GameRepository.Games[i].RematchConfirmOne)
-        //                 {
-        //                     await Clients.Client(GameRepository.Games[i].PlayerOne.ConnectionId).RematchRefused();
-        //                 }
-        //                 else
-        //                 {
-        //                     await Clients.Client(GameRepository.Games[i].PlayerOne.ConnectionId).EnemyQuit();
-        //                 }
-        //             }
-        //             GameRepository.Games.Remove(GameRepository.Games[i]);
-        //             break;
-        //         }
-        //     }
-        //     await base.OnDisconnectedAsync(exception);
-        // }
+                }
+                if (GameRepository.Games[i].PlayerTwo != null && GameRepository.Games[i].PlayerTwo.ConnectionId == Context.ConnectionId)
+                {
+                    if (GameRepository.Games[i].PlayerOne != null)
+                    {
+                        await Clients.Client(GameRepository.Games[i].PlayerOne.ConnectionId).EnemyQuit();
+                    }
+                    GameRepository.Games.Remove(GameRepository.Games[i]);
+                    break;
+                }
+            }
+            await base.OnDisconnectedAsync(exception);
+        }
     }
 }

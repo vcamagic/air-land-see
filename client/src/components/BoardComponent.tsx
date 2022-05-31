@@ -35,8 +35,6 @@ export const BoardComponent = () => {
     gameEnded,
     gameStarted,
     getIsHost,
-    savedUserInput,
-    changeUserInput,
   } = useContext(WebSocketContext);
   const [clickedCard, setClickedCard] = useState({});
   const [targetedCard, setTargetedCard] = useState({});

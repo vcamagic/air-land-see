@@ -1,5 +1,4 @@
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-import { cloneDeep } from 'lodash';
 import React, { useCallback, useRef, useState } from 'react';
 import {
   calculateHostScore,
@@ -10,8 +9,6 @@ import {
   makeBoardInstance,
 } from '../helpers';
 import { Board } from '../models/Board';
-import { Card } from '../models/Cards/Card';
-import { Lane } from '../models/Lane';
 import { Message } from '../models/Message';
 import { ServerBoard } from '../models/ServerBoard';
 import { WebSocketProv } from './WebSocketContext';
@@ -35,6 +32,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [open, setOpen] = React.useState(false);
   const [gameConceded, setGameConceded] = useState(false);
+  const [opponentQuit, setOpponentQuit] = useState(false);
   const [gameConcededByPlayer, setGameConcededByPlayer] = useState(false);
   const gameId = useRef('');
   const host = useRef(true);
@@ -141,6 +139,18 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
           }, 4000);
         }
       );
+
+      connection.current.on('EnemyQuit', () => {
+        setOpen(true);
+        setOpponentQuit(true);
+        setTimeout(() => {
+          setOpen(false);
+          setOpponentQuit(false);
+          setGameStarted(false);
+          setMessages([]);
+          connection.current.invoke('Requeue');
+        }, 4000);
+      });
 
       connection.current.on('ReceiveMessage', async (message: string) => {
         const msg = new Message(message, true);
@@ -271,8 +281,11 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     }
     if (gameConceded) {
       return gameConcededByPlayer
-        ? 'Round Forfeit.'
+        ? 'Round Forfeited.'
         : 'Opponent Forfeited the Round.';
+    }
+    if (opponentQuit) {
+      return 'Opponent has left the game. Searching for new match...';
     }
     return declareWinner(board, !host.current) ? 'Round Won.' : 'Round Lost.';
   };
