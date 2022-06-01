@@ -91,8 +91,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         (
           serverBoard: ServerBoard,
           targetId: number,
-          overwriteTurn: boolean,
-          isForfeit: boolean
+          overwriteTurn: boolean
         ) => {
           const temp = invertBoardState(makeBoardInstance(serverBoard));
           temp.calculateScores();
@@ -155,8 +154,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const turn = async (
     board: Board,
     targetId?: number,
-    overwriteTurn?: boolean,
-    isForfeit?: boolean
+    overwriteTurn?: boolean
   ) => {
     try {
       await connection.current.invoke(
@@ -164,8 +162,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         gameId.current,
         board,
         targetId ?? -1,
-        overwriteTurn ?? false,
-        isForfeit ?? false
+        overwriteTurn ?? false
       );
       if (overwriteTurn) {
         setPlayerTurn(false);
