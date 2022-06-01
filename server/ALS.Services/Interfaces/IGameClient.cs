@@ -7,6 +7,7 @@ namespace ALS.Services.Interfaces
         Task GameSetup(bool isHost, string opponentName);
         Task GameFound(Guid id);
         Task OpponentTurn(Board serverBoard, int targetId, bool overwriteTurn, bool isForfeit);
+        Task ReceiveNewRound(Board serverBoard);
         Task EnemyConcede(Board serverBoard);
         Task GameEnded();
         Task EnemyQuit();

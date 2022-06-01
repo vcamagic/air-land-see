@@ -10,6 +10,7 @@ import {
 } from '../helpers';
 import { Board } from '../models/Board';
 import { Message } from '../models/Message';
+import { NotificationType } from '../models/NotificationType';
 import { ServerBoard } from '../models/ServerBoard';
 import { WebSocketProv } from './WebSocketContext';
 
@@ -31,9 +32,9 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const [gameStarted, setGameStarted] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [open, setOpen] = React.useState(false);
-  const [gameConceded, setGameConceded] = useState(false);
-  const [opponentQuit, setOpponentQuit] = useState(false);
-  const [gameConcededByPlayer, setGameConcededByPlayer] = useState(false);
+  const [notification, setNotification] = useState(
+    NotificationType.StandardRoundEnd
+  );
   const gameId = useRef('');
   const host = useRef(true);
   const playerName = useRef('');
@@ -93,7 +94,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
           overwriteTurn: boolean,
           isForfeit: boolean
         ) => {
-          let temp = invertBoardState(makeBoardInstance(serverBoard));
+          const temp = invertBoardState(makeBoardInstance(serverBoard));
           temp.calculateScores();
           updateBoardState(highlightChanges(previousBoard.current, temp));
           if (overwriteTurn) {
@@ -101,23 +102,17 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
           } else {
             setPlayerTurn(declareTurn(temp));
           }
-          if (isForfeit) {
-            host.current = !host.current;
-            setPlayerTurn(host.current);
-          }
           setReceivedTargetId(targetId);
-          console.log('OPPONENT TURN', temp);
           yourTurnAudio.play();
-          if (
-            temp.player.hand.length === 6 &&
-            temp.opponent.hand.length === 6 &&
-            isForfeit
-          ) {
-            setOpen(true);
-            setTimeout(() => {
-              setOpen(false);
-            }, 4000);
-          }
+        }
+      );
+
+      connection.current.on(
+        'ReceiveNewRound',
+        async (serverBoard: ServerBoard) => {
+          const temp = invertBoardState(makeBoardInstance(serverBoard));
+          setNotification(NotificationType.StandardRoundEnd);
+          showStandardNotification(temp);
         }
       );
 
@@ -125,27 +120,17 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         'EnemyConcede',
         async (serverBoard: ServerBoard) => {
           let temp = invertBoardState(makeBoardInstance(serverBoard));
-          temp.calculateScores();
-          updateBoardState(temp);
-          host.current = !host.current;
-          setPlayerTurn(host.current);
-          setOpen(true);
-          setGameConceded(true);
-          setGameConcededByPlayer(false);
           yourTurnAudio.play();
-          setTimeout(() => {
-            setOpen(false);
-            setGameConceded(false);
-          }, 4000);
+          setNotification(NotificationType.GameConcededByOpponent);
+          showStandardNotification(temp);
         }
       );
 
       connection.current.on('EnemyQuit', () => {
         setOpen(true);
-        setOpponentQuit(true);
+        setNotification(NotificationType.OpponentQuit);
         setTimeout(() => {
           setOpen(false);
-          setOpponentQuit(false);
           setGameStarted(false);
           setMessages([]);
           connection.current.invoke('Requeue');
@@ -160,6 +145,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
 
       connection.current.on('GameEnded', () => {
         setOpen(true);
+        setNotification(NotificationType.ScoreLimitReached);
         setTimeout(() => {
           setOpen(false);
           setGameEnded(true);
@@ -192,17 +178,37 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       } else {
         setPlayerTurn(declareTurn(board));
       }
-      if (isForfeit) {
-        host.current = !host.current;
-        setPlayerTurn(host.current);
-      }
       if (
         board.player.hand.length === 0 &&
         board.opponent.hand.length === 0 &&
         !board.targeting
       ) {
-        showRoundEndModalAndRestartGame();
+        roundFinished();
       }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const roundFinished = async () => {
+    try {
+      let playerWon = true;
+      if (!declareWinner(board, getIsHost())) {
+        playerWon = false;
+      }
+      const tempBoard = board.nextRound();
+      if (playerWon) {
+        tempBoard.player.score += 6;
+      } else {
+        tempBoard.opponent.score += 6;
+      }
+      await connection.current.invoke(
+        'RoundFinished',
+        gameId.current,
+        tempBoard
+      );
+      setNotification(NotificationType.StandardRoundEnd);
+      showStandardNotification(tempBoard);
     } catch (e) {
       console.error(e);
     }
@@ -228,66 +234,32 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       tempBoard.opponent.score += getIsHost()
         ? calculateHostScore(board.player.hand.length)
         : calculateScore(board.player.hand.length);
-      updateBoardState(tempBoard);
-      host.current = !host.current;
-      setPlayerTurn(host.current);
       await connection.current.invoke('Concede', gameId.current, tempBoard);
-      if (tempBoard.opponent.score >= 12) {
-        endGame();
-      } else {
-        setOpen(true);
-        setGameConceded(true);
-        setGameConcededByPlayer(true);
-        yourTurnAudio.play();
-        setTimeout(() => {
-          setOpen(false);
-          setGameConceded(false);
-        }, 4000);
-      }
+      yourTurnAudio.play();
+      setNotification(NotificationType.GameConcededByPlayer);
+      showStandardNotification(tempBoard);
     } catch (e) {
       console.error(e);
     }
   };
 
-  const showRoundEndModalAndRestartGame = () => {
-    let playerWon = true;
-    if (!declareWinner(board, getIsHost())) {
-      playerWon = false;
-    }
-    let tempBoard = board.nextRound();
-    if (playerWon) {
-      tempBoard.player.score += 6;
-    } else {
-      tempBoard.opponent.score += 6;
-    }
-    updateBoardState(tempBoard);
-    turn(tempBoard, undefined, undefined, true);
-    if (tempBoard.player.score >= 12 || tempBoard.opponent.score >= 12) {
-      endGame();
-    }
-
-    setOpen(true);
-    setTimeout(() => {
-      setOpen(false);
-    }, 4000);
-  };
-
   const getPopupText = (): string => {
-    if (board.player.score >= 12) {
-      return 'Congratulations Commander, Victory is yours.';
+    switch (notification) {
+      case NotificationType.ScoreLimitReached:
+        return board.player.score >= 12
+          ? 'Congratulations Commander, Victory is yours.'
+          : `Mission Failed, we'll get em next Time.`;
+      case NotificationType.GameConcededByOpponent:
+        return 'Opponent Forfeited the Round.';
+      case NotificationType.GameConcededByPlayer:
+        return 'Round Forfeited.';
+      case NotificationType.OpponentQuit:
+        return 'Opponent has left the game. Searching for new match...';
+      default:
+        return declareWinner(board, host.current)
+          ? 'Round Won.'
+          : 'Round Lost.';
     }
-    if (board.opponent.score >= 12) {
-      return `Mission Failed, we'll get em next Time.`;
-    }
-    if (gameConceded) {
-      return gameConcededByPlayer
-        ? 'Round Forfeited.'
-        : 'Opponent Forfeited the Round.';
-    }
-    if (opponentQuit) {
-      return 'Opponent has left the game. Searching for new match...';
-    }
-    return declareWinner(board, !host.current) ? 'Round Won.' : 'Round Lost.';
   };
 
   const closeConnection = async () => {
@@ -335,6 +307,21 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const showStandardNotification = (tempBoard: Board): void => {
+    setOpen(true);
+    setTimeout(() => {
+      updateBoardState(tempBoard);
+      host.current = !host.current;
+      setPlayerTurn(host.current);
+      setOpen(false);
+      if (host.current) {
+        if (tempBoard.player.score >= 12 || tempBoard.opponent.score >= 12) {
+          endGame();
+        }
+      }
+    }, 4000);
   };
 
   return (

@@ -16,16 +16,14 @@ export const ScoreComponent = ({
 }: ScoreComponentProps) => {
   const {
     board,
-    getIsHost,
+    open,
     playerTurn,
     getPlayerName,
     getOpponentName,
     getPopupText,
     concede,
-    open,
+    getIsHost,
   } = useContext(WebSocketContext);
-
-  useEffect(() => {}, [board]);
 
   const handleForfeitClick = () => {
     if (!playerTurn) {

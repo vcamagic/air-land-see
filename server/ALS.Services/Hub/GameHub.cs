@@ -34,6 +34,22 @@ namespace ALS.Services.Hub
             }
         }
 
+        public async void RoundFinished(Guid gameId, Board board) {
+            Game g = GameRepository.Games.FirstOrDefault(x => x.Id == gameId);
+            if (g != null)
+            {
+                g.LastActive = DateTime.Now;
+                if (g.PlayerOne.ConnectionId != Context.ConnectionId)
+                {
+                    await Clients.Client(g.PlayerOne.ConnectionId).ReceiveNewRound(board);
+                }
+                else
+                {
+                    await Clients.Client(g.PlayerTwo.ConnectionId).ReceiveNewRound(board);
+                }
+            }
+        }
+
         public async void EndGame(Guid id)
         {
             Game g = GameRepository.Games.FirstOrDefault(x => x.Id == id);

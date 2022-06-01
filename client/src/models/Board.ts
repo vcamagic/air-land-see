@@ -78,19 +78,19 @@ export class Board {
 
 
   nextRound(): Board {
-    this.player = this.player.reset();
-    this.opponent = this.opponent.reset();
-    this.deck = this.createDeck();
-    this.shuffleDeck();
-    this.dealCards();
-    this.targeting = false;
-    this.disruptSteps = 0;
-    this.lanes.forEach((lane: Lane) => {
+    let newBoard = cloneDeep(this);
+    newBoard.player = newBoard.player.reset();
+    newBoard.opponent = newBoard.opponent.reset();
+    newBoard.deck = newBoard.createDeck();
+    newBoard.shuffleDeck();
+    newBoard.dealCards();
+    newBoard.targeting = false;
+    newBoard.disruptSteps = 0;
+    newBoard.lanes.forEach((lane: Lane) => {
       lane = lane.reset();
     });
-    this.lanes = [this.lanes[2], this.lanes[0], this.lanes[1]];
-    console.log(this);
-    return cloneDeep(this);
+    newBoard.lanes = [newBoard.lanes[2], newBoard.lanes[0], newBoard.lanes[1]];
+    return newBoard;
   }
 
   getAdjacentLanes(lane: LaneType): Lane[] {
