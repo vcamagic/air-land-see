@@ -28,6 +28,7 @@ interface WebSocketContextProps {
   savedUserInput: string;
   changeUserInput: (newVal: string) => void;
   concede: () => void;
+  requeue: () => void;
   open: boolean;
 }
 const WebSocketContext = React.createContext<WebSocketContextProps>({
@@ -56,6 +57,7 @@ const WebSocketContext = React.createContext<WebSocketContextProps>({
   savedUserInput: '',
   changeUserInput: (newVal: string) => {},
   concede: () => {},
+  requeue: () => {},
   open: false,
 });
 export const WebSocketConsumer = WebSocketContext.Consumer;

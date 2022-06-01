@@ -129,12 +129,6 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       connection.current.on('EnemyQuit', () => {
         setOpen(true);
         setNotification(NotificationType.OpponentQuit);
-        setTimeout(() => {
-          setOpen(false);
-          setGameStarted(false);
-          setMessages([]);
-          connection.current.invoke('Requeue');
-        }, 4000);
       });
 
       connection.current.on('ReceiveMessage', async (message: string) => {
@@ -248,18 +242,25 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       case NotificationType.ScoreLimitReached:
         return board.player.score >= 12
           ? 'Congratulations Commander, Victory is yours.'
-          : `Mission Failed, we'll get em next Time.`;
+          : `Mission Failed, we'll get em next Time.`; //udje ovde na kraju, ili kao da nije bitno koji je igrac i da je samo skor resetovan vec, ili nije updated u +12 pa je zato false
       case NotificationType.GameConcededByOpponent:
         return 'Opponent Forfeited the Round.';
       case NotificationType.GameConcededByPlayer:
         return 'Round Forfeited.';
       case NotificationType.OpponentQuit:
-        return 'Opponent has left the game. Searching for new match...';
+        return 'Opponent has left the game. Search for a new match?';
       default:
         return declareWinner(board, host.current)
           ? 'Round Won.'
           : 'Round Lost.';
     }
+  };
+
+  const requeue = (): void => {
+    setOpen(false);
+    setGameStarted(false);
+    setMessages([]);
+    connection.current.invoke('Requeue');
   };
 
   const closeConnection = async () => {
@@ -313,14 +314,15 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     setOpen(true);
     setTimeout(() => {
       updateBoardState(tempBoard);
+      if (!host.current) {
+        if (tempBoard.player.score >= 12 || tempBoard.opponent.score >= 12) {
+          endGame();
+          return;
+        }
+      }
       host.current = !host.current;
       setPlayerTurn(host.current);
       setOpen(false);
-      if (host.current) {
-        if (tempBoard.player.score >= 12 || tempBoard.opponent.score >= 12) {
-          endGame();
-        }
-      }
     }, 4000);
   };
 
@@ -348,6 +350,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         sendMessage,
         changeUserInput,
         concede,
+        requeue,
       }}
     >
       {children}

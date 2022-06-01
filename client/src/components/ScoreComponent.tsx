@@ -22,6 +22,7 @@ export const ScoreComponent = ({
     getOpponentName,
     getPopupText,
     concede,
+    requeue,
     getIsHost,
   } = useContext(WebSocketContext);
 
@@ -30,6 +31,10 @@ export const ScoreComponent = ({
       return;
     }
     concede();
+  };
+
+  const handleRequeueClick = () => {
+    requeue();
   };
 
   const style = {
@@ -47,9 +52,22 @@ export const ScoreComponent = ({
   return (
     <div className='p-3 mx-3 flex flex-col items-center h-full w-64'>
       <Modal open={open}>
-        <Box sx={style}>
+        <Box sx={style} className='rounded-xl'>
           <Typography sx={{ mt: 1, mb: 1, textAlign: 'center' }}>
-            {getPopupText()}
+            <div>
+              {getPopupText()}
+              {getPopupText() ===
+              'Opponent has left the game. Search for a new match?' ? (
+                <button
+                  className='mt-4 px-3 py-2 rounded-xl bg-green-400 text-white'
+                  onClick={handleRequeueClick}
+                >
+                  Find new Match
+                </button>
+              ) : (
+                ''
+              )}
+            </div>
           </Typography>
         </Box>
       </Modal>
