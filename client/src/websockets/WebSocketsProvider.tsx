@@ -141,6 +141,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
 
       connection.current.on('EnemyQuit', () => {
         setOpen(true);
+        setDisableInput(true);
         setNotification(NotificationType.OpponentQuit);
       });
 
@@ -152,9 +153,11 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
 
       connection.current.on('GameEnded', () => {
         setOpen(true);
+        setDisableInput(true);
         setNotification(NotificationType.ScoreLimitReached);
         setTimeout(() => {
           setOpen(false);
+          setDisableInput(false);
           setGameEnded(true);
         }, 10000);
       });
@@ -277,6 +280,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
 
   const requeue = (): void => {
     setOpen(false);
+    setDisableInput(false);
     setGameStarted(false);
     setMessages([]);
     connection.current.invoke('Requeue');
@@ -331,6 +335,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
 
   const showStandardNotification = (tempBoard: Board): void => {
     setOpen(true);
+    setDisableInput(true);
     setTimeout(() => {
       updateBoardState(tempBoard);
       if (!host.current) {
@@ -342,6 +347,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       host.current = !host.current;
       setPlayerTurn(host.current);
       setOpen(false);
+      setDisableInput(false);
     }, 7000);
   };
 
