@@ -10,4 +10,5 @@ export class ServerBoard {
   playerTurn!: boolean;
   targeting!: boolean;
   disruptSteps!: number; 
+  fizzledCard!: Card | null;
 }

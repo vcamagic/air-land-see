@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Board } from '../models/Board';
 import { Aerodrome } from '../models/Cards/Air/Aerodrome';
@@ -17,6 +18,7 @@ import { Redeploy } from '../models/Cards/Sea/Redeploy';
 import { Transport } from '../models/Cards/Sea/Transport';
 import { Lane } from '../models/Lane';
 import WebSocketContext from '../websockets/WebSocketContext';
+import { CardComponent } from './CardComponent';
 import { ChatComponent } from './ChatComponent';
 import { HandComponent } from './HandComponent';
 import { LaneComponent } from './LaneComponent';
@@ -77,6 +79,13 @@ export const BoardComponent = () => {
             lane
           );
         }
+        if (tempBoard.fizzledCard !== null) {
+          setTimeout(() => {
+            tempBoard.fizzledCard = null;
+            tempBoard.calculateScores();
+            updateBoardState(cloneDeep(tempBoard));
+          }, 1000);
+        }
       }
       if (transportActive.current === true) {
         const transport = board.getCardById(13)?.card as Transport;
@@ -113,6 +122,13 @@ export const BoardComponent = () => {
   const improvise = (card: Card, lane: Lane) => {
     const tempBoard = card.improvise(board, lane.type);
     tempBoard.calculateScores();
+    if (tempBoard.fizzledCard !== null) {
+      setTimeout(() => {
+        tempBoard.fizzledCard = null;
+        tempBoard.calculateScores();
+        updateBoardState(cloneDeep(tempBoard));
+      }, 1000);
+    }
     updateBoardState(tempBoard);
     turn(tempBoard);
   };
@@ -318,6 +334,13 @@ export const BoardComponent = () => {
       boardTemp = (card as Blockade).deploy(board, lane.type);
       turn(boardTemp);
     }
+    if (boardTemp.fizzledCard !== null) {
+      setTimeout(() => {
+        boardTemp.fizzledCard = null;
+        boardTemp.calculateScores();
+        updateBoardState(cloneDeep(boardTemp));
+      }, 1000);
+    }
     boardTemp.calculateScores();
     updateBoardState(boardTemp);
   };
@@ -328,7 +351,23 @@ export const BoardComponent = () => {
 
   const Bbbboard = () =>
     gameStarted ? (
-      <div className='h-full' style={{ background: 'rgba(0, 0, 0, 0.6)' }}>
+      <div
+        className={`h-full ${
+          board.fizzledCard !== null ? 'pointer-events-none' : ''
+        }`}
+        style={{ background: 'rgba(0, 0, 0, 0.6)' }}
+      >
+        {board.fizzledCard !== null ? (
+          <div className='pointer-events-none absolute top-1/4 left-28 z-50 h-30vh animate-ping animate-once'>
+            <CardComponent
+              card={board.fizzledCard}
+              updateClickedCard={() => {}}
+            ></CardComponent>
+          </div>
+        ) : (
+          ''
+        )}
+
         <div className='flex justify-center h-69'>
           <LaneComponent
             board={board}

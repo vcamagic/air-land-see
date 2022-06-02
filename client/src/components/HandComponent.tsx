@@ -14,7 +14,6 @@ export const HandComponent = (props: HandComponentProps) => {
         {props.cards.map((card) => (
           <CardComponent
             key={card.id}
-            inHand={true}
             card={card}
             updateClickedCard={props.updateClickedCard}
           />

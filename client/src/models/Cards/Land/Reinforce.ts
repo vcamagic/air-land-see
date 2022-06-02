@@ -39,12 +39,13 @@ export class Reinforce extends Card {
     targetId?: number,
     selectedLane?: Lane
   ): Board {
-    let topDeck = board.deck[board.deck.length - 1];
+    let topDeck = board.deck.splice(board.deck.length - 1, 1)[0];  
     topDeck.faceUp = false;
     if(board.survivesBlockade((selectedLane as Lane).type) && board.survivesContainment()){
       (selectedLane as Lane).addPlayerCard(topDeck);
-    }
-    board.deck.splice(board.deck.length - 1, 1);   
+    } else {
+      board.fizzledCard = topDeck;
+    } 
     board.targeting = false; 
     board.clearHighlights();
     return cloneDeep(board);

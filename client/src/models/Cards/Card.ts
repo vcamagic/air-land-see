@@ -66,6 +66,8 @@ export class Card {
     if(board.survivesBlockade(selectedLane)){
       board.getLane(selectedLane).addPlayerCard(this);
       board.targeting = this.effect === CardEffect.INSTANT ? true : false;
+    } else {
+      board.fizzledCard = this;
     }
     board.player.airdrop = false;
     board.removeCardFromPlayerHand(this.id);
@@ -77,6 +79,8 @@ export class Card {
     board.clearHighlights();
     if(board.survivesContainment() && board.survivesBlockade(selectedLane)){
       board.getLane(selectedLane).addPlayerCard(this);
+    } else {
+      board.fizzledCard = this;
     }
     board.player.airdrop = false;
     board.removeCardFromPlayerHand(this.id);

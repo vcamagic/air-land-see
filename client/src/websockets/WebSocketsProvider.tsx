@@ -1,4 +1,5 @@
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { cloneDeep } from 'lodash';
 import React, { useCallback, useRef, useState } from 'react';
 import {
   calculateHostScore,
@@ -20,8 +21,8 @@ interface WebSocketProviderProps {
 export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const connection = useRef(
     new HubConnectionBuilder()
-      .withUrl('https://air-land-sea.herokuapp.com/game')
-      //.withUrl('http://localhost:5237/game')
+      //.withUrl('https://air-land-sea.herokuapp.com/game')
+      .withUrl('http://localhost:5237/game')
       .configureLogging(LogLevel.Information)
       .build()
   );
@@ -96,6 +97,13 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
           const temp = invertBoardState(makeBoardInstance(serverBoard));
           temp.calculateScores();
           updateBoardState(highlightChanges(previousBoard.current, temp));
+          if (temp.fizzledCard !== null) {
+            setTimeout(() => {
+              temp.fizzledCard = null;
+              temp.calculateScores();
+              updateBoardState(cloneDeep(temp));
+            }, 1000);
+          }
           if (overwriteTurn) {
             setPlayerTurn(true);
           } else {

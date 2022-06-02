@@ -26,6 +26,7 @@ export class Board {
   deck!: Card[];
   targeting!: boolean;
   disruptSteps!: number;
+  fizzledCard!: Card | null;
 
   constructor(lastLane?: LaneType) {
     if(lastLane!==undefined) {
@@ -47,6 +48,7 @@ export class Board {
     this.opponent = new Player();
     this.disruptSteps = 0;
     this.targeting = false;
+    this.fizzledCard = null;
     this.deck = this.createDeck();
     this.shuffleDeck();
     this.dealCards();
@@ -86,6 +88,7 @@ export class Board {
     newBoard.dealCards();
     newBoard.targeting = false;
     newBoard.disruptSteps = 0;
+    newBoard.fizzledCard = null;
     newBoard.lanes.forEach((lane: Lane) => {
       lane = lane.reset();
     });

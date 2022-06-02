@@ -23,6 +23,7 @@ export const makeBoardInstance = (board: ServerBoard): Board => {
   let tempBoard = new Board();
   tempBoard.targeting = board.targeting;
   tempBoard.disruptSteps = board.disruptSteps;
+  tempBoard.fizzledCard = board.fizzledCard;
   let tempLanes = board.lanes.map((lane) => {
     let ret = new Lane(lane.type);
     ret.highlight = lane.highlight;
@@ -117,6 +118,7 @@ export const invertBoardState = (board: Board): Board => {
   temp.targeting = board.targeting;
   temp.disruptSteps = board.disruptSteps;
   temp.deck = board.deck;
+  temp.fizzledCard = board.fizzledCard;
   [temp.player, temp.opponent] = [board.opponent, board.player];
   board.lanes.forEach((lane: Lane, index: number) => {
     [

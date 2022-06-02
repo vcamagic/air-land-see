@@ -30,7 +30,6 @@ const getBannerColor = (laneType: LaneType): string => {
 
 interface CardComponentProps {
   card: Card;
-  inHand: boolean;
   updateClickedCard: (card: Card) => void;
 }
 
@@ -47,10 +46,10 @@ export const CardComponent = (props: CardComponentProps) => {
 
   const FaceUpCard = () => (
     <div
-      className={`w-220 rounded overflow-hidden ${
+      className={`w-220 h-full rounded overflow-hidden ${
         playerTurn ? 'hover:cursor-pointer' : 'hover:cursor-default'
       } ${props.card.highlight ? 'border-2 border-red-600 ' : ''}`}
-      onClick={props.inHand ? handleOnClick : () => {}}
+      onClick={handleOnClick}
     >
       <div
         className={`flex ${getBannerColor(

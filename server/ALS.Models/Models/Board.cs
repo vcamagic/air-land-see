@@ -9,4 +9,5 @@ public class Board
     public List<Card> Deck { get; set; }
     public bool Targeting { get; set; }
     public int DisruptSteps { get; set; }
+    public Card FizzledCard { get; set; }
 }
