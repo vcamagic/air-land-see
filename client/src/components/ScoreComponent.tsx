@@ -24,6 +24,7 @@ export const ScoreComponent = ({
     concede,
     requeue,
     getIsHost,
+    closeNotification,
   } = useContext(WebSocketContext);
 
   const handleForfeitClick = () => {
@@ -35,6 +36,10 @@ export const ScoreComponent = ({
 
   const handleRequeueClick = () => {
     requeue();
+  };
+
+  const handleCloseClick = () => {
+    closeNotification();
   };
 
   const style = {
@@ -65,7 +70,12 @@ export const ScoreComponent = ({
                   Find new Match
                 </button>
               ) : (
-                ''
+                <button
+                  className='mt-4 px-3 py-2 rounded-xl bg-green-400 text-white'
+                  onClick={handleCloseClick}
+                >
+                  View Battlefield
+                </button>
               )}
             </div>
           </Typography>
