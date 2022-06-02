@@ -21,8 +21,8 @@ interface WebSocketProviderProps {
 export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const connection = useRef(
     new HubConnectionBuilder()
-      //.withUrl('https://air-land-sea.herokuapp.com/game')
-      .withUrl('http://localhost:5237/game')
+      .withUrl('https://air-land-sea.herokuapp.com/game')
+      //.withUrl('http://localhost:5237/game')
       .configureLogging(LogLevel.Information)
       .build()
   );

@@ -367,10 +367,10 @@ export const BoardComponent = () => {
   const Bbbboard = () =>
     gameStarted ? (
       <div
-        className={`h-full ${
+        className={` ${
           board.fizzledCard !== null ? 'pointer-events-none' : ''
         }`}
-        style={{ background: 'rgba(0, 0, 0, 0.6)' }}
+        style={{ background: 'rgba(0, 0, 0, 0.6)', height: '100vh' }}
       >
         <CardFizzle />
         <div className='flex justify-center h-69'>
