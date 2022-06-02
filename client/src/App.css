@@ -39,5 +39,7 @@
 
 .animate-once {
   -webkit-animation-iteration-count: 1;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
   animation-iteration-count: 1;
 }

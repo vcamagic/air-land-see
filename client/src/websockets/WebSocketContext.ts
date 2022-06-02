@@ -30,6 +30,7 @@ interface WebSocketContextProps {
   concede: () => void;
   requeue: () => void;
   open: boolean;
+  opponentFizzle: boolean;
 }
 const WebSocketContext = React.createContext<WebSocketContextProps>({
   joinGame: (user: any) => new Promise((resolve) => resolve()),
@@ -59,6 +60,7 @@ const WebSocketContext = React.createContext<WebSocketContextProps>({
   concede: () => {},
   requeue: () => {},
   open: false,
+  opponentFizzle: false,
 });
 export const WebSocketConsumer = WebSocketContext.Consumer;
 export const WebSocketProv = WebSocketContext.Provider;

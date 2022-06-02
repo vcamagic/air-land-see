@@ -37,6 +37,7 @@ export const BoardComponent = () => {
     gameEnded,
     gameStarted,
     getIsHost,
+    opponentFizzle,
   } = useContext(WebSocketContext);
   const [clickedCard, setClickedCard] = useState({});
   const [targetedCard, setTargetedCard] = useState({});
@@ -93,7 +94,7 @@ export const BoardComponent = () => {
               tempBoard.fizzledCard = null;
               tempBoard.calculateScores();
               updateBoardState(cloneDeep(tempBoard));
-            }, 1000);
+            }, 2800);
           }
         }
       }
@@ -128,7 +129,7 @@ export const BoardComponent = () => {
         tempBoard.fizzledCard = null;
         tempBoard.calculateScores();
         updateBoardState(cloneDeep(tempBoard));
-      }, 1000);
+      }, 2800);
     }
     updateBoardState(tempBoard);
     turn(tempBoard);
@@ -340,7 +341,7 @@ export const BoardComponent = () => {
         boardTemp.fizzledCard = null;
         boardTemp.calculateScores();
         updateBoardState(cloneDeep(boardTemp));
-      }, 1000);
+      }, 2800);
     }
     boardTemp.calculateScores();
     updateBoardState(boardTemp);
@@ -350,6 +351,19 @@ export const BoardComponent = () => {
     if (gameEnded) window.location.reload();
   }, [gameEnded]);
 
+  const CardFizzle = () =>
+    board.fizzledCard !== null ? (
+      <div
+        className={`pointer-events-none absolute top-1/4 ${
+          opponentFizzle ? 'right-28' : 'left-28'
+        } z-50 h-30vh fizzle`}
+      >
+        <CardComponent
+          card={board.fizzledCard}
+          updateClickedCard={() => {}}
+        ></CardComponent>
+      </div>
+    ) : null;
   const Bbbboard = () =>
     gameStarted ? (
       <div
@@ -358,17 +372,7 @@ export const BoardComponent = () => {
         }`}
         style={{ background: 'rgba(0, 0, 0, 0.6)' }}
       >
-        {board.fizzledCard !== null ? (
-          <div className='pointer-events-none absolute top-1/4 left-28 z-50 h-30vh animate-ping animate-once'>
-            <CardComponent
-              card={board.fizzledCard}
-              updateClickedCard={() => {}}
-            ></CardComponent>
-          </div>
-        ) : (
-          ''
-        )}
-
+        <CardFizzle />
         <div className='flex justify-center h-69'>
           <LaneComponent
             board={board}

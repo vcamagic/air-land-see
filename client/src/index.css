@@ -4,7 +4,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Lato&family=Roboto&display=swap');
 
-
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
@@ -40,4 +39,30 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.fizzle-puls {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+}
+
+.fizzle {
+  animation: ping 3s cubic-bezier(0, 0, 0.2, 1);
+
+  @keyframes ping {
+    75%,
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
 }

@@ -43,6 +43,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const previousBoard = useRef(new Board());
   const msgReceivedAudio = new Audio('/MsgNotif.mp3');
   const yourTurnAudio = new Audio('/yourturn.mp3');
+  const opponentFizzle = useRef(false);
   msgReceivedAudio.volume = 0.2;
   yourTurnAudio.volume = 0.07;
 
@@ -97,13 +98,17 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
           const temp = invertBoardState(makeBoardInstance(serverBoard));
           temp.calculateScores();
           updateBoardState(highlightChanges(previousBoard.current, temp));
+
           if (temp.fizzledCard !== null) {
+            opponentFizzle.current = true;
             setTimeout(() => {
               temp.fizzledCard = null;
               temp.calculateScores();
               updateBoardState(cloneDeep(temp));
-            }, 1000);
+              opponentFizzle.current = false;
+            }, 2800);
           }
+
           if (overwriteTurn) {
             setPlayerTurn(true);
           } else {
@@ -342,6 +347,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         messages,
         savedUserInput: savedUserInput.current,
         open,
+        opponentFizzle: opponentFizzle.current,
         joinGame,
         closeConnection,
         turn,
