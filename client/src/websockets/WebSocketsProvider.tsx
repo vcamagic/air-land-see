@@ -195,6 +195,15 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     }
   };
 
+  const playAgain = async () => {
+    await connection.current.invoke(
+      'SubmitName',
+      gameId.current,
+      playerName.current
+    );
+    setGameStarted(false);
+  };
+
   const roundFinished = async () => {
     try {
       let playerWon = true;
@@ -374,6 +383,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         requeue,
         closeNotification,
         updateDisableInput,
+        playAgain,
       }}
     >
       {children}

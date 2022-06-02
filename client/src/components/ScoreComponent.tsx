@@ -18,6 +18,7 @@ export const ScoreComponent = ({
     board,
     open,
     playerTurn,
+    disableInput,
     getPlayerName,
     getOpponentName,
     getPopupText,
@@ -102,7 +103,11 @@ export const ScoreComponent = ({
         className={`p-2 rounded-xl mt-3 bg-gray-400 text-white`}
       >
         Forfeit round
-        <div className='text-xs italic'>
+        <div
+          className={`text-xs italic ${
+            disableInput ? 'pointer-events-none' : ''
+          }`}
+        >
           Opponent gains{' '}
           <span className='ml-1 mr-1'>
             {getIsHost()
