@@ -39,7 +39,7 @@ export const BoardComponent = () => {
     turn,
     resetTargetId,
     getIsHost,
-    playAgain,
+    requeue,
   } = useContext(WebSocketContext);
   const [clickedCard, setClickedCard] = useState({});
   const [targetedCard, setTargetedCard] = useState({});
@@ -350,7 +350,7 @@ export const BoardComponent = () => {
   };
 
   const handleRequeueClick = () => {
-    playAgain();
+    requeue();
   };
 
   const CardFizzle = () =>
@@ -406,10 +406,10 @@ export const BoardComponent = () => {
                 opponentScore={board.opponent.score}
               />
             </div>
-              <HandComponent
-                cards={board.player.hand}
-                updateClickedCard={updateClickedCard}
-              />
+            <HandComponent
+              cards={board.player.hand}
+              updateClickedCard={updateClickedCard}
+            />
             <div className='ml-4 mr-2 mb-2'>
               <ChatComponent></ChatComponent>
             </div>

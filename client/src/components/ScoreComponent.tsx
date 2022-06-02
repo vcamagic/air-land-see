@@ -61,7 +61,7 @@ export const ScoreComponent = ({
         <Box sx={style} className='rounded-xl'>
           <Typography sx={{ mt: 1, mb: 1, textAlign: 'center' }}>
             <div>
-              {getPopupText()}
+              <div>{getPopupText()}</div>
               {getPopupText() ===
               'Opponent has left the game. Search for a new match?' ? (
                 <button

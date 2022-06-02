@@ -155,11 +155,9 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         setOpen(true);
         setDisableInput(true);
         setNotification(NotificationType.ScoreLimitReached);
-        setTimeout(() => {
-          setOpen(false);
-          setDisableInput(false);
-          setGameEnded(true);
-        }, 10000);
+
+        setDisableInput(false);
+        setGameEnded(true);
       });
 
       await connection.current.start();
@@ -291,6 +289,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     setOpen(false);
     setDisableInput(false);
     setGameStarted(false);
+    setGameEnded(false);
     setMessages([]);
     connection.current.invoke('Requeue');
   };
