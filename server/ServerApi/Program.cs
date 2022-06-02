@@ -22,7 +22,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddHostedService<WorkerService>();
 builder.Services.AddSignalR();
-builder.Services.AddScoped<IGameRepository, GameRepository>();
+builder.Services.AddScoped<GameRepository>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
