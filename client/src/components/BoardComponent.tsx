@@ -66,27 +66,6 @@ export const BoardComponent = () => {
     }
     if (deploy === undefined && lane.highlight) {
       let tempBoard = new Board();
-      if (
-        clickedCard instanceof Reinforce ||
-        targetedCard instanceof Reinforce
-      ) {
-        if (clickedCard instanceof Reinforce) {
-          tempBoard = clickedCard.executeEffect(board, undefined, lane);
-        } else {
-          tempBoard = (targetedCard as Reinforce).executeEffect(
-            board,
-            undefined,
-            lane
-          );
-        }
-        if (tempBoard.fizzledCard !== null) {
-          setTimeout(() => {
-            tempBoard.fizzledCard = null;
-            tempBoard.calculateScores();
-            updateBoardState(cloneDeep(tempBoard));
-          }, 1000);
-        }
-      }
       if (transportActive.current === true) {
         const transport = board.getCardById(13)?.card as Transport;
         tempBoard = transport.executeEffect(
@@ -95,6 +74,28 @@ export const BoardComponent = () => {
           lane
         );
         transportActive.current = false;
+      } else {
+        if (
+          clickedCard instanceof Reinforce ||
+          targetedCard instanceof Reinforce
+        ) {
+          if (clickedCard instanceof Reinforce) {
+            tempBoard = clickedCard.executeEffect(board, undefined, lane);
+          } else {
+            tempBoard = (targetedCard as Reinforce).executeEffect(
+              board,
+              undefined,
+              lane
+            );
+          }
+          if (tempBoard.fizzledCard !== null) {
+            setTimeout(() => {
+              tempBoard.fizzledCard = null;
+              tempBoard.calculateScores();
+              updateBoardState(cloneDeep(tempBoard));
+            }, 1000);
+          }
+        }
       }
 
       if (!tempBoard.targeting && tempBoard.disruptSteps === 1) {
