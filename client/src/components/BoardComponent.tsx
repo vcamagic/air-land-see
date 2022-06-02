@@ -356,7 +356,7 @@ export const BoardComponent = () => {
       <div
         className={`pointer-events-none absolute top-1/4 ${
           opponentFizzle ? 'right-28' : 'left-28'
-        } z-50 h-30vh animate-ping animate-once`}
+        } z-50 h-29vh animate-ping animate-once`}
       >
         <CardComponent
           card={board.fizzledCard}
@@ -367,10 +367,10 @@ export const BoardComponent = () => {
   const Bbbboard = () =>
     gameStarted ? (
       <div
-        className={`h-full ${
+        className={` ${
           board.fizzledCard !== null ? 'pointer-events-none' : ''
         }`}
-        style={{ background: 'rgba(0, 0, 0, 0.6)' }}
+        style={{ background: 'rgba(0, 0, 0, 0.6)', height: '100vh' }}
       >
         <CardFizzle />
         <div className='flex justify-center h-69'>
@@ -380,7 +380,7 @@ export const BoardComponent = () => {
             updateTargetedCard={updateTargetedCard}
           />
         </div>
-        <div className='h-30vh flex mt-2'>
+        <div className='h-29vh flex mt-4'>
           <div className='flex-none'>
             <ScoreComponent
               playerScore={board.player.score}

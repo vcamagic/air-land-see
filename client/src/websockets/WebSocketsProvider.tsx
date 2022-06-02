@@ -21,8 +21,8 @@ interface WebSocketProviderProps {
 export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const connection = useRef(
     new HubConnectionBuilder()
-      //.withUrl('https://air-land-sea.herokuapp.com/game')
-      .withUrl('http://localhost:5237/game')
+      .withUrl('https://air-land-sea.herokuapp.com/game')
+      //.withUrl('http://localhost:5237/game')
       .configureLogging(LogLevel.Information)
       .build()
   );
@@ -33,6 +33,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const [gameStarted, setGameStarted] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [open, setOpen] = React.useState(false);
+  const [disableInput, setDisableInput] = useState(false);
   const [notification, setNotification] = useState(
     NotificationType.StandardRoundEnd
   );
@@ -155,7 +156,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         setTimeout(() => {
           setOpen(false);
           setGameEnded(true);
-        }, 6000);
+        }, 10000);
       });
 
       await connection.current.start();
@@ -266,6 +267,14 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     }
   };
 
+  const closeNotification = (): void => {
+    setOpen(false);
+  };
+
+  const updateDisableInput = (disabled: boolean) => {
+    setDisableInput(disabled);
+  };
+
   const requeue = (): void => {
     setOpen(false);
     setGameStarted(false);
@@ -333,7 +342,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       host.current = !host.current;
       setPlayerTurn(host.current);
       setOpen(false);
-    }, 4000);
+    }, 7000);
   };
 
   return (
@@ -348,6 +357,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         savedUserInput: savedUserInput.current,
         open,
         opponentFizzle: opponentFizzle.current,
+        disableInput,
         joinGame,
         closeConnection,
         turn,
@@ -362,6 +372,8 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         changeUserInput,
         concede,
         requeue,
+        closeNotification,
+        updateDisableInput,
       }}
     >
       {children}
