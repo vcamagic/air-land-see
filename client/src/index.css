@@ -41,7 +41,7 @@ code {
     monospace;
 }
 
-.fizzle-puls {
+/* .fizzle-puls {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
   @keyframes pulse {
@@ -65,4 +65,4 @@ code {
       opacity: 0;
     }
   }
-}
+} */

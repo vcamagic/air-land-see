@@ -83,7 +83,7 @@ export const ChatComponent = () => {
         ></input>
         <button
           onClick={sendMsg}
-          className='flex-initial w-14 rounded-xl bg-orange-300 text-white p-2'
+          className='flex-initial w-14 rounded-xl bg-amber-600 text-white p-2'
         >
           <FontAwesomeIcon icon={faPaperPlane} />
         </button>

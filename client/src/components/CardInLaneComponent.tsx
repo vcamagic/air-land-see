@@ -21,22 +21,22 @@ const getCardIcon = (cardEffect: CardEffect) => {
 const getBannerColor = (laneType: LaneType): string => {
   switch (laneType) {
     case LaneType.AIR:
-      return 'bg-sky-300';
+      return 'bg-sky-400';
     case LaneType.LAND:
-      return 'bg-orange-300';
+      return 'bg-amber-600';
     case LaneType.SEA:
-      return 'bg-teal-500';
+      return 'bg-teal-700';
   }
 };
 
 const getBorderColor = (laneType: LaneType): string => {
   switch (laneType) {
     case LaneType.AIR:
-      return 'bg-sky-200';
+      return 'border-sky-300';
     case LaneType.LAND:
-      return 'border-orange-200';
+      return 'border-amber-500';
     case LaneType.SEA:
-      return 'border-teal-400';
+      return 'border-teal-600';
   }
 };
 

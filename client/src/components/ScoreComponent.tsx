@@ -110,7 +110,7 @@ export const ScoreComponent = ({
               1st
             </div>
           ) : (
-            <div className='rounded-full bg-orange-300 p-2 ml-auto italic'>
+            <div className='rounded-full bg-amber-600 p-2 ml-auto italic'>
               2nd
             </div>
           )}

@@ -106,7 +106,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
               temp.calculateScores();
               updateBoardState(cloneDeep(temp));
               opponentFizzle.current = false;
-            }, 2800);
+            }, 900);
           }
 
           if (overwriteTurn) {

@@ -20,11 +20,11 @@ const getCardIcon = (cardEffect: CardEffect) => {
 const getBannerColor = (laneType: LaneType): string => {
   switch (laneType) {
     case LaneType.AIR:
-      return 'bg-sky-300';
+      return 'bg-sky-400';
     case LaneType.LAND:
-      return 'bg-orange-300';
+      return 'bg-amber-600';
     case LaneType.SEA:
-      return 'bg-teal-500';
+      return 'bg-teal-700';
   }
 };
 

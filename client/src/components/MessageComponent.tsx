@@ -11,7 +11,7 @@ export const MessageComponent = (props: MessageComponentProps) => {
       className={`my-0.5 p-2 rounded-xl text-xs ${
         props.isReceived
           ? 'bg-gray-200 text-black ml-1'
-          : 'bg-orange-300 text-white mr-1'
+          : 'bg-amber-600 text-white mr-1'
       }`}
     >
       {props.messageText}

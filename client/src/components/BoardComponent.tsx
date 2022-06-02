@@ -94,7 +94,7 @@ export const BoardComponent = () => {
               tempBoard.fizzledCard = null;
               tempBoard.calculateScores();
               updateBoardState(cloneDeep(tempBoard));
-            }, 2800);
+            }, 900);
           }
         }
       }
@@ -129,7 +129,7 @@ export const BoardComponent = () => {
         tempBoard.fizzledCard = null;
         tempBoard.calculateScores();
         updateBoardState(cloneDeep(tempBoard));
-      }, 2800);
+      }, 900);
     }
     updateBoardState(tempBoard);
     turn(tempBoard);
@@ -341,7 +341,7 @@ export const BoardComponent = () => {
         boardTemp.fizzledCard = null;
         boardTemp.calculateScores();
         updateBoardState(cloneDeep(boardTemp));
-      }, 2800);
+      }, 900);
     }
     boardTemp.calculateScores();
     updateBoardState(boardTemp);
@@ -356,7 +356,7 @@ export const BoardComponent = () => {
       <div
         className={`pointer-events-none absolute top-1/4 ${
           opponentFizzle ? 'right-28' : 'left-28'
-        } z-50 h-30vh fizzle`}
+        } z-50 h-30vh animate-ping animate-once`}
       >
         <CardComponent
           card={board.fizzledCard}
