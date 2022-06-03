@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { Card } from '../models/Cards/Card';
-import WebSocketContext from '../websockets/WebSocketContext';
+import { Card } from '../../models/Cards/Card';
+import WebSocketContext from '../../websockets/WebSocketContext';
 import { CardComponent } from './CardComponent';
 
 interface HandComponentProps {

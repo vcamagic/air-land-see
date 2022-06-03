@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react';
-import WebSocketContext from '../websockets/WebSocketContext';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import { calculateHostScore, calculateScore } from '../helpers';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
+import React, { useContext } from 'react';
+import { calculateHostScore, calculateScore } from '../../helpers';
+import WebSocketContext from '../../websockets/WebSocketContext';
 
 interface ScoreComponentProps {
   playerScore: number;

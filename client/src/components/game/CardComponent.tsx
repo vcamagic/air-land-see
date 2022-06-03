@@ -1,10 +1,10 @@
 import { faBolt, faInfinity } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext } from 'react';
-import { Card } from '../models/Cards/Card';
-import { CardEffect } from '../models/Cards/CardEffect';
-import { LaneType } from '../models/LaneType';
-import WebSocketContext from '../websockets/WebSocketContext';
+import { Card } from '../../models/Cards/Card';
+import { CardEffect } from '../../models/Cards/CardEffect';
+import { LaneType } from '../../models/LaneType';
+import WebSocketContext from '../../websockets/WebSocketContext';
 
 const getCardIcon = (cardEffect: CardEffect) => {
   switch (cardEffect) {

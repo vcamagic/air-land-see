@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import WebSocketContext from '../websockets/WebSocketContext';
+import WebSocketContext from '../../websockets/WebSocketContext';
 
 interface NameInputFormProps {
   insertName: () => void;

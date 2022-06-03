@@ -34,7 +34,8 @@ namespace ALS.Services.Hub
             }
         }
 
-        public async void RoundFinished(Guid gameId, Board board) {
+        public async void RoundFinished(Guid gameId, Board board)
+        {
             Game g = GameRepository.Games.FirstOrDefault(x => x.Id == gameId);
             if (g != null)
             {
@@ -119,22 +120,26 @@ namespace ALS.Services.Hub
 
         public async void ReQueue()
         {
-            bool gameFound = false;
-            foreach (Game g in GameRepository.Games)
+            var game = GameRepository.Games.FirstOrDefault(game => game.PlayerOne != null && game.PlayerTwo == null);
+
+            if (game != null)
             {
-                if (g.PlayerOne != null && g.PlayerTwo == null)
+                game.PlayerTwo = new Player() { Color = "black", ConnectionId = Context.ConnectionId };
+                await Clients.Client(game.PlayerOne.ConnectionId).GameFound(game.Id);
+                await Clients.Client(game.PlayerTwo.ConnectionId).GameFound(game.Id);
+                return;
+            }
+
+            GameRepository.Games.Add(
+                new Game()
                 {
-                    g.PlayerTwo = new Player() { Color = "black", ConnectionId = Context.ConnectionId };
-                    gameFound = true;
-                    await Clients.Client(g.PlayerOne.ConnectionId).GameFound(g.Id);
-                    await Clients.Client(g.PlayerTwo.ConnectionId).GameFound(g.Id);
-                    break;
+                    PlayerOne = new Player()
+                    {
+                        Color = "white",
+                        ConnectionId = Context.ConnectionId
+                    }
                 }
-            }
-            if (!gameFound)
-            {
-                GameRepository.Games.Add(new Game() { PlayerOne = new Player() { Color = "white", ConnectionId = Context.ConnectionId } });
-            }
+            );
         }
 
         public async void Rematch(Guid id)

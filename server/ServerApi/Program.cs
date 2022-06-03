@@ -6,17 +6,21 @@ using ALS.Services.Worker;
 var AllowSpecificOrigins = "AllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
+var allowedOrigins = builder.Configuration
+                                .GetSection("AllowedOrigins")
+                                .GetChildren().Select(x => x.Value)
+                                .ToArray();
+                                
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: AllowSpecificOrigins, builder =>
+    options.AddPolicy(name: AllowSpecificOrigins, build =>
     {
-        builder.AllowAnyHeader().AllowCredentials().AllowAnyHeader().WithOrigins("https://leska-chama.herokuapp.com", "http://localhost:3000");
+        build.AllowAnyHeader().AllowCredentials().AllowAnyHeader().WithOrigins(allowedOrigins);
     });
+
 });
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -25,7 +29,6 @@ builder.Services.AddSignalR();
 builder.Services.AddScoped<GameRepository>();
 
 var app = builder.Build();
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

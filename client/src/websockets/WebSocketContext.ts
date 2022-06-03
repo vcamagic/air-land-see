@@ -1,6 +1,6 @@
 import React from 'react';
 import { Board } from '../models/Board';
-import { Message } from '../models/Message';
+import { Message } from '../models/ServerDataModels/Message';
 
 interface WebSocketContextProps {
   joinGame: (user: any) => Promise<void>;

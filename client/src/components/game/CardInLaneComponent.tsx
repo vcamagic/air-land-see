@@ -2,10 +2,10 @@ import { faBolt, faInfinity } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef, useState } from 'react';
 import 'tippy.js/dist/tippy.css'; // optional
-import { Board } from '../models/Board';
-import { Card } from '../models/Cards/Card';
-import { CardEffect } from '../models/Cards/CardEffect';
-import { LaneType } from '../models/LaneType';
+import { Board } from '../../models/Board';
+import { Card } from '../../models/Cards/Card';
+import { CardEffect } from '../../models/Cards/CardEffect';
+import { LaneType } from '../../models/LaneType';
 
 const getCardIcon = (cardEffect: CardEffect) => {
   switch (cardEffect) {

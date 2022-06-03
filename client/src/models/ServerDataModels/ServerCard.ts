@@ -1,5 +1,5 @@
-import { CardEffect } from './Cards/CardEffect';
-import { LaneType } from './LaneType';
+import { CardEffect } from '../Cards/CardEffect';
+import { LaneType } from '../LaneType';
 
 export class ServerCard {
   id!: number;
