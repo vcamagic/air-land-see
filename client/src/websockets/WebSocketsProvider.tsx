@@ -21,8 +21,8 @@ interface WebSocketProviderProps {
 export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const connection = useRef(
     new HubConnectionBuilder()
-      .withUrl('https://air-land-sea.herokuapp.com/game')
-      //.withUrl('http://localhost:5237/game')
+      //.withUrl('https://air-land-sea.herokuapp.com/game')
+      .withUrl('http://localhost:5237/game')
       .configureLogging(LogLevel.Information)
       .build()
   );
@@ -164,7 +164,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     } catch (e) {
       console.error(e);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const turn = async (
@@ -210,7 +210,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const roundFinished = async () => {
     try {
       let playerWon = true;
-      if (declareWinner(board, true)) {
+      if (!declareWinner(board, getIsHost())) {
         playerWon = false;
       }
       const tempBoard = board.nextRound();
@@ -293,7 +293,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     setGameStarted(false);
     setGameEnded(false);
     setMessages([]);
-    connection.current.invoke('Requeue');
+    connection.current.invoke('Requeue', gameId.current);
   };
 
   const closeConnection = async () => {

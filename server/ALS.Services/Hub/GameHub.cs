@@ -58,8 +58,6 @@ namespace ALS.Services.Hub
             {
                 await Clients.Client(g.PlayerOne.ConnectionId).GameEnded();
                 await Clients.Client(g.PlayerTwo.ConnectionId).GameEnded();
-
-                GameRepository.Games.Remove(g);
             }
         }
 
@@ -83,20 +81,6 @@ namespace ALS.Services.Hub
             }
         }
 
-        // public async void Undo(Guid id, AffectedField[] fields)
-        // {
-        //     Game g = Repo.Games.FirstOrDefault(x => x.Id == id);
-        //     if (g != null)
-        //     {
-        //         string temp = g.CurrentPlayer.ConnectionId;
-        //         if(Context.ConnectionId != g.CurrentPlayer.ConnectionId)
-        //         {
-        //             g.CurrentPlayer = g.CurrentPlayer == g.PlayerOne ? g.PlayerTwo : g.PlayerOne;
-        //         }
-        //         await Clients.Client(temp).EnemyUndo(fields);
-        //     }
-        // }
-
         public async void SubmitName(Guid id, string name)
         {
             Game g = GameRepository.Games.FirstOrDefault(x => x.Id == id);
@@ -118,8 +102,9 @@ namespace ALS.Services.Hub
             }
         }
 
-        public async void ReQueue()
+        public async void ReQueue(Guid id)
         {
+            GameRepository.Games.Remove(GameRepository.Games.FirstOrDefault(game => game.Id == id));
             var game = GameRepository.Games.FirstOrDefault(game => game.PlayerOne != null && game.PlayerTwo == null);
 
             if (game != null)
