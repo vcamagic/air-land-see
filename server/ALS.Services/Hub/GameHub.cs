@@ -20,18 +20,17 @@ namespace ALS.Services.Hub
         public async void Turn(Guid id, Board board, int targetId, bool overwriteTurn)
         {
             Game g = GameRepository.Games.FirstOrDefault(x => x.Id == id);
-            if (g != null)
+            if (g == null)
             {
-                g.LastActive = DateTime.Now;
-                if (g.PlayerOne.ConnectionId != Context.ConnectionId)
-                {
-                    await Clients.Client(g.PlayerOne.ConnectionId).OpponentTurn(board, targetId, overwriteTurn);
-                }
-                else
-                {
-                    await Clients.Client(g.PlayerTwo.ConnectionId).OpponentTurn(board, targetId, overwriteTurn);
-                }
+                return;
             }
+            g.LastActive = DateTime.Now;
+            if (g.PlayerOne.ConnectionId != Context.ConnectionId)
+            {
+                await Clients.Client(g.PlayerOne.ConnectionId).OpponentTurn(board, targetId, overwriteTurn);
+                return;
+            }
+            await Clients.Client(g.PlayerTwo.ConnectionId).OpponentTurn(board, targetId, overwriteTurn);
         }
 
         public async void RoundFinished(Guid gameId, Board board)

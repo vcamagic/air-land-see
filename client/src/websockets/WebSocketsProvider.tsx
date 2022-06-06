@@ -201,7 +201,6 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       if (!declareWinner(board, host.current)) {
         playerWon = false;
       }
-      console.log('playerWon & host.current', playerWon, host.current);
       const tempBoard = board.nextRound();
       if (playerWon) {
         tempBoard.player.score += 6;
@@ -332,13 +331,17 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     setOpen(true);
     setDisableInput(true);
     setTimeout(() => {
-      updateBoardState(tempBoard);
       if (!host.current) {
         if (tempBoard.player.score >= 12 || tempBoard.opponent.score >= 12) {
+          const updatedScoresBoard = cloneDeep(board);
+          updatedScoresBoard.player.score = tempBoard.player.score;
+          updatedScoresBoard.opponent.score = tempBoard.opponent.score;
+          updateBoardState(updatedScoresBoard);
           endGame();
           return;
         }
       }
+      updateBoardState(tempBoard);
       host.current = !host.current;
       setPlayerTurn(host.current);
       setOpen(false);
