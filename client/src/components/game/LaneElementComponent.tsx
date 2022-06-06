@@ -1,9 +1,9 @@
 import React from 'react';
-import { Board } from '../models/Board';
-import { Card } from '../models/Cards/Card';
-import { Lane } from '../models/Lane';
-import { LaneDeployment } from '../models/LaneDeployment';
-import { LaneType } from '../models/LaneType';
+import { Board } from '../../models/Board';
+import { Card } from '../../models/Cards/Card';
+import { Lane } from '../../models/Lane';
+import { LaneDeployment } from '../../models/LaneDeployment';
+import { LaneType } from '../../models/LaneType';
 import { CardInLaneComponent } from './CardInLaneComponent';
 
 const getLaneName = (type: LaneType) => {

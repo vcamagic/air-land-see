@@ -1,25 +1,25 @@
 import { cloneDeep } from 'lodash';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Board } from '../models/Board';
-import { Aerodrome } from '../models/Cards/Air/Aerodrome';
-import { AirDrop } from '../models/Cards/Air/AirDrop';
-import { Containment } from '../models/Cards/Air/Containment';
-import { Support } from '../models/Cards/Air/Support';
-import { Card } from '../models/Cards/Card';
-import { Heavy } from '../models/Cards/Heavy';
-import { Ambush } from '../models/Cards/Land/Ambush';
-import { CoverFire } from '../models/Cards/Land/CoverFire';
-import { Disrupt } from '../models/Cards/Land/Disrupt';
-import { Reinforce } from '../models/Cards/Land/Reinforce';
-import { Maneuver } from '../models/Cards/Maneuver';
-import { Blockade } from '../models/Cards/Sea/Blockade';
-import { Escalation } from '../models/Cards/Sea/Escalation';
-import { Redeploy } from '../models/Cards/Sea/Redeploy';
-import { Transport } from '../models/Cards/Sea/Transport';
-import { Lane } from '../models/Lane';
-import WebSocketContext from '../websockets/WebSocketContext';
+import React, { useContext, useRef, useState } from 'react';
+import { Board } from '../../models/Board';
+import { Aerodrome } from '../../models/Cards/Air/Aerodrome';
+import { AirDrop } from '../../models/Cards/Air/AirDrop';
+import { Containment } from '../../models/Cards/Air/Containment';
+import { Support } from '../../models/Cards/Air/Support';
+import { Card } from '../../models/Cards/Card';
+import { Heavy } from '../../models/Cards/Heavy';
+import { Ambush } from '../../models/Cards/Land/Ambush';
+import { CoverFire } from '../../models/Cards/Land/CoverFire';
+import { Disrupt } from '../../models/Cards/Land/Disrupt';
+import { Reinforce } from '../../models/Cards/Land/Reinforce';
+import { Maneuver } from '../../models/Cards/Maneuver';
+import { Blockade } from '../../models/Cards/Sea/Blockade';
+import { Escalation } from '../../models/Cards/Sea/Escalation';
+import { Redeploy } from '../../models/Cards/Sea/Redeploy';
+import { Transport } from '../../models/Cards/Sea/Transport';
+import { Lane } from '../../models/Lane';
+import WebSocketContext from '../../websockets/WebSocketContext';
 import { CardComponent } from './CardComponent';
-import { ChatComponent } from './ChatComponent';
+import { ChatComponent } from '../chat/ChatComponent';
 import { HandComponent } from './HandComponent';
 import { LaneComponent } from './LaneComponent';
 import { ScoreComponent } from './ScoreComponent';
@@ -29,15 +29,17 @@ export const BoardComponent = () => {
   audio.volume = 0.1;
   const {
     board,
-    updateBoardState,
-    playerTurn,
-    turn,
     receivedTargetId,
-    resetTargetId,
+    playerTurn,
     gameEnded,
     gameStarted,
-    getIsHost,
     opponentFizzle,
+    disableInput,
+    updateBoardState,
+    turn,
+    resetTargetId,
+    getIsHost,
+    requeue,
   } = useContext(WebSocketContext);
   const [clickedCard, setClickedCard] = useState({});
   const [targetedCard, setTargetedCard] = useState({});
@@ -347,9 +349,9 @@ export const BoardComponent = () => {
     updateBoardState(boardTemp);
   };
 
-  useEffect(() => {
-    if (gameEnded) window.location.reload();
-  }, [gameEnded]);
+  const handleRequeueClick = () => {
+    requeue();
+  };
 
   const CardFizzle = () =>
     board.fizzledCard !== null ? (
@@ -364,39 +366,56 @@ export const BoardComponent = () => {
         ></CardComponent>
       </div>
     ) : null;
+
+  const RequeueButton = () => (
+    <div className='absolute right-12 top-12'>
+      <button
+        onClick={handleRequeueClick}
+        className='mt-4 px-3 py-2 rounded-xl bg-green-400 text-white'
+      >
+        Play Again
+      </button>
+    </div>
+  );
   const Bbbboard = () =>
     gameStarted ? (
-      <div
-        className={` ${
-          board.fizzledCard !== null ? 'pointer-events-none' : ''
-        }`}
-        style={{ background: 'rgba(0, 0, 0, 0.6)', height: '100vh' }}
-      >
-        <CardFizzle />
-        <div className='flex justify-center h-69'>
-          <LaneComponent
-            board={board}
-            updateClickedLane={updateClickedLane}
-            updateTargetedCard={updateTargetedCard}
-          />
-        </div>
-        <div className='h-29vh flex mt-4'>
-          <div className='flex-none'>
-            <ScoreComponent
-              playerScore={board.player.score}
-              opponentScore={board.opponent.score}
+      <>
+        {gameEnded ? <RequeueButton /> : null}
+        <div
+          className={` ${
+            board.fizzledCard !== null ? 'pointer-events-none' : ''
+          }`}
+          style={{ background: 'rgba(0, 0, 0, 0.6)', height: '100vh' }}
+        >
+          <CardFizzle />
+          <div
+            className={`flex justify-center h-69 ${
+              disableInput ? 'pointer-events-none' : ''
+            }`}
+          >
+            <LaneComponent
+              board={board}
+              updateClickedLane={updateClickedLane}
+              updateTargetedCard={updateTargetedCard}
             />
           </div>
-          <HandComponent
-            cards={board.player.hand}
-            updateClickedCard={updateClickedCard}
-          />
-
-          <div className='ml-4 mr-2 mb-2'>
-            <ChatComponent></ChatComponent>
+          <div className='h-29vh flex mt-4'>
+            <div className='flex-none'>
+              <ScoreComponent
+                playerScore={board.player.score}
+                opponentScore={board.opponent.score}
+              />
+            </div>
+            <HandComponent
+              cards={board.player.hand}
+              updateClickedCard={updateClickedCard}
+            />
+            <div className='ml-4 mr-2 mb-2'>
+              <ChatComponent></ChatComponent>
+            </div>
           </div>
         </div>
-      </div>
+      </>
     ) : (
       <div
         className='p-3 text-7xl text-white grid place-items-center h-screen'

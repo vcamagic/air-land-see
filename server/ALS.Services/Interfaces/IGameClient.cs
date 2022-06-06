@@ -9,10 +9,10 @@ namespace ALS.Services.Interfaces
         Task OpponentTurn(Board serverBoard, int targetId, bool overwriteTurn);
         Task ReceiveNewRound(Board serverBoard);
         Task EnemyConcede(Board serverBoard);
+        Task ReceivePreparedGame(Board board);
+        Task ReceiveMessage(string message);
         Task GameEnded();
         Task EnemyQuit();
         Task RematchRefused();
-        Task ReceivePreparedGame(Board board);
-        Task ReceiveMessage(string message);
     }
 }

@@ -16,8 +16,8 @@ import { Escalation } from './models/Cards/Sea/Escalation';
 import { Redeploy } from './models/Cards/Sea/Redeploy';
 import { Transport } from './models/Cards/Sea/Transport';
 import { Lane } from './models/Lane';
-import { ServerBoard } from './models/ServerBoard';
-import { ServerCard } from './models/ServerCard';
+import { ServerBoard } from './models/ServerDataModels/ServerBoard';
+import { ServerCard } from './models/ServerDataModels/ServerCard';
 
 export const makeBoardInstance = (board: ServerBoard): Board => {
   let tempBoard = new Board();

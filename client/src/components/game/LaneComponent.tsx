@@ -1,7 +1,7 @@
 import React from 'react';
-import { Board } from '../models/Board';
-import { Card } from '../models/Cards/Card';
-import { Lane } from '../models/Lane';
+import { Board } from '../../models/Board';
+import { Card } from '../../models/Cards/Card';
+import { Lane } from '../../models/Lane';
 import { LaneElementComponent } from './LaneElementComponent';
 
 interface LaneComponentProps {

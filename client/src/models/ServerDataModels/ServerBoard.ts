@@ -1,6 +1,6 @@
-import { Card } from './Cards/Card';
-import { Lane } from './Lane';
-import { Player } from './Player';
+import { Card } from '../Cards/Card';
+import { Lane } from '../Lane';
+import { Player } from '../Player';
 
 export class ServerBoard {
   lanes!: Lane[];

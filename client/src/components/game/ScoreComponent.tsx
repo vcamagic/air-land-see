@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react';
-import WebSocketContext from '../websockets/WebSocketContext';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import { calculateHostScore, calculateScore } from '../helpers';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
+import React, { useContext } from 'react';
+import { calculateHostScore, calculateScore } from '../../helpers';
+import WebSocketContext from '../../websockets/WebSocketContext';
 
 interface ScoreComponentProps {
   playerScore: number;
@@ -18,6 +18,7 @@ export const ScoreComponent = ({
     board,
     open,
     playerTurn,
+    disableInput,
     getPlayerName,
     getOpponentName,
     getPopupText,
@@ -60,7 +61,7 @@ export const ScoreComponent = ({
         <Box sx={style} className='rounded-xl'>
           <Typography sx={{ mt: 1, mb: 1, textAlign: 'center' }}>
             <div>
-              {getPopupText()}
+              <div>{getPopupText()}</div>
               {getPopupText() ===
               'Opponent has left the game. Search for a new match?' ? (
                 <button
@@ -102,7 +103,11 @@ export const ScoreComponent = ({
         className={`p-2 rounded-xl mt-3 bg-gray-400 text-white`}
       >
         Forfeit round
-        <div className='text-xs italic'>
+        <div
+          className={`text-xs italic ${
+            disableInput ? 'pointer-events-none' : ''
+          }`}
+        >
           Opponent gains{' '}
           <span className='ml-1 mr-1'>
             {getIsHost()

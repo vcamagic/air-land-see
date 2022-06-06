@@ -10,9 +10,9 @@ import {
   makeBoardInstance,
 } from '../helpers';
 import { Board } from '../models/Board';
-import { Message } from '../models/Message';
-import { NotificationType } from '../models/NotificationType';
-import { ServerBoard } from '../models/ServerBoard';
+import { Message } from '../models/ServerDataModels/Message';
+import { NotificationType } from '../models/ServerDataModels/NotificationType';
+import { ServerBoard } from '../models/ServerDataModels/ServerBoard';
 import { WebSocketProv } from './WebSocketContext';
 
 interface WebSocketProviderProps {
@@ -155,17 +155,16 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         setOpen(true);
         setDisableInput(true);
         setNotification(NotificationType.ScoreLimitReached);
-        setTimeout(() => {
-          setOpen(false);
-          setDisableInput(false);
-          setGameEnded(true);
-        }, 10000);
+
+        setDisableInput(false);
+        setGameEnded(true);
       });
 
       await connection.current.start();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const turn = async (
@@ -197,6 +196,15 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const playAgain = async () => {
+    await connection.current.invoke(
+      'SubmitName',
+      gameId.current,
+      playerName.current
+    );
+    setGameStarted(false);
   };
 
   const roundFinished = async () => {
@@ -283,6 +291,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     setOpen(false);
     setDisableInput(false);
     setGameStarted(false);
+    setGameEnded(false);
     setMessages([]);
     connection.current.invoke('Requeue');
   };
@@ -381,6 +390,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         requeue,
         closeNotification,
         updateDisableInput,
+        playAgain,
       }}
     >
       {children}
