@@ -181,17 +181,18 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         targetId ?? -1,
         overwriteTurn ?? false
       );
-      if (overwriteTurn) {
-        setPlayerTurn(false);
-      } else {
-        setPlayerTurn(declareTurn(board));
-      }
       if (
         board.player.hand.length === 0 &&
         board.opponent.hand.length === 0 &&
         !board.targeting
       ) {
         roundFinished();
+        return;
+      }
+      if (overwriteTurn) {
+        setPlayerTurn(false);
+      } else {
+        setPlayerTurn(declareTurn(board));
       }
     } catch (e) {
       console.error(e);
@@ -201,7 +202,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const roundFinished = async () => {
     try {
       let playerWon = true;
-      if (!declareWinner(board, getIsHost())) {
+      if (declareWinner(board, true)) {
         playerWon = false;
       }
       const tempBoard = board.nextRound();
@@ -256,7 +257,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       case NotificationType.ScoreLimitReached:
         return board.player.score >= 12
           ? 'Congratulations Commander, Victory is yours.'
-          : `Mission Failed, we'll get em next Time.`; //udje ovde na kraju, ili kao da nije bitno koji je igrac i da je samo skor resetovan vec, ili nije updated u +12 pa je zato false
+          : `Mission Failed, we'll get em next Time.`;
       case NotificationType.GameConcededByOpponent:
         return 'Opponent Forfeited the Round.';
       case NotificationType.GameConcededByPlayer:
