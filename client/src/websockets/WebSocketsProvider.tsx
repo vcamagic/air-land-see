@@ -178,39 +178,30 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         targetId ?? -1,
         overwriteTurn ?? false
       );
+      if (overwriteTurn) {
+        setPlayerTurn(false);
+      } else {
+        setPlayerTurn(declareTurn(board));
+      }
       if (
         board.player.hand.length === 0 &&
         board.opponent.hand.length === 0 &&
         !board.targeting
       ) {
-        roundFinished();
-        return;
-      }
-      if (overwriteTurn) {
-        setPlayerTurn(false);
-      } else {
-        setPlayerTurn(declareTurn(board));
+        roundFinished(board);
       }
     } catch (e) {
       console.error(e);
     }
   };
 
-  const playAgain = async () => {
-    await connection.current.invoke(
-      'SubmitName',
-      gameId.current,
-      playerName.current
-    );
-    setGameStarted(false);
-  };
-
-  const roundFinished = async () => {
+  const roundFinished = async (board: Board) => {
     try {
       let playerWon = true;
-      if (!declareWinner(board, getIsHost())) {
+      if (!declareWinner(board, host.current)) {
         playerWon = false;
       }
+      console.log('playerWon & host.current', playerWon, host.current);
       const tempBoard = board.nextRound();
       if (playerWon) {
         tempBoard.player.score += 6;
@@ -306,7 +297,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const declareTurn = (board: Board) => {
     let playersTurn!: boolean;
     if (host.current) {
-      playersTurn = board.player.hand.length === board.opponent.hand.length;
+      playersTurn = board.player.hand.length >= board.opponent.hand.length;
     } else {
       playersTurn = board.player.hand.length > board.opponent.hand.length;
     }
@@ -383,7 +374,6 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         concede,
         requeue,
         closeNotification,
-        playAgain,
       }}
     >
       {children}
