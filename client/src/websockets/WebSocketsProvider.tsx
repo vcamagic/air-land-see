@@ -21,8 +21,8 @@ interface WebSocketProviderProps {
 export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const connection = useRef(
     new HubConnectionBuilder()
-      //.withUrl('https://air-land-sea.herokuapp.com/game')
-      .withUrl('http://localhost:5237/game')
+      .withUrl('https://air-land-sea.herokuapp.com/game')
+      //.withUrl('http://localhost:5237/game')
       .configureLogging(LogLevel.Information)
       .build()
   );
@@ -155,8 +155,6 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         setOpen(true);
         setDisableInput(true);
         setNotification(NotificationType.ScoreLimitReached);
-
-        setDisableInput(false);
         setGameEnded(true);
       });
 
@@ -283,10 +281,6 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     setOpen(false);
   };
 
-  const updateDisableInput = (disabled: boolean) => {
-    setDisableInput(disabled);
-  };
-
   const requeue = (): void => {
     setOpen(false);
     setDisableInput(false);
@@ -389,7 +383,6 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         concede,
         requeue,
         closeNotification,
-        updateDisableInput,
         playAgain,
       }}
     >

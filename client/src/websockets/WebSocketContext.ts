@@ -33,7 +33,6 @@ interface WebSocketContextProps {
   opponentFizzle: boolean;
   closeNotification: () => void;
   disableInput: boolean;
-  updateDisableInput: (disabled: boolean) => void;
   playAgain: () => void;
 }
 const WebSocketContext = React.createContext<WebSocketContextProps>({
@@ -67,7 +66,6 @@ const WebSocketContext = React.createContext<WebSocketContextProps>({
   opponentFizzle: false,
   closeNotification: () => {},
   disableInput: false,
-  updateDisableInput: () => {},
   playAgain: () => {},
 });
 export const WebSocketConsumer = WebSocketContext.Consumer;

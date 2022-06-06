@@ -58,31 +58,32 @@ export const ScoreComponent = ({
   return (
     <div className='p-3 mx-3 flex flex-col items-center h-full w-64'>
       <Modal open={open}>
-        <Box sx={style} className='rounded-xl'>
-          <Typography sx={{ mt: 1, mb: 1, textAlign: 'center' }}>
-            <div>
-              <div>{getPopupText()}</div>
-              {getPopupText() ===
-              'Opponent has left the game. Search for a new match?' ? (
-                <button
-                  className='mt-4 px-3 py-2 rounded-xl bg-green-400 text-white'
-                  onClick={handleRequeueClick}
-                >
-                  Find new Match
-                </button>
-              ) : (
-                <button
-                  className='mt-4 px-3 py-2 rounded-xl bg-green-400 text-white'
-                  onClick={handleCloseClick}
-                >
-                  View Battlefield
-                </button>
-              )}
-            </div>
+        <Box sx={style} className='rounded-xl py-1 text-center'>
+          <Typography
+            component={'span'}
+            sx={{ mt: 1, mb: 1, textAlign: 'center' }}
+          >
+            <div>{getPopupText()}</div>
+            {getPopupText() ===
+            'Opponent has left the game. Search for a new match?' ? (
+              <button
+                className='mt-4 px-3 py-2 rounded-xl bg-green-400 text-white'
+                onClick={handleRequeueClick}
+              >
+                Find new Match
+              </button>
+            ) : (
+              <button
+                className='mt-4 px-3 py-2 rounded-xl bg-green-400 text-white'
+                onClick={handleCloseClick}
+              >
+                View Battlefield
+              </button>
+            )}
           </Typography>
         </Box>
       </Modal>
-      <div className='text-white text-2xl flex flex-col items-center w-full'>
+      <div className={`text-white text-2xl flex flex-col items-center w-full`}>
         <div className='flex justify-end text-xl w-full'>
           <h1 className='mr-auto w-5/12 text-left'>{`${getPlayerName()}`}</h1>
           <h1 className='w-2/12 text-center italic'>VS</h1>
@@ -100,14 +101,12 @@ export const ScoreComponent = ({
       <button
         onClick={handleForfeitClick}
         disabled={!playerTurn}
-        className={`p-2 rounded-xl mt-3 bg-gray-400 text-white`}
+        className={`p-2 rounded-xl mt-3 bg-gray-400 text-white  ${
+          disableInput ? 'pointer-events-none' : ''
+        }`}
       >
         Forfeit round
-        <div
-          className={`text-xs italic ${
-            disableInput ? 'pointer-events-none' : ''
-          }`}
-        >
+        <div className={`text-xs italic`}>
           Opponent gains{' '}
           <span className='ml-1 mr-1'>
             {getIsHost()

@@ -104,7 +104,16 @@ namespace ALS.Services.Hub
 
         public async void ReQueue(Guid id)
         {
-            GameRepository.Games.Remove(GameRepository.Games.FirstOrDefault(game => game.Id == id));
+            var previousGame = GameRepository.Games.FirstOrDefault(game => game.Id == id);
+            if(previousGame!=null) {
+                if(previousGame.PlayerOne.ConnectionId == Context.ConnectionId) {
+                    await Clients.Client(previousGame.PlayerTwo.ConnectionId).EnemyQuit();
+                } else {
+                    await Clients.Client(previousGame.PlayerOne.ConnectionId).EnemyQuit();
+                }
+                GameRepository.Games.Remove(previousGame);
+            }
+            
             var game = GameRepository.Games.FirstOrDefault(game => game.PlayerOne != null && game.PlayerTwo == null);
 
             if (game != null)
@@ -125,36 +134,6 @@ namespace ALS.Services.Hub
                     }
                 }
             );
-        }
-
-        public async void Rematch(Guid id)
-        {
-            Game g = GameRepository.Games.FirstOrDefault(x => x.Id == id);
-            if (g != null)
-            {
-                if (g.PlayerOne.ConnectionId == Context.ConnectionId)
-                {
-                    g.RematchConfirmOne = true;
-                }
-                if (g.PlayerTwo.ConnectionId == Context.ConnectionId)
-                {
-                    g.RematchConfirmTwo = true;
-                }
-                if (g.RematchConfirmTwo && g.RematchConfirmOne)
-                {
-                    g.PlayerOne.Color = g.PlayerOne.Color == "white" ? "black" : "white";
-                    g.PlayerTwo.Color = g.PlayerTwo.Color == "white" ? "black" : "white";
-                    //g.CurrentPlayer = g.PlayerOne.Color == "white" ? g.PlayerOne : g.PlayerTwo;
-                    g.RematchConfirmOne = false;
-                    g.RematchConfirmTwo = false;
-                    await Clients.Client(g.PlayerOne.ConnectionId).GameFound(g.Id);
-                    await Clients.Client(g.PlayerTwo.ConnectionId).GameFound(g.Id);
-                }
-            }
-            else
-            {
-                await Clients.Client(Context.ConnectionId).RematchRefused();
-            }
         }
 
         public async void Concede(Guid id, Board board)
