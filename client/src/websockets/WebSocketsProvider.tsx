@@ -21,8 +21,8 @@ interface WebSocketProviderProps {
 export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
   const connection = useRef(
     new HubConnectionBuilder()
-      .withUrl('https://air-land-sea.herokuapp.com/game')
-      //.withUrl('http://localhost:5237/game')
+      //.withUrl('https://air-land-sea.herokuapp.com/game')
+      .withUrl('http://localhost:5237/game')
       .configureLogging(LogLevel.Information)
       .build()
   );
@@ -164,7 +164,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     } catch (e) {
       console.error(e);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const turn = async (
@@ -180,17 +180,18 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
         targetId ?? -1,
         overwriteTurn ?? false
       );
-      if (overwriteTurn) {
-        setPlayerTurn(false);
-      } else {
-        setPlayerTurn(declareTurn(board));
-      }
       if (
         board.player.hand.length === 0 &&
         board.opponent.hand.length === 0 &&
         !board.targeting
       ) {
         roundFinished();
+        return;
+      }
+      if (overwriteTurn) {
+        setPlayerTurn(false);
+      } else {
+        setPlayerTurn(declareTurn(board));
       }
     } catch (e) {
       console.error(e);
@@ -264,7 +265,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
       case NotificationType.ScoreLimitReached:
         return board.player.score >= 12
           ? 'Congratulations Commander, Victory is yours.'
-          : `Mission Failed, we'll get em next Time.`; //udje ovde na kraju, ili kao da nije bitno koji je igrac i da je samo skor resetovan vec, ili nije updated u +12 pa je zato false
+          : `Mission Failed, we'll get em next Time.`;
       case NotificationType.GameConcededByOpponent:
         return 'Opponent Forfeited the Round.';
       case NotificationType.GameConcededByPlayer:
@@ -292,7 +293,7 @@ export const WebSocketsProvider = ({ children }: WebSocketProviderProps) => {
     setGameStarted(false);
     setGameEnded(false);
     setMessages([]);
-    connection.current.invoke('Requeue');
+    connection.current.invoke('Requeue', gameId.current);
   };
 
   const closeConnection = async () => {
