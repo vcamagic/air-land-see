@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/http//vcamagic.github.io/air-land-sea/static/css/main.bc39ed0b.css",
-    "main.js": "/http//vcamagic.github.io/air-land-sea/static/js/main.34e2d0fb.js",
-    "static/js/787.c4e7f8f9.chunk.js": "/http//vcamagic.github.io/air-land-sea/static/js/787.c4e7f8f9.chunk.js",
-    "static/media/background.jpg": "/http//vcamagic.github.io/air-land-sea/static/media/background.349cbe683ed931a7af1a.jpg",
-    "index.html": "/http//vcamagic.github.io/air-land-sea/index.html",
-    "main.bc39ed0b.css.map": "/http//vcamagic.github.io/air-land-sea/static/css/main.bc39ed0b.css.map",
-    "main.34e2d0fb.js.map": "/http//vcamagic.github.io/air-land-sea/static/js/main.34e2d0fb.js.map",
-    "787.c4e7f8f9.chunk.js.map": "/http//vcamagic.github.io/air-land-sea/static/js/787.c4e7f8f9.chunk.js.map"
+    "main.css": "/react-gh-pages/static/css/main.83cdaca5.css",
+    "main.js": "/react-gh-pages/static/js/main.b841ad4a.js",
+    "static/js/787.c4e7f8f9.chunk.js": "/react-gh-pages/static/js/787.c4e7f8f9.chunk.js",
+    "static/media/background.jpg": "/react-gh-pages/static/media/background.349cbe683ed931a7af1a.jpg",
+    "index.html": "/react-gh-pages/index.html",
+    "main.83cdaca5.css.map": "/react-gh-pages/static/css/main.83cdaca5.css.map",
+    "main.b841ad4a.js.map": "/react-gh-pages/static/js/main.b841ad4a.js.map",
+    "787.c4e7f8f9.chunk.js.map": "/react-gh-pages/static/js/787.c4e7f8f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.bc39ed0b.css",
-    "static/js/main.34e2d0fb.js"
+    "static/css/main.83cdaca5.css",
+    "static/js/main.b841ad4a.js"
   ]
 }
