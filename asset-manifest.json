@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/react-gh-pages/static/css/main.83cdaca5.css",
-    "main.js": "/react-gh-pages/static/js/main.b841ad4a.js",
-    "static/js/787.c4e7f8f9.chunk.js": "/react-gh-pages/static/js/787.c4e7f8f9.chunk.js",
-    "static/media/background.jpg": "/react-gh-pages/static/media/background.349cbe683ed931a7af1a.jpg",
-    "index.html": "/react-gh-pages/index.html",
-    "main.83cdaca5.css.map": "/react-gh-pages/static/css/main.83cdaca5.css.map",
-    "main.b841ad4a.js.map": "/react-gh-pages/static/js/main.b841ad4a.js.map",
-    "787.c4e7f8f9.chunk.js.map": "/react-gh-pages/static/js/787.c4e7f8f9.chunk.js.map"
+    "main.css": "/air-land-see/static/css/main.bf231fdd.css",
+    "main.js": "/air-land-see/static/js/main.84ad7485.js",
+    "static/js/787.c4e7f8f9.chunk.js": "/air-land-see/static/js/787.c4e7f8f9.chunk.js",
+    "static/media/background.jpg": "/air-land-see/static/media/background.349cbe683ed931a7af1a.jpg",
+    "index.html": "/air-land-see/index.html",
+    "main.bf231fdd.css.map": "/air-land-see/static/css/main.bf231fdd.css.map",
+    "main.84ad7485.js.map": "/air-land-see/static/js/main.84ad7485.js.map",
+    "787.c4e7f8f9.chunk.js.map": "/air-land-see/static/js/787.c4e7f8f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.83cdaca5.css",
-    "static/js/main.b841ad4a.js"
+    "static/css/main.bf231fdd.css",
+    "static/js/main.84ad7485.js"
   ]
 }
